@@ -6,7 +6,7 @@
     <title>Login — PsySink</title>
  
     <link rel="stylesheet" type="text/css" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
-    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
 </head>
 <body>
  
