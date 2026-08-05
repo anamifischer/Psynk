@@ -40,8 +40,10 @@
  
             <a href="redefinir-senha.php" class="forgot-link">Esqueci minha senha →</a>
  
-            <input type="button" id="botao-login" class="btn-primary" value="Entrar">
- 
+            <form action="Psynk/pages/admin/dashboard.php" method="get">
+                <button type="submit" id="botao-login" class="btn-primary"> Entrar </button>
+            </form>
+
         </div>
     </div>
  
