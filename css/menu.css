@@ -1,12 +1,9 @@
 body {
   font-family: var(--font);
   font-size: 16px;
-  line-height: 1.6;
   color: var(--gray-100);
-  background-color: var(--warm-sand);
   min-height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
 }
 
@@ -32,10 +29,14 @@ body {
     margin-bottom: 35px;
 }
 
+.barraLogo img{
+    width: 200px;
+}
+
 .barraItens {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 2px;
 }
 
 .barraItens a {
@@ -50,14 +51,25 @@ body {
     transition: .2s;
 }
 
-.barraItens a:hover {
-    background: var(--menu-hover);
-}
 
 .barraItens a.active {
     background: var(--menu-active);
     color: white;
+}
 
+.item{
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+}
+
+.item img{
+    width: 28px;
+    height: 28px;
+}
+
+.item:hover {
+    background: var(--teal);
 }
 
 .barraUser {

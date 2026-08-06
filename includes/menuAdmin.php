@@ -14,16 +14,34 @@
 <nav class="barraLateral">
 
     <div class="barraLogo">
-        <h1> ✦ PsySink </h1>
+        <img src = "../../imgs/logoComTipografia.png">
     </div>
 
     <div class ="barraItens">
-        <a href="Psynk/pages/admin/dashboard.php">Início</a>
-        <a href="Psynk/pages/admin/agenda.php">Agenda</a>
-        <a href="Psynk/pages/admin/pacientes.php">Pacientes</a>
-        <a href="Psynk/pages/admin/financeiro.php">Financeiro</a>
-        <a href="Psynk/pages/admin/relatorios.php">Relatórios</a>
-        <a href="Psynk/pages/admin/configuracoes.php">Configurações</a>
+        <div class="item">
+            <img src = "../../imgs/icons/home.png">
+            <a href="../../pages/admin/dashboard.php">Início</a>
+        </div>
+        <div class="item">
+            <img src = "../../imgs/icons/agenda.png">
+            <a href="../../pages/admin/agenda.php">Agenda</a>
+        </div>
+        <div class="item">
+            <img src = "../../imgs/icons/pacientes.png">
+            <a href="../../pages/admin/pacientes.php">Pacientes</a>
+        </div>
+        <div class="item">
+            <img src = "../../imgs/icons/financeiro.png">
+            <a href="../../pages/admin/financeiro.php">Financeiro</a>
+        </div>
+        <div class="item">
+            <img src = "../../imgs/icons/home.png">
+            <a href="../../pages/admin/relatorios.php">Relatórios</a>
+        </div>
+        <div class="item">
+            <img src = "../../imgs/icons/configuracoes.png">
+            <a href="../../pages/admin/configuracoes.php">Configurações</a>
+        </div>
     </div>
 
     <div class = "barraUser">
