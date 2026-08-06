@@ -7,6 +7,7 @@
  
     <link rel="stylesheet" type="text/css" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
     <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/variables.css">
 </head>
 <body>
  
@@ -40,7 +41,7 @@
  
             <a href="redefinir-senha.php" class="forgot-link">Esqueci minha senha →</a>
  
-            <form action="Psynk/pages/admin/dashboard.php" method="get">
+            <form action="/pages/admin/dashboard.php" method="get">
                 <button type="submit" id="botao-login" class="btn-primary"> Entrar </button>
             </form>
 

@@ -1,0 +1,81 @@
+body {
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--gray-100);
+  background-color: var(--warm-sand);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.barraLateral {
+    width: 240px;
+    height: 100vh;
+    background: var(--deep-teal);
+    display: flex;
+    flex-direction: column;
+    padding: 20px 14px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    color: var(--text-light);
+}
+
+.barraLogo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 35px;
+}
+
+.barraItens {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.barraItens a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 12px;
+    color: #D6DEE5;
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: 8px;
+    transition: .2s;
+}
+
+.barraItens a:hover {
+    background: var(--menu-hover);
+}
+
+.barraItens a.active {
+    background: var(--menu-active);
+    color: white;
+
+}
+
+.barraUser {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+
+}
+
+.barraUser img {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+
+}
+
+.barraUser span {
+    font-size: 13px;
+}
