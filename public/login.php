@@ -19,7 +19,7 @@
     <h1>Bem-vindo(a) ao PsySink</h1>
     <p>Faça login para acessar os recursos do sistema.</p>
 
-    <form action="/pages/admin/dashboard.php" method="get">
+    <form action="../app/pages/admin/dashboard.php" method="get">
 
         <label for="email">E-mail</label>
         <input type="email" id="email" name="email" placeholder="seu@email.com">

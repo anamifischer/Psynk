@@ -13,40 +13,40 @@
 
 <nav class="barraLateral">
 
-    <div class="barraLogo">
-        <img src = "../../imgs/logoComTipografia.png">
+        <div class="barraLogo">
+        <img src = "/imgs/logotipo-claro.png">
     </div>
 
     <div class ="barraItens">
         <div class="item">
-            <img src = "../../imgs/icons/home.png">
-            <a href="../../pages/psicologo/dashboard.php">Início</a>
+            <img src = "/imgs/icons/home.png">
+            <a href="../../pages/admin/dashboard.php">Início</a>
         </div>
         <div class="item">
-            <img src = "../../imgs/icons/agenda.png">
-            <a href="../../pages/psicologo/agenda.php">Agenda</a>
+            <img src = "/imgs/icons/agenda.png">
+            <a href="../../pages/admin/agenda.php">Agenda</a>
         </div>
         <div class="item">
-            <img src = "../../imgs/icons/pacientes.png">
-            <a href="../../pages/psicologo/pacientes.php">Pacientes</a>
+            <img src = "/imgs/icons/pacientes.png">
+            <a href="/pages/admin/pacientes.php">Pacientes</a>
         </div>
         <div class="item">
-            <img src = "../../imgs/icons/financeiro.png">
-            <a href="../../pages/psicologo/financeiro.php">Financeiro</a>
+            <img src = "/imgs/icons/financeiro.png">
+            <a href="../../pages/admin/financeiro.php">Financeiro</a>
         </div>
         <div class="item">
-            <img src = "../../imgs/icons/home.png">
-            <a href="../../pages/psicologo/relatorios.php">Relatórios</a>
+            <img src = "/imgs/icons/relatorio.png">
+            <a href="../../pages/admin/relatorios.php">Relatórios</a>
         </div>
         <div class="item">
-            <img src = "../../imgs/icons/configuracoes.png">
-            <a href="../../pages/psicologo/configuracoes.php">Configurações</a>
+            <img src = "/imgs/icons/configuracoes.png">
+            <a href="../../pages/admin/configuracoes.php">Configurações</a>
         </div>
     </div>
 
     <div class = "barraUser">
 
-        <img src="Psynk/imgs/avatarExemplo.jpg">
+        <img src="/imgs/avatarExemplo.jpg">
         <p>Nome User</p>
         <a href="/logout.php">Sair</a>
     </div>
