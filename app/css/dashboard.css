@@ -2,7 +2,6 @@ body{
   font-family: var(--font);
 }
 
-
 .barraSuperior {
   display: flex;
   align-items: center;
@@ -33,6 +32,10 @@ body{
   flex-direction: column;
   min-height: 100vh;
   background: var(--off-white);
+}
+
+.main.retraido {
+  margin-left: var(--sidebar-width-retraido);
 }
 
 .cumprimento {

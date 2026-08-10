@@ -35,7 +35,8 @@
   /* Sombra */
   --shadow: 0 8px 30px rgba(20, 30, 40, 0.08);
 
-  --sidebar-width: 240px;
+  --sidebar-width: 200px;
+  --sidebar-width-retraido: 64px;
 }
 
 

@@ -8,9 +8,10 @@ nav {
 }
 
 .barraLateral {
-    width: 240px;
+    width: var(--sidebar-width);
     height: 100vh;
-    background: var(--deep-teal);
+    background: var(--off-white);
+    border-right: 1px var(--sage) solid;
     color: var(--text-light);
     display: flex;
     flex-direction: column;
@@ -22,7 +23,7 @@ nav {
 }
 
 .barraLateral.retraida {
-    width: 64px;
+    width: var(--sidebar-width-retraido);
     padding: 20px 8px;
 }
 
@@ -61,8 +62,8 @@ nav {
     margin-bottom: 35px;
 }
 
-.logo-completo {
-    width: 200px;
+.logo-completo{
+    width: 160px;
 }
 
 .logo-icone {
@@ -104,7 +105,7 @@ nav {
 }
 
 .item:hover {
-    background: var(--teal);
+    background: var(--gray-200);
 }
 
 .barraItens a {
@@ -112,7 +113,7 @@ nav {
     align-items: center;
     gap: 12px;
     padding: 11px 12px;
-    color: #D6DEE5;
+    color: var(--teal);
     text-decoration: none;
     font-size: 14px;
     border-radius: 8px;
