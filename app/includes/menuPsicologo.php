@@ -10,12 +10,15 @@
 
 
 <body>
+    <link rel="stylesheet" type="text/css" href="/app/css/menu.css">
+    <script src="/app/js/menu.js"></script>
 
 <nav class="barraLateral">
 
         <div class="barraLogo">
-        <img src = "/imgs/logotipo-claro.png">
-    </div>
+            <img class="logo-completo" src = "/imgs/logotipo-claro.png">
+            <img class="logo-icone" src="/imgs/logo.png">
+        </div>
 
     <div class ="barraItens">
         <div class="item">

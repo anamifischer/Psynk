@@ -10,8 +10,6 @@
     <link rel="stylesheet" type="text/css" href="/app/css/variables.css">
     <link rel="stylesheet" type="text/css" href="/app/css/dashboard.css">
   
-    <link rel="stylesheet" type="text/css" href="/app/css/menu.css">
-
     <?php 
         include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/menuAdmin.php");
     ?>
@@ -39,7 +37,35 @@
             <div class="cartao" onclick="toggleList('listaAguardaConfirmacaoo')">
                 <div class="cartaoTitulo">Aguardando Confirmação</div>
                 <div class="cartaoValor">2</div>
+                <div class="cartaoLegenda">pendentes</div>
             </div>
+
+            <div class="cartao-aviso">
+                <div class="cartaoTitulo">Avisos</div>
+                <div class="cartaoLegenda">Paciente Ana Lima já está aqui | Atendimento 08:00h - 09:30h</div>
+                <div class="link"><a href="agenda.php">Acessar evento 🡪 </a></div>
+            </div> 
+
+            <div class="calendario">
+                <div class="calendario-header">
+                    <button id="mes-anterior">‹</button>
+                    <h3 id="mes-atual"></h3>
+                    <button id="mes-proximo">›</button>
+                </div>
+
+                <div class="dias-semana">
+                    <span>DOM</span>
+                    <span>SEG</span>
+                    <span>TER</span>
+                    <span>QUA</span>
+                    <span>QUI</span>
+                    <span>SEX</span>
+                    <span>SÁB</span>
+                </div>
+
+                <div id="dias" class="dias"></div>
+            </div>
+
         </div>
 
         <div id="listaConsultas" class="collapse-list">
@@ -120,26 +146,6 @@
             </table>
         </div>
 
-
-            <div class="calendario">
-                <div class="calendario-header">
-                    <button id="mes-anterior">‹</button>
-                    <h3 id="mes-atual"></h3>
-                    <button id="mes-proximo">›</button>
-                </div>
-
-                <div class="dias-semana">
-                    <span>DOM</span>
-                    <span>SEG</span>
-                    <span>TER</span>
-                    <span>QUA</span>
-                    <span>QUI</span>
-                    <span>SEX</span>
-                    <span>SÁB</span>
-                </div>
-
-                <div id="dias" class="dias"></div>
-            </div>
     
             
         <script src="/app/js/utils.js"></script>

@@ -45,10 +45,21 @@ body{
 
 .cartoes {
   display: grid;
-  grid-template-columns: auto auto 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 1rem;
-  align-items: start;
+  align-items: stretch;
   padding: 1rem 2rem;
+}
+
+@media (max-width: 768px) {
+  .cartoes {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .calendario {
+    grid-column: 1 / -1;  /* calendário ocupa a linha inteira */
+  }
 }
 
 .cartao {
@@ -63,6 +74,19 @@ body{
   flex-direction: column;
   align-items: flex-start;
   gap: 0.25rem;
+}
+
+.cartao-aviso {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  grid-column: 1 / 3;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .cartao:hover {
@@ -89,6 +113,31 @@ body{
   color: var(--gray-400);
 }
 
+.link {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-end;
+
+  padding: 0.5rem 1rem;
+  margin-top: 0.5rem;
+
+  background: var(--gray-100);
+
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.link:hover {
+  background: var(--off-white);
+}
+
+.link a {
+  color: var(--deep-teal);
+  text-decoration: none;
+}
+
 .calendario {
   background: #fff;
   border-radius: var(--radius-md);
@@ -96,6 +145,9 @@ body{
   padding: 1rem;
   min-width: 240px;
   max-width: 300px;
+
+  grid-row: 1 / 3;
+  grid-column: 3;
 }
 
 .calendario-header {
