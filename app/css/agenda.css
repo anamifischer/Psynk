@@ -3,7 +3,6 @@ body {
     background: var(--off-white);
     color: var(--gray-900);
     display: flex;
-    min-height: 100vh;
 }
 
 .main {

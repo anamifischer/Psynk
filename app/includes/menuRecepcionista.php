@@ -16,7 +16,7 @@
 <nav class="barraLateral">
     
         <div class="barraLogo">
-            <img class="logo-completo" src = "/imgs/logotipo-claro.png">
+            <img class="logo-completo" src = "/imgs/logotipo-escuro.png">
             <img class="logo-icone" src="/imgs/logo.png">
         </div>
 

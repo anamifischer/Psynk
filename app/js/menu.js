@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebar.classList.toggle('retraida');
 
         const main = document.querySelector('.main');
-        if (main) main.classList.toggle('expandida');
+        if (main) main.classList.toggle('retraido');
 
         localStorage.setItem('menu-retraido', sidebar.classList.contains('retraida'));
     });

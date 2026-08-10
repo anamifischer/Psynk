@@ -11,7 +11,7 @@ nav {
     width: var(--sidebar-width);
     height: 100vh;
     background: var(--off-white);
-    border-right: 1px var(--sage) solid;
+ 
     color: var(--text-light);
     display: flex;
     flex-direction: column;
