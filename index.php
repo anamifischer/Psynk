@@ -1,54 +1,41 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login — PsySink</title>
- 
-    <link rel="stylesheet" type="text/css" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
-    <link rel="stylesheet" type="text/css" href="/css/index.css">
-    <link rel="stylesheet" type="text/css" href="/css/variables.css">
-</head>
-<body>
- 
-<div class="login-page">
- 
-    <!-- Painel esquerdo: branding (visível só em telas maiores) -->
-    <div class="login-branding">
-        <span class="logo-mark">✦</span>
-        <span class="brand-name">PsySink</span>
-        <p class="brand-tagline">Organize informações.<br>Apoie transformações.</p>
-    </div>
- 
-    <!-- Painel direito: formulário -->
-    <div class="login-panel">
-        <div class="login-box">
- 
-            <div class="login-header">
-                <h1>Bem-vindo(a) ao PsySink</h1>
-                <p>Faça login para acessar os recursos do sistema.</p>
-            </div>
- 
-            <div class="field">
-                <label for="email">E-mail</label>
-                <input type="email" id="email" placeholder="seu@email.com">
-            </div>
- 
-            <div class="field">
-                <label for="senha">Senha</label>
-                <input type="password" id="senha" placeholder="••••••••">
-            </div>
- 
-            <a href="redefinir-senha.php" class="forgot-link">Esqueci minha senha →</a>
- 
-            <form action="/pages/admin/dashboard.php" method="get">
-                <button type="submit" id="botao-login" class="btn-primary"> Entrar </button>
-            </form>
+    <title>Página inicial</title>
 
+    <link rel="stylesheet" type="text/css" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
+    <link rel="stylesheet" type="text/css" href="public/index.css">
+    <link rel="stylesheet" type="text/css" href="app/css/variables.css">
+
+</head>
+<body onload="mostrarPagina('inicio')">
+
+    <div class="main">
+        <div class="imgPsySink">
+            <img src="imgs/imgIndex.png" alt="Psicólogo(a) com prancheta e logotipo PsySink">
+        </div>
+
+        <div class="conteudo">
+            <nav>
+                <img src="imgs/logotipo-escuro.png" alt="logotipo PsySink">
+                <button onclick="mostrarPagina('inicio')">Início</button>
+                <button onclick="mostrarPagina('sobre')">Sobre Nós</button>
+                <button onclick="mostrarPagina('funcionalidades')">Funcionalidades</button>
+                <button onclick="mostrarPagina('planos')">Planos</button>
+                <button onclick="window.location.href='/public/login.php'">Login
+
+                </button>
+            </nav>
+
+            <main id="conteudo">
+
+            </main>
         </div>
     </div>
- 
-</div>
- 
+        
+    <script src="public/index.js"></script>
+
 </body>
 </html>

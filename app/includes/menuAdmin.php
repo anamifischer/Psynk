@@ -46,7 +46,7 @@
 
     <div class = "barraUser">
 
-        <img src="Psynk/imgs/avatarExemplo.jpg">
+        <img src="../../imgs/avatarExemplo.jpg">
         <p>Nome User</p>
         <a href="/logout.php">Sair</a>
     </div>

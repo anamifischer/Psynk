@@ -4,8 +4,19 @@ body {
   color: var(--gray-100);
   min-height: 100vh;
   display: flex;
-  justify-content: center;
 }
+
+.barraLateral.retraida{
+    width: 64px;
+    padding: 20px 8px;
+}
+
+.barraLateral.retraida .barraItens a, .barraLateral.retraida .barraUser p{
+    display: none;
+}
+
+
+
 
 .barraLateral {
     width: 240px;
@@ -50,7 +61,6 @@ body {
     border-radius: 8px;
     transition: .2s;
 }
-
 
 .barraItens a.active {
     background: var(--menu-active);
