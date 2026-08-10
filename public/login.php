@@ -5,16 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login — PsySink</title>
  
-    <link rel="stylesheet" type="text/css" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
-    <link rel="stylesheet" type="text/css" href="login.css">
-    <link rel="stylesheet" type="text/css" href="../app/css/variables.css">
+    <link rel="stylesheet" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
+    <link rel="stylesheet" href="../app/css/variables.css">
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
  
 <div class="login-panel">
 
+    <div class="login-img">
+        <img src="../imgs/logotipo-escuro.png" alt="logotipo PsySink">
+    </div>
     <h1>Bem-vindo(a) ao PsySink</h1>
-    <p>Organize informações. Apoie transformações.</p>
     <p>Faça login para acessar os recursos do sistema.</p>
 
     <form action="/pages/admin/dashboard.php" method="get">
