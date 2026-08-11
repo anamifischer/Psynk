@@ -19,10 +19,13 @@
   --gray-100: #F5F5F5;
 
   /* Estados */
-  --success: #4C956C;
-  --warning: #D89A3F;
-  --error:   #C65B5B;
-  --info:    #5C7AAEA;
+    --verde-500: #4CAF50;
+    --amarelo-500: #F5B942;
+    --azul-500: #5B8DEF;
+    --laranja-500: #F28C5C;
+    --vermelho-500: #f25c5c;
+    --roxo-500: #7B61A8;
+    --cinza-500: #9E9E9E;
 
   /* Tipografia */
   --font: calibri, sans-serif;
