@@ -1,4 +1,4 @@
-//Calendário
+// ─── Calendário ───────────────────────────────────────────────
 const mesAtual = document.getElementById("mes-atual");
 const dias = document.getElementById("dias");
 
@@ -12,21 +12,15 @@ const meses = [
 
 function criarCalendario() {
     if (!dias || !mesAtual) return;
-
     dias.innerHTML = "";
-
     const ano = dataAtual.getFullYear();
     const mes = dataAtual.getMonth();
-
     mesAtual.textContent = `${meses[mes]} ${ano}`;
-
     const primeiroDia    = new Date(ano, mes, 1).getDay();
     const quantidadeDias = new Date(ano, mes + 1, 0).getDate();
-
     for (let i = 0; i < primeiroDia; i++) {
         dias.appendChild(document.createElement("span"));
     }
-
     for (let dia = 1; dia <= quantidadeDias; dia++) {
         const elementoDia = document.createElement("button");
         elementoDia.textContent = dia;
@@ -61,56 +55,16 @@ if (btnProximo) {
 
 criarCalendario();
 
-//Toggle Lists
+// ─── Toggle Lists ─────────────────────────────────────────────
 function toggleList(id) {
     const alvo = document.getElementById(id);
     if (!alvo) return;
-
     const jaEstaAberto = alvo.classList.contains('open');
-
-    document.querySelectorAll('.collapse-list').forEach(el => {
-        el.classList.remove('open');
-    });
-
-    if (!jaEstaAberto) {
-        alvo.classList.add('open');
-    }
+    document.querySelectorAll('.collapse-list').forEach(el => el.classList.remove('open'));
+    if (!jaEstaAberto) alvo.classList.add('open');
 }
 
-//Filtros
-let filtroAtivo = { psicologo: 'todos', status: 'todos' };
-
-function aplicarFiltro() {
-    document.querySelectorAll('.data-table tbody tr').forEach(tr => {
-        const psicologo = tr.cells[1]?.textContent.trim();
-        const status = tr.cells[2]?.textContent.trim();
-
-        const passaPsicologo = filtroAtivo.psicologo === 'todos' || psicologo === filtroAtivo.psicologo;
-        const passaStatus = filtroAtivo.status === 'todos' || status === filtroAtivo.status;
-
-        tr.style.display = passaPsicologo && passaStatus ? '' : 'none';
-    });
-}
-
-function iniciarFiltros() {
-    ['filtro-psicologo', 'filtro-status'].forEach(grupoId => {
-        const grupo = document.getElementById(grupoId);
-        if (!grupo) return;
-
-        grupo.querySelectorAll('.chip').forEach(chip => {
-            chip.addEventListener('click', () => {
-                grupo.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-                chip.classList.add('active');
-
-                const chave = grupoId === 'filtro-psicologo' ? 'psicologo' : 'status';
-                filtroAtivo[chave] = chip.dataset.valor;
-
-                aplicarFiltro();
-            });
-        });
-    });
-}
-
+// ─── Dropdown genérico (fecha ao clicar fora) ─────────────────
 function toggleFiltroDropdown() {
     const dropdown = document.getElementById('filtro-dropdown');
     if (!dropdown) return;
@@ -125,154 +79,19 @@ document.addEventListener('click', (e) => {
     }
 });
 
-//Gráfico Financeiro
-const dadosReceita = {
-    2024: {
-        receita:  [2800, 3100, 3400, 3200, 3900, 4100, 3700, 4200, 3800, 4400, 4100, 4800],
-        pendente: [300,  200,  400,  350,  250,  300,  200,  400,  300,  250,  350,  500],
-    },
-    2025: {
-        receita:  [3200, 2900, 3800, 4100, 4300, 3900, 4600, 4800, 4200, 5000, 4700, 5300],
-        pendente: [400,  350,  300,  500,  200,  450,  350,  300,  400,  200,  300,  600],
-    },
-    2026: {
-        receita:  [3500, 3800, 4200, 3900, 4500, 4100, 4800, 3100, 0, 0, 0, 0],
-        pendente: [300,  250,  350,  400,  200,  300,  280,  630, 0, 0, 0, 0],
-    },
-};
-
-const mesesLabels = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-let graficoReceita = null;
-let anoAtivo = new Date().getFullYear();
-
-function atualizarGrafico() {
-    const d = dadosReceita[anoAtivo];
-    if (!d) return;
-
-    const datasets = [
-        {
-            label: 'Receita recebida',
-            data: d.receita,
-            borderColor: '#316372',
-            backgroundColor: 'rgba(76, 175, 80, 0.06)',
-            borderWidth: 2,
-            pointBackgroundColor: '#316372',
-            pointRadius: 2,
-            tension: 0.2,
-            fill: true,
-        },
-        {
-            label: 'Pendente',
-            data: d.pendente,
-            borderColor: '#d97c56',
-            backgroundColor: 'rgba(242, 140, 92, 0.06)',
-            borderWidth: 2,
-            pointBackgroundColor: '#d97c56',
-            pointRadius: 2,
-            tension: 0.1,
-            fill: true,
-            borderDash: [4, 4],
-        }
-    ];
-
-    if (graficoReceita) {
-        graficoReceita.data.datasets[0].data = d.receita;
-        graficoReceita.data.datasets[1].data = d.pendente;
-        graficoReceita.update();
-        return;
-    }
-
-    const ctx = document.getElementById('graficoReceita');
-    if (!ctx) return;
-    ctx.style.width = '100%';
-
-    graficoReceita = new Chart(ctx, {
-        type: 'line',
-        data: { labels: mesesLabels, datasets },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                    labels: {
-                        font: { size: 12 },
-                        color: '#9E9E9E',
-                        boxWidth: 12,
-                        usePointStyle: true,
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: ctx => ` R$ ${ctx.parsed.y.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    grid: { display: false },
-                    ticks: { color: '#9E9E9E', font: { size: 12 } }
-                },
-                y: {
-                    grid: { color: '#f0f0f0' },
-                    ticks: {
-                        color: '#9E9E9E',
-                        font: { size: 12 },
-                        callback: v => 'R$ ' + v.toLocaleString('pt-BR')
-                    }
-                }
-            }
-        }
-    });
-}
-
-function toggleAnoDropdown() {
-    const dropdown = document.getElementById('ano-dropdown');
-    if (!dropdown) return;
-    dropdown.classList.toggle('open');
-}
-
-function iniciarFiltroAnos() {
-    const container = document.getElementById('ano-dropdown');
-    if (!container) return;
-
-    container.querySelectorAll('.ano-opcao').forEach(opcao => {
-        opcao.addEventListener('click', () => {
-            container.querySelectorAll('.ano-opcao').forEach(o => o.classList.remove('active'));
-            opcao.classList.add('active');
-
-            anoAtivo = parseInt(opcao.dataset.ano);
-            document.getElementById('btn-ano-label').textContent = anoAtivo;
-
-            dropdown.classList.remove('open');
-            atualizarGrafico();
-        });
-    });
-
-    // fecha ao clicar fora
-    document.addEventListener('click', (e) => {
-        const wrapper = document.querySelector('.ano-dropdown-wrapper');
-        if (!wrapper) return;
-        if (!wrapper.contains(e.target)) {
-            document.getElementById('ano-dropdown')?.classList.remove('open');
-        }
-    });
-
-    atualizarGrafico();
-}
-
-//Init
+// ─── Init global ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('filtro-psicologo')) {
-        iniciarFiltros();
+    // Pacientes
+    if (document.getElementById('listaCadastrados')) {
+        document.getElementById('listaCadastrados').classList.add('open');
+        iniciarFiltrosPacientes();
     }
 
-    //Abrir listaCadastrados por padrão
-    const listaCadastrados = document.getElementById('listaCadastrados');
-    if (listaCadastrados) {
-        listaCadastrados.classList.add('open');
+    // Financeiro
+    if (document.getElementById('listaVencendo')) {
+        document.getElementById('listaVencendo').classList.add('open');
     }
 
-    //gerar gráfico financeiro
     if (document.getElementById('graficoReceita')) {
         iniciarFiltroAnos();
     }

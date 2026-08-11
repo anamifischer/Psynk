@@ -159,6 +159,7 @@
         </div>
 
         <script src="/app/js/utils.js"></script>
+        <script src="/app/js/pacientes.js"></script>
 </div>
     
 </body>
