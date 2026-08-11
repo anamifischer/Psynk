@@ -17,7 +17,7 @@
 </head>
 <body>
         <div class="main">
-            
+
             <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/header.php"); ?>
 
             <div class="cartoes">
@@ -158,6 +158,7 @@
 
         <script src="/app/js/utils.js"></script>
         <script src="/app/js/pacientes.js"></script>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/drawer.php"); ?>
 </div>
     
 </body>

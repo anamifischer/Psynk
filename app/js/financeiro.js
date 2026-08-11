@@ -1,4 +1,4 @@
-// ─── Dados mockados ───────────────────────────────────────────
+//Dados mockados
 const dadosProfissionais = {
     'todos': {
         receita: 12150.76,
@@ -26,7 +26,7 @@ const dadosProfissionais = {
     },
 };
 
-// ─── Atualizar Cards ──────────────────────────────────────────
+//Atualizar Cards
 function atualizarCards(profissional) {
     const dados = dadosProfissionais[profissional];
     if (!dados) return;
@@ -42,7 +42,7 @@ function atualizarCards(profissional) {
     if (cardVencendo) cardVencendo.textContent = dados.vencendoHoje;
 }
 
-// ─── Filtro Tabelas ───────────────────────────────────────────
+//Filtro Tabelas
 function aplicarFiltroProfissional(profissional) {
     document.querySelectorAll('.data-table tbody tr').forEach(tr => {
         const psicologo = tr.cells[1]?.textContent.trim();
@@ -50,7 +50,7 @@ function aplicarFiltroProfissional(profissional) {
     });
 }
 
-// ─── Filtro Profissional ──────────────────────────────────────
+//Filtro Profissional
 function iniciarFiltrosProfissional() {
     const grupo = document.getElementById('filtro-profissional');
     if (!grupo) return;
@@ -72,7 +72,7 @@ function iniciarFiltrosProfissional() {
     }
 }
 
-// ─── Init ─────────────────────────────────────────────────────
+//Init
 document.addEventListener('DOMContentLoaded', () => {
     iniciarFiltrosProfissional();
 });

@@ -1,4 +1,4 @@
-// ─── Filtros Pacientes ────────────────────────────────────────
+//Filtros Pacientes
 let filtroAtivo = { psicologo: 'todos', status: 'todos' };
 
 function aplicarFiltro() {

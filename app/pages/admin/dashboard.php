@@ -145,6 +145,7 @@
     
             
         <script src="/app/js/utils.js"></script>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/drawer.php"); ?>
 
 </body>
 </html>
