@@ -394,3 +394,7 @@ body {
 .badge-verde    { background: #e6f5ed; color: var(--verde-500); }
 .badge-laranja  { background: #fdf3e3; color: var(--laranja-500); }
 .badge-vermelho { background: #faeaea; color: var(--vermelho-500); }
+.badge-amarelo  { background: #fef9e7; color: var(--amarelo-500); }
+.badge-azul     { background: #eaf1fd; color: var(--azul-500); }
+.badge-roxo     { background: #f0edf7; color: var(--roxo-500); }
+.badge-cinza    { background: #f2f2f2; color: var(--cinza-500); }
