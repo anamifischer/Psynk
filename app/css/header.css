@@ -1,0 +1,95 @@
+.barraSuperior {
+  background: var(--off-white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  margin-left: 1.7rem;
+  margin-right: 1.7rem;
+  border-bottom-left-radius: var(--radius-md);
+  border-bottom-right-radius: var(--radius-md);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.barraSuperior h1 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--deep-teal);
+}
+
+.barraSuperior p {
+  font-size: 0.875rem;
+  color: var(--gray-400);
+}
+
+/* ─── Search ─────────────────────────────────────────────────── */
+.barraSuperior-direita {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-wrapper svg {
+  position: absolute;
+  left: 0.75rem;
+  color: var(--gray-400);
+  pointer-events: none;
+}
+
+.search-input {
+  padding: 0.4rem 0.75rem 0.4rem 2.25rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-200);
+  background: var(--gray-150);
+  font-family: var(--font);
+  font-size: 0.875rem;
+  color: var(--gray-900);
+  width: 220px;
+  transition: border-color 0.15s, width 0.2s;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--deep-teal);
+  width: 280px;
+}
+
+.search-resultados {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+  min-width: 280px;
+  background: #fff;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--gray-100);
+  z-index: 200;
+  overflow: hidden;
+}
+
+.search-resultados.open { display: block; }
+
+.search-resultado-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  transition: background 0.15s;
+}
+
+.search-resultado-item:hover { background: var(--gray-100); }
+.search-resultado-item + .search-resultado-item { border-top: 1px solid var(--gray-100); }
+.search-resultado-nome { font-weight: 500; color: var(--gray-900); }
+.search-resultado-psicologo { font-size: 0.8125rem; color: var(--gray-400); }

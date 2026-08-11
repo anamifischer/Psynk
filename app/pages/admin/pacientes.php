@@ -17,10 +17,8 @@
 </head>
 <body>
         <div class="main">
-            <header class="barraSuperior">
-                <h1>Visão Geral</h1>
-                <p>07 de Agosto de 2026</p>
-            </header>
+            
+            <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/header.php"); ?>
 
             <div class="cartoes">
                 <div class="cartao" onclick="toggleList('listaCadastrados')">

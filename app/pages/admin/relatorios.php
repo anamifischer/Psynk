@@ -18,7 +18,9 @@
 
 </head>
 <body>
+
     <div class="main">
+        <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/header.php"); ?>
         <div class="grafico">
             <div class="ano-dropdown-wrapper">
                 <button class="btn btn-secondary" id="btn-ano" onclick="toggleAnoDropdown()">
@@ -44,6 +46,7 @@
 
     <script src="/app/js/relatorios.js"></script>
     <script src="/app/js/utils.js"></script>
+
 
 </body>
 </html>

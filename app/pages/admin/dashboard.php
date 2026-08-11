@@ -20,11 +20,7 @@
 <body>
  
     <div class="main">
-        <header class="barraSuperior">
-            <h1>Visão Geral</h1>
-            <p>07 de Agosto de 2026</p>
-        </header>
-
+        <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/header.php"); ?>
         <h1 class="cumprimento"> Olá Frederico </h1>
 
         <div class="cartoes">

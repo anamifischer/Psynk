@@ -1,4 +1,4 @@
-// ─── Calendário ───────────────────────────────────────────────
+//Calendário
 const mesAtual = document.getElementById("mes-atual");
 const dias = document.getElementById("dias");
 
@@ -55,7 +55,7 @@ if (btnProximo) {
 
 criarCalendario();
 
-// ─── Toggle Lists ─────────────────────────────────────────────
+//Toggle Lists
 function toggleList(id) {
     const alvo = document.getElementById(id);
     if (!alvo) return;
@@ -64,7 +64,7 @@ function toggleList(id) {
     if (!jaEstaAberto) alvo.classList.add('open');
 }
 
-// ─── Dropdown genérico (fecha ao clicar fora) ─────────────────
+//Dropdown genérico
 function toggleFiltroDropdown() {
     const dropdown = document.getElementById('filtro-dropdown');
     if (!dropdown) return;
@@ -79,7 +79,7 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// ─── Init global ──────────────────────────────────────────────
+//Init global
 document.addEventListener('DOMContentLoaded', () => {
     // Pacientes
     if (document.getElementById('listaCadastrados')) {
