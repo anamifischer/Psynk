@@ -36,6 +36,12 @@
                 <div class="cartaoLegenda">pendentes</div>
             </div>
 
+            <div class="cartao" onclick="toggleList('listaPendenteAnotação')">
+                <div class="cartaoTitulo">Pendentes</div>
+                <div class="cartaoValor">2</div>
+                <div class="cartaoLegenda">anotações da consulta</div>
+            </div>
+
             <div class="cartao-aviso">
                 <div class="cartaoTitulo">Avisos</div>
                 <div class="cartaoLegenda">Paciente Ana Lima já está aqui | Atendimento 08:00h - 09:30h</div>
@@ -79,31 +85,31 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Ana Lima</td>
+                        <td><span class="link-paciente" onclick="abrirDrawer('Ana Lima')">Ana Lima</span></td>
                         <td>Dr. Carlos Souza</td>
                         <td>08h00</td>
                         <td><span class="badge badge-green">Confirmado</span></td>
                     </tr>
                     <tr>
-                        <td>Bruno Martins</td>
+                        <td><span class="link-paciente" onclick="abrirDrawer('Bruno Martins')">Bruno Martins</span></td>
                         <td>Dra. Fernanda Rocha</td>
                         <td>09h30</td>
                         <td><span class="badge badge-orange">Pendente</span></td>
                     </tr>
                     <tr>
-                        <td>Carla Dias</td>
+                        <td><span class="link-paciente" onclick="abrirDrawer('Carla Dias')">Carla Dias</span></td>
                         <td>Dr. Carlos Souza</td>
                         <td>11h00</td>
                         <td><span class="badge badge-green">Confirmado</span></td>
                     </tr>
                     <tr>
-                        <td>Diego Fernandes</td>
+                        <td><span class="link-paciente" onclick="abrirDrawer('Diego Fernandes')">Diego Fernandes</span></td>
                         <td>Dra. Fernanda Rocha</td>
                         <td>14h00</td>
                         <td><span class="badge badge-green">Confirmado</span></td>
                     </tr>
                     <tr>
-                        <td>Elisa Costa</td>
+                        <td><span class="link-paciente" onclick="abrirDrawer('Elisa Costa')">Elisa Costa</span></td>
                         <td>Dr. Carlos Souza</td>
                         <td>15h30</td>
                         <td><span class="badge badge-orange">Pendente</span></td>
@@ -127,16 +133,49 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Bruno Martins</td>
+                        <td><span class="link-paciente" onclick="abrirDrawer('Bruno Martins')">Bruno Martins</span></td>
                         <td>Dra. Fernanda Rocha</td>
                         <td>09h30</td>
                         <td><button class="btn btn-sm">Confirmar</button></td>
                     </tr>
                     <tr>
-                        <td>Elisa Costa</td>
+                        <td><span class="link-paciente" onclick="abrirDrawer('Elisa Costa')">Elisa Costa</span></td>
                         <td>Dr. Carlos Souza</td>
                         <td>15h30</td>
                         <td><button class="btn btn-sm">Confirmar</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="listaPendenteAnotação" class="collapse-list">
+            <div class="section-header">
+                <span class="section-title">Anotações pendentes de lançar</span>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Paciente</th>
+                        <th>Psicólogo(a)</th>
+                        <th>Data da consulta</th>
+                        <th>Horário</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="link-paciente" onclick="abrirDrawer('Ana Lima')">Ana Lima</span></td>
+                        <td>Dr. Carlos Souza</td>
+                        <td>05/08/2026</td>
+                        <td>14h00</td>
+                        <td><button class="btn btn-sm btn-secondary" onclick="abrirModal('Ana Lima', 1)">Lançar</button></td>
+                    </tr>
+                    <tr>
+                        <td><span class="link-paciente" onclick="abrirDrawer('Bruno Lima')">Bruno Lima</span></td>
+                        <td>Dra. Fernanda Rocha</td>
+                        <td>04/08/2026</td>
+                        <td>09h30</td>
+                        <td><button class="btn btn-sm btn-secondary" onclick="abrirModal('Bruno Martins', 0)">Lançar</button></td>
                     </tr>
                 </tbody>
             </table>
