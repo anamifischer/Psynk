@@ -129,16 +129,52 @@ nav {
     margin-top: auto;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     padding: 12px;
+    border-top: 1px solid var(--gray-200);
 }
 
 .barraUser img {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
 }
 
-.barraUser span {
+.barraUser-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.barraUser p {
     font-size: 13px;
+    font-weight: 600;
+    color: var(--teal);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.barraUser a {
+    font-size: 11px;
+    color: var(--gray-400);
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.barraUser a:hover {
+    color: var(--teal);
+}
+
+.barraLateral.retraida .barraUser-info {
+    display: none;
+}
+
+.barraLateral.retraida .barraUser {
+    justify-content: center;
+    padding: 12px 0;
 }

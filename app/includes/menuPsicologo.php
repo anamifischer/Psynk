@@ -21,30 +21,30 @@
         </div>
 
     <div class ="barraItens">
-        <div class="item">
-            <img src = "/imgs/icons/home.png">
-            <a href="../../pages/admin/dashboard.php">Início</a>
-        </div>
-        <div class="item">
-            <img src = "/imgs/icons/agenda.png">
-            <a href="../../pages/admin/agenda.php">Agenda</a>
-        </div>
-        <div class="item">
-            <img src = "/imgs/icons/pacientes.png">
-            <a href="/pages/admin/pacientes.php">Pacientes</a>
-        </div>
-        <div class="item">
-            <img src = "/imgs/icons/financeiro.png">
-            <a href="../../pages/admin/financeiro.php">Financeiro</a>
-        </div>
-        <div class="item">
-            <img src = "/imgs/icons/relatorio.png">
-            <a href="../../pages/admin/relatorios.php">Relatórios</a>
-        </div>
-        <div class="item">
-            <img src = "/imgs/icons/configuracoes.png">
-            <a href="../../pages/admin/configuracoes.php">Configurações</a>
-        </div>
+        <a class="item" href="../../pages/psicologo/dashboard.php">
+                <img src="/imgs/icons/home.png">
+                <span>Início</span>
+        </a>
+        <a class="item" href="../../pages/psicologo/agenda.php">
+                <img src="/imgs/icons/agenda.png">
+                <span>Agenda</span>
+        </a>
+        <a class="item" href="../../pages/psicologo/pacientes.php">
+                <img src="/imgs/icons/pacientes.png">
+                <span>Pacientes</span>
+        </a>
+        <a class="item" href="../../pages/psicologo/financeiro.php">
+                <img src="/imgs/icons/financeiro.png">
+                <span>Financeiro</span>
+        </a>
+        <a class="item" href="../../pages/psicologo/relatorios.php">
+                <img src="/imgs/icons/relatorio.png">
+                <span>Relatórios</span>
+        </a>
+        <a class="item" href="../../pages/psicologo/configuracoes.php">
+                <img src="/imgs/icons/configuracoes.png">
+                <span>Configurações</span>
+        </a>
     </div>
 
     <div class = "barraUser">

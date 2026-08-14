@@ -64,6 +64,7 @@ function atualizarGrafico() {
         data: { labels: mesesLabels, datasets },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
                     position: 'top',
@@ -72,6 +73,8 @@ function atualizarGrafico() {
                         color: '#9E9E9E',
                         boxWidth: 12,
                         usePointStyle: true,
+                        pointStyle: 'circle',
+                        pointStyleWidth: 12,
                     }
                 },
                 tooltip: {
@@ -116,12 +119,11 @@ function iniciarFiltroAnos() {
             anoAtivo = parseInt(opcao.dataset.ano);
             document.getElementById('btn-ano-label').textContent = anoAtivo;
 
-            dropdown.classList.remove('open');
+            container.classList.remove('open');
             atualizarGrafico();
         });
     });
 
-    // fecha ao clicar fora
     document.addEventListener('click', (e) => {
         const wrapper = document.querySelector('.ano-dropdown-wrapper');
         if (!wrapper) return;
@@ -131,4 +133,31 @@ function iniciarFiltroAnos() {
     });
 
     atualizarGrafico();
+}
+
+function renderizarFaturamentoLista() {
+    const tbody = document.getElementById('faturamento-lista-body');
+    if (!tbody) return;
+
+    const linhas = [];
+    pacientesMockados.forEach(p => {
+        (p.pagamentos || []).forEach(pg => {
+            linhas.push({ nome: p.nome, ...pg });
+        });
+    });
+
+    linhas.sort((a, b) => {
+        const [da, ma, aa] = a.data.split('/').map(Number);
+        const [db, mb, ab] = b.data.split('/').map(Number);
+        return new Date(ab, mb-1, db) - new Date(aa, ma-1, da);
+    });
+
+    tbody.innerHTML = linhas.map(l => `
+        <tr class="faturamento-linha" onclick="abrirDrawerPagamentos('${l.nome}')">
+            <td>${l.nome}</td>
+            <td>${l.data}</td>
+            <td>R$ ${l.valor.toFixed(2).replace('.', ',')}</td>
+            <td><span class="badge badge-${badgeClassPagamento(l.status)}">${l.status}</span></td>
+        </tr>
+    `).join('');
 }
