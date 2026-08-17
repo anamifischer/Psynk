@@ -196,7 +196,11 @@ function abrirDrawer(nomePaciente) {
                         ? '<span class="badge badge-vermelho">Anotação pendente</span>'
                         : '<span class="badge badge-verde">Concluída</span>');
 
-                const podeLancar = !s.anotacao;
+                const podeLancar = !s.anotacao && papelUsuario !== 'recepcionista';
+
+                const textoAnotacao = (s.anotacao && papelUsuario !== 'recepcionista')
+                    ? `<p class="sessao-anotacao">${s.anotacao}</p>`
+                    : '';
 
                 return `
                     <div class="sessao-item">
@@ -206,12 +210,13 @@ function abrirDrawer(nomePaciente) {
                             ${badge}
                             ${podeLancar ? `<button class="btn btn-sm btn-secondary" onclick="abrirModal('${paciente.nome}', ${index})">Lançar</button>` : ''}
                         </div>
-                        ${s.anotacao ? `<p class="sessao-anotacao">${s.anotacao}</p>` : ''}
+                        ${textoAnotacao}
                     </div>
                 `;
             }).join('');
         }
     }
+
 
     document.getElementById('drawer-paciente').classList.add('open');
     document.getElementById('drawer-overlay').classList.add('open');

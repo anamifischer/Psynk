@@ -24,9 +24,9 @@ const eventos = [
     { data:"2026-08-25", hora:"09:00", paciente:"Lucas Pereira",   psicologoId:2, status:"confirmado" },
 ];
 
-let dataAtual         = new Date();
-let viewAtual         = "mes";
-let psicologosFiltro  = new Set(psicologos.map(p => p.id)); // todos selecionados
+let dataCalendarioAgenda = new Date();
+let viewAtual= "mes";
+let psicologosFiltro= new Set(psicologos.map(p => p.id)); // todos selecionados
 
 function formatarData(ano, mes, dia) {
     return `${ano}-${String(mes + 1).padStart(2,"0")}-${String(dia).padStart(2,"0")}`;
@@ -91,8 +91,8 @@ function renderizar() {
 
 
 function renderizarMes(grade, periodoEl) {
-    const ano = dataAtual.getFullYear();
-    const mes = dataAtual.getMonth();
+    const ano = dataCalendarioAgenda.getFullYear();
+    const mes = dataCalendarioAgenda.getMonth();
     periodoEl.textContent = `${nomesMeses[mes]} ${ano}`;
 
     const gradeEl       = document.createElement("div");
@@ -136,7 +136,7 @@ function criarCelulaMes(dia, ano, mes, outroMes) {
             const tag       = document.createElement("div");
             tag.className   = `evento-dia ${ev.status}`;
             tag.textContent = `${ev.hora} · ${ev.paciente}`;
-            tag.addEventListener("click", e => { e.stopPropagation(); abrirDetalhe(ev); });
+            tag.addEventListener("click", e => { e.stopPropagation(); abrirDrawer(ev.paciente); });
             cel.appendChild(tag);
         });
         if (evs.length > 2) {
@@ -151,8 +151,8 @@ function criarCelulaMes(dia, ano, mes, outroMes) {
 
 
 function renderizarSemana(grade, periodoEl) {
-    const inicio = new Date(dataAtual);
-    inicio.setDate(dataAtual.getDate() - dataAtual.getDay());
+    const inicio = new Date(dataCalendarioAgenda);
+    inicio.setDate(dataCalendarioAgenda.getDate() - dataCalendarioAgenda.getDay());
     const fim = new Date(inicio);
     fim.setDate(inicio.getDate() + 6);
 
@@ -190,7 +190,7 @@ function renderizarSemana(grade, periodoEl) {
                 <div class="evento-hora">${ev.hora}</div>
                 <div class="evento-nome">${ev.paciente}</div>
             `;
-            tag.addEventListener("click", () => abrirDetalhe(ev));
+            tag.addEventListener("click", e => { e.stopPropagation(); abrirDrawer(ev.paciente); });
             corpo.appendChild(tag);
         });
 
@@ -202,7 +202,7 @@ function renderizarSemana(grade, periodoEl) {
 }
 
 function renderizarAno(grade, periodoEl) {
-    const ano = dataAtual.getFullYear();
+    const ano = dataCalendarioAgenda.getFullYear();
     periodoEl.textContent = ano;
 
     const gradeEl     = document.createElement("div");
@@ -243,7 +243,7 @@ function renderizarAno(grade, periodoEl) {
             if (eventosDoDia(ano, m, d).length > 0) cel.classList.add("tem-evento");
             cel.textContent = d;
             cel.addEventListener("click", () => {
-                dataAtual = new Date(ano, m, d);
+                dataCalendarioAgenda = new Date(ano, m, d);
                 viewAtual = "semana";
                 atualizarBotoes();
                 renderizar();
@@ -258,55 +258,18 @@ function renderizarAno(grade, periodoEl) {
     grade.appendChild(gradeEl);
 }
 
-function abrirDetalhe(evento) {
-    const painel   = document.getElementById("painel-detalhe");
-    const conteudo = document.getElementById("detalhe-conteudo");
-    const psi      = psicologoPorId(evento.psicologoId);
-
-    const badgeClass = evento.status === "confirmado" ? "badge-verde" :
-                       evento.status === "pendente"   ? "badge-laranja" : "badge-vermelho";
-    const statusLabel = evento.status.charAt(0).toUpperCase() + evento.status.slice(1);
-
-    conteudo.innerHTML = `
-        <div class="detalhe-secao">
-            <p class="detalhe-rotulo">Paciente</p>
-            <p class="detalhe-valor">${evento.paciente}</p>
-        </div>
-        <div class="detalhe-secao">
-            <p class="detalhe-rotulo">Psicólogo(a)</p>
-            <div style="display:flex;align-items:center;gap:0.5rem;margin-top:0.25rem">
-                <div class="avatar-psicologo" style="background:${psi.cor};width:24px;height:24px;font-size:0.625rem">${psi.iniciais}</div>
-                <p class="detalhe-valor">${psi.nome}</p>
-            </div>
-        </div>
-        <div class="detalhe-secao">
-            <p class="detalhe-rotulo">Data e horário</p>
-            <p class="detalhe-valor">${evento.data} às ${evento.hora}</p>
-        </div>
-        <div class="detalhe-secao">
-            <p class="detalhe-rotulo">Status</p>
-            <span class="detalhe-badge ${badgeClass}">${statusLabel}</span>
-        </div>
-    `;
-
-    painel.classList.add("aberto");
-}
-
-document.getElementById("fechar-detalhe").addEventListener("click", () => {
-    document.getElementById("painel-detalhe").classList.remove("aberto");
-});
 
 document.getElementById("btn-anterior").addEventListener("click", () => {
-    if (viewAtual === "mes")    dataAtual.setMonth(dataAtual.getMonth() - 1);
-    else if (viewAtual === "semana") dataAtual.setDate(dataAtual.getDate() - 7);
-    else dataAtual.setFullYear(dataAtual.getFullYear() - 1);
+    if (viewAtual === "mes")    dataCalendarioAgenda.setMonth(dataCalendarioAgenda.getMonth() - 1);
+    else if (viewAtual === "semana") dataCalendarioAgenda.setDate(dataCalendarioAgenda.getDate() - 7);
+    else dataCalendarioAgenda.setFullYear(dataCalendarioAgenda.getFullYear() - 1);
     renderizar();
 });
 
 document.getElementById("btn-proximo").addEventListener("click", () => {
-    if (viewAtual === "mes")    dataAtual.setMonth(dataAtual.getMonth() + 1);
-    else if (viewAtual === "semana") dataAtual.setDate(dataAtual.getDate() + 7);
-    else dataAtual.setFullYear(dataAtual.getFullYear() + 1);
+    if (viewAtual === "mes")    dataCalendarioAgenda.setMonth(dataCalendarioAgenda.getMonth() + 1);
+    else if (viewAtual === "semana") dataCalendarioAgenda.setDate(dataCalendarioAgenda.getDate() + 7);
+    else dataCalendarioAgenda.setFullYear(dataCalendarioAgenda.getFullYear() + 1);
     renderizar();
 });
 
@@ -325,10 +288,6 @@ document.querySelectorAll(".botao-view").forEach(btn => {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("fechar-detalhe").addEventListener("click", () => {
-        document.getElementById("painel-detalhe").classList.remove("aberto");
-    });
-
     renderizarFiltros();
     renderizar();
 });

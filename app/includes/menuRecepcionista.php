@@ -14,6 +14,10 @@
     <script src="/app/js/menu.js"></script>
 
 <nav class="barraLateral">
+
+        <button class="btn-retrair" id="btn-retrair">
+            <img src="/imgs/icons/menu.png">
+        </button>
     
         <div class="barraLogo">
             <img class="logo-completo" src = "/imgs/logotipo-escuro.png">
@@ -23,23 +27,23 @@
     <div class ="barraItens">
         <div class="item">
             <img src = "/imgs/icons/home.png">
-            <a href="../../pages/admin/dashboard.php">Início</a>
+            <a href="../../pages/recepcionista/dashboard.php">Início</a>
         </div>
         <div class="item">
             <img src = "/imgs/icons/agenda.png">
-            <a href="../../pages/admin/agenda.php">Agenda</a>
+            <a href="../../pages/recepcionista/agenda.php">Agenda</a>
         </div>
         <div class="item">
             <img src = "/imgs/icons/pacientes.png">
-            <a href="/pages/admin/pacientes.php">Pacientes</a>
+            <a href="../../pages/recepcionista/pacientes.php">Pacientes</a>
         </div>
         <div class="item">
             <img src = "/imgs/icons/financeiro.png">
-            <a href="../../pages/admin/financeiro.php">Financeiro</a>
+            <a href="../../pages/recepcionista/financeiro.php">Financeiro</a>
         </div>
         <div class="item">
             <img src = "/imgs/icons/configuracoes.png">
-            <a href="../../pages/admin/configuracoes.php">Configurações</a>
+            <a href="../../pages/recepcionista/configuracoes.php">Configurações</a>
         </div>
     </div>
 

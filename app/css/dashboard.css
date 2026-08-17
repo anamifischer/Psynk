@@ -228,6 +228,35 @@ body{
   display: block;
 }
 
+#confirmacoes {
+  display: flex;
+  gap: 1rem;
+  margin: 0 2rem 1.5rem;
+}
+
+#confirmacoes .collapse-list {
+  flex: 1;
+  margin: 0;
+  overflow: visible;
+}
+
+#confirmacoes .collapse-list.open {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 1250px) {
+    #confirmacoes {
+        flex-direction: column;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8125rem;
+    }
+}
+
 .section-header {
   display: flex;
   align-items: center;

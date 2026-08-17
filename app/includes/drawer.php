@@ -129,5 +129,9 @@
         </div>
     </div>
 
+    <script>
+        const papelUsuario = "<?= $papel ?? 'admin' ?>";
+    </script>
+
 </body>
 </html>
