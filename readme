@@ -10,3 +10,9 @@ Sobre o tipo dos arquivos
 
 Considerando a necessidade de uso de includes para melhor organização e logísitica
 do código, as páginas foram criadas diretamente em php
+
+Pendências Front:
+- Lógica para acessar a página recepcionista
+- Página de configurações
+- Tem escuro
+- Melhorias css
