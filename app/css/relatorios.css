@@ -61,8 +61,8 @@ body{
 }
 
 .cartaoValor {
-  font-size: 2rem;
-  font-weight: 600;
+  font-size: 1.5rem;
+  font-weight: 400;
   color: var(--deep-teal);
   line-height: 1;
 }
@@ -174,6 +174,7 @@ body{
     margin: 1rem 2rem 1rem;
     display: flex;
     justify-content: flex-end;
+
 }
 
 .grafico-container {
@@ -183,6 +184,11 @@ body{
     box-shadow: var(--shadow);
     padding: 1.25rem;
     overflow: visible;
+    max-height: 300px;
+}
+
+.grafico-container canvas {
+    width: 100% !important;
 }
 
 .ano-dropdown-wrapper {
@@ -253,5 +259,54 @@ body{
     background: var(--deep-teal);
     border-color: var(--deep-teal);
     color: #fff;
+}
+
+.collapse-list {
+    display: none;
+    margin: 0 2rem 1.5rem;
+    background: #fff;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.collapse-list.open {
+    display: block;
+}
+
+.faturamento-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font);
+    font-size: 0.875rem;
+}
+
+.faturamento-tabela thead th {
+    padding: 0.75rem 1.25rem;
+    text-align: left;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--gray-400);
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.faturamento-tabela tbody td {
+    padding: 0.875rem 1.25rem;
+    color: var(--gray-700);
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.faturamento-linha {
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.faturamento-linha:hover {
+    background: var(--gray-50);
+}
+
+.faturamento-linha:last-child td {
+    border-bottom: none;
 }
 

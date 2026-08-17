@@ -21,6 +21,7 @@
     <div class="main">
 
         <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/header.php"); ?>
+        
         <div class="grafico">
             <div class="ano-dropdown-wrapper">
                 <button class="btn btn-secondary" id="btn-ano" onclick="toggleAnoDropdown()">
@@ -38,8 +39,36 @@
         </div>
 
         <div class="grafico-container">
+            <h1>Faturamento Geral</h1>
             <canvas id="graficoReceita"></canvas>
         </div>
+
+        <div class="cartoes">
+            <div class="cartao" onclick="toggleList('faturamentoClinica')">
+                <div class="cartaoTitulo">Faturamento Clínica</div>
+                <div class="cartaoValor">R$ 12520,60</div>
+                <div class="cartaoLegenda">mês</div>
+            </div>
+
+            <div class="cartao">
+                <div class="cartaoTitulo">Percentual definido sobre consultas</div>
+                <div class="cartaoValor">15%</div>
+            </div>
+        </div>
+
+        <div class="collapse-list" id="faturamentoClinica">
+            <table class="faturamento-tabela">
+                <thead>
+                    <tr>
+                        <th>Paciente</th>
+                        <th>Data</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="faturamento-lista-body"></tbody>
+            </table>
+</div>
 
 
     </div>

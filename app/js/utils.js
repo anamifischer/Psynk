@@ -88,6 +88,11 @@ const pacientesMockados = [
         nascimento: '12/03/1990', 
         idade: 36, 
         mostrarAnotacoes: true,
+        pagamentos: [
+            { data: '05/08/2026', valor: 180.00, status: 'Pago' },
+            { data: '29/07/2026', valor: 180.00, status: 'Pago' },
+            { data: '22/07/2026', valor: 180.00, status: 'Atrasado' },
+        ],
         sessoes: [
             {
                 data: '15/08/2026',
@@ -112,10 +117,22 @@ const pacientesMockados = [
             },
         ]
     },
-    { nome: 'Maria Laura Silva', status: 'Em espera', psicologo: 'Dr. Carlos Souza', nascimento: '05/07/1995', idade: 31, mostrarAnotacoes: true },
-    { nome: 'José Gonçalves', status: 'Encerrado', psicologo: 'Dra. Fernanda Rocha', nascimento: '22/11/1985', idade: 40, mostrarAnotacoes: false },
-    { nome: 'Gabriela Moreira', status: 'Pausado', psicologo: 'Dra. Fernanda Rocha', nascimento: '18/04/1992', idade: 34, mostrarAnotacoes: true },
-    { nome: 'Gabriel Mussoi', status: 'Inativo', psicologo: 'Dr. Pedro Alves', nascimento: '30/09/1998', idade: 27, mostrarAnotacoes: true },
+    { nome: 'Maria Laura Silva', status: 'Em espera', psicologo: 'Dr. Carlos Souza', nascimento: '05/07/1995', idade: 31, mostrarAnotacoes: true, pagamentos: [
+          { data: '01/08/2026', valor: 160.00, status: 'Pendente' },
+          { data: '18/07/2026', valor: 160.00, status: 'Pago' },
+        ] },
+    { nome: 'José Gonçalves', status: 'Encerrado', psicologo: 'Dra. Fernanda Rocha', nascimento: '22/11/1985', idade: 40, mostrarAnotacoes: false, pagamentos: [
+          { data: '10/06/2026', valor: 200.00, status: 'Pago' },
+          { data: '03/06/2026', valor: 200.00, status: 'Pago' },
+      ] },
+    { nome: 'Gabriela Moreira', status: 'Pausado', psicologo: 'Dra. Fernanda Rocha', nascimento: '18/04/1992', idade: 34, mostrarAnotacoes: true, pagamentos: [
+          { data: '20/07/2026', valor: 170.00, status: 'Atrasado' },
+          { data: '13/07/2026', valor: 170.00, status: 'Pago' },
+      ]},
+    { nome: 'Gabriel Mussoi', status: 'Inativo', psicologo: 'Dr. Pedro Alves', nascimento: '30/09/1998', idade: 27, mostrarAnotacoes: true, pagamentos: [
+          { data: '15/07/2026', valor: 150.00, status: 'Pago' },
+          { data: '08/07/2026', valor: 150.00, status: 'Pendente' },
+      ] },
 ];
 
 function iniciarSearch() {
@@ -217,6 +234,24 @@ function abrirDrawer(nomePaciente) {
         }
     }
 
+    // renderiza pagamentos
+    const abaPagamentosPanel = document.getElementById('aba-pagamentos');
+    if (abaPagamentosPanel) {
+        if (!paciente.pagamentos || !paciente.pagamentos.length) {
+            abaPagamentosPanel.innerHTML = '<p class="drawer-vazio">Nenhum pagamento registrado.</p>';
+        } else {
+            abaPagamentosPanel.innerHTML = paciente.pagamentos.map(pg => `
+                <div class="pagamento-item">
+                    <div class="pagamento-info">
+                        <span class="pagamento-data">${pg.data}</span>
+                        <span class="badge badge-${badgeClassPagamento(pg.status)}">${pg.status}</span>
+                    </div>
+                    <span class="pagamento-valor">R$ ${pg.valor.toFixed(2).replace('.', ',')}</span>
+                </div>
+            `).join('');
+        }
+    }
+
 
     document.getElementById('drawer-paciente').classList.add('open');
     document.getElementById('drawer-overlay').classList.add('open');
@@ -293,6 +328,24 @@ function salvarAnotacao() {
     abrirDrawer(sessaoAtiva.paciente);
 }
 
+function badgeClassPagamento(status) {
+    const map = {
+        'Pago': 'verde',
+        'Pendente': 'amarelo',
+        'Atrasado': 'vermelho',
+    };
+    return map[status] || 'cinza';
+}
+
+function abrirDrawerPagamentos(nomePaciente) {
+    abrirDrawer(nomePaciente);
+
+    document.querySelectorAll('.drawer-aba').forEach(a => a.classList.remove('active'));
+    document.querySelectorAll('.drawer-painel').forEach(p => p.classList.remove('active'));
+    document.querySelector('.drawer-aba[data-aba="pagamentos"]').classList.add('active');
+    document.getElementById('aba-pagamentos').classList.add('active');
+}
+
 //Init global
 document.addEventListener('DOMContentLoaded', () => {
     // Global
@@ -308,6 +361,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Financeiro
     if (document.getElementById('listaVencendo')) {
         document.getElementById('listaVencendo').classList.add('open');
+    }
+
+    //lista faturamento
+    if (document.getElementById('faturamento-lista-body')) {
+        document.getElementById('faturamentoClinica').classList.add('open');
+        renderizarFaturamentoLista();
     }
 
     if (document.getElementById('graficoReceita')) {

@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="/app/css/variables.css">
     <link rel="stylesheet" type="text/css" href="/app/css/financeiro.css">
   
-
+    <?php $papel = 'recepcionista'; ?>
     <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/menuRecepcionista.php"); ?>
 </head>
 <body>

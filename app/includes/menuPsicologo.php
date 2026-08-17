@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu Admin</title>
 
-
 </head>
 
 
@@ -14,53 +13,48 @@
     <link rel="stylesheet" type="text/css" href="/app/css/menu.css">
     <script src="/app/js/menu.js"></script>
 
-    <nav class="barraLateral">
-
-        <button class="btn-retrair" id="btn-retrair">
-            <img src="/imgs/icons/menu.png">
-        </button>
-
+<nav class="barraLateral">
 
         <div class="barraLogo">
             <img class="logo-completo" src = "/imgs/logotipo-escuro.png">
             <img class="logo-icone" src="/imgs/logo.png">
         </div>
 
-        <div class="barraItens">
-            <a class="item" href="../../pages/admin/dashboard.php">
+    <div class ="barraItens">
+        <a class="item" href="../../pages/psicologo/dashboard.php">
                 <img src="/imgs/icons/home.png">
                 <span>Início</span>
-            </a>
-            <a class="item" href="../../pages/admin/agenda.php">
+        </a>
+        <a class="item" href="../../pages/psicologo/agenda.php">
                 <img src="/imgs/icons/agenda.png">
                 <span>Agenda</span>
-            </a>
-            <a class="item" href="../../pages/admin/pacientes.php">
+        </a>
+        <a class="item" href="../../pages/psicologo/pacientes.php">
                 <img src="/imgs/icons/pacientes.png">
                 <span>Pacientes</span>
-            </a>
-            <a class="item" href="../../pages/admin/financeiro.php">
+        </a>
+        <a class="item" href="../../pages/psicologo/financeiro.php">
                 <img src="/imgs/icons/financeiro.png">
                 <span>Financeiro</span>
-            </a>
-            <a class="item" href="../../pages/admin/relatorios.php">
+        </a>
+        <a class="item" href="../../pages/psicologo/relatorios.php">
                 <img src="/imgs/icons/relatorio.png">
                 <span>Relatórios</span>
-            </a>
-            <a class="item" href="../../pages/admin/configuracoes.php">
+        </a>
+        <a class="item" href="../../pages/psicologo/configuracoes.php">
                 <img src="/imgs/icons/configuracoes.png">
                 <span>Configurações</span>
-            </a>
-        </div>
+        </a>
+    </div>
 
-        <div class = "barraUser">
+    <div class = "barraUser">
 
-            <img src="/imgs/avatarExemplo.jpg">
-            <p>Nome User</p>
-            <a href="/logout.php">Sair</a>
-        </div>
+        <img src="/imgs/avatarExemplo.jpg">
+        <p>Nome User</p>
+        <a href="/logout.php">Sair</a>
+    </div>
 
-    </nav>
+</nav>
 
 </body>
 </html>

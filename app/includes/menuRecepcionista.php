@@ -24,28 +24,32 @@
             <img class="logo-icone" src="/imgs/logo.png">
         </div>
 
-    <div class ="barraItens">
-        <div class="item">
-            <img src = "/imgs/icons/home.png">
-            <a href="../../pages/recepcionista/dashboard.php">Início</a>
+        <div class="barraItens">
+            <a class="item" href="../../pages/recepcionista/dashboard.php">
+                <img src="/imgs/icons/home.png">
+                <span>Início</span>
+            </a>
+            <a class="item" href="../../pages/recepcionista/agenda.php">
+                <img src="/imgs/icons/agenda.png">
+                <span>Agenda</span>
+            </a>
+            <a class="item" href="../../pages/recepcionista/pacientes.php">
+                <img src="/imgs/icons/pacientes.png">
+                <span>Pacientes</span>
+            </a>
+            <a class="item" href="../../pages/recepcionista/financeiro.php">
+                <img src="/imgs/icons/financeiro.png">
+                <span>Financeiro</span>
+            </a>
+            <a class="item" href="../../pages/recepcionista/relatorios.php">
+                <img src="/imgs/icons/relatorio.png">
+                <span>Relatórios</span>
+            </a>
+            <a class="item" href="../../pages/recepcionista/configuracoes.php">
+                <img src="/imgs/icons/configuracoes.png">
+                <span>Configurações</span>
+            </a>
         </div>
-        <div class="item">
-            <img src = "/imgs/icons/agenda.png">
-            <a href="../../pages/recepcionista/agenda.php">Agenda</a>
-        </div>
-        <div class="item">
-            <img src = "/imgs/icons/pacientes.png">
-            <a href="../../pages/recepcionista/pacientes.php">Pacientes</a>
-        </div>
-        <div class="item">
-            <img src = "/imgs/icons/financeiro.png">
-            <a href="../../pages/recepcionista/financeiro.php">Financeiro</a>
-        </div>
-        <div class="item">
-            <img src = "/imgs/icons/configuracoes.png">
-            <a href="../../pages/recepcionista/configuracoes.php">Configurações</a>
-        </div>
-    </div>
 
     <div class = "barraUser">
 
