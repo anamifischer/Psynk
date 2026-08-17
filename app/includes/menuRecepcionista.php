@@ -41,10 +41,6 @@
                 <img src="/imgs/icons/financeiro.png">
                 <span>Financeiro</span>
             </a>
-            <a class="item" href="../../pages/recepcionista/relatorios.php">
-                <img src="/imgs/icons/relatorio.png">
-                <span>Relatórios</span>
-            </a>
             <a class="item" href="../../pages/recepcionista/configuracoes.php">
                 <img src="/imgs/icons/configuracoes.png">
                 <span>Configurações</span>
