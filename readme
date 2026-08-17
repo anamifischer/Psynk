@@ -1,0 +1,12 @@
+Sobre as páginas de cada usuário
+
+O usuário psicólogo nao possui páginas próprias pois as páginas serão as mesmas do admin, 
+com a diferença de que na lógica do código a visualização entre esses usuários será diferente, 
+tendo o psicólogo acesso limitado a seus próprios pacientes e o administrador podendo 
+visualizar tudo
+
+
+Sobre o tipo dos arquivos
+
+Considerando a necessidade de uso de includes para melhor organização e logísitica
+do código, as páginas foram criadas diretamente em php
