@@ -1,17 +1,4 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Admin</title>
-
-
-</head>
-
-
-<body>
-    <link rel="stylesheet" type="text/css" href="/app/css/menu.css">
+   <link rel="stylesheet" type="text/css" href="/app/css/menu.css">
     <script src="/app/js/menu.js"></script>
 
     <nav class="barraLateral">
@@ -27,27 +14,27 @@
         </div>
 
         <div class="barraItens">
-            <a class="item" href="../../pages/admin/dashboard.php">
+            <a class="item" href="/app/pages/admin/dashboard.php">
                 <img src="/imgs/icons/home.png">
                 <span>Início</span>
             </a>
-            <a class="item" href="../../pages/admin/agenda.php">
+            <a class="item" href="/app/pages/admin/agenda.php">
                 <img src="/imgs/icons/agenda.png">
                 <span>Agenda</span>
             </a>
-            <a class="item" href="../../pages/admin/pacientes.php">
+            <a class="item" href="/app/pages/admin/pacientes.php">
                 <img src="/imgs/icons/pacientes.png">
                 <span>Pacientes</span>
             </a>
-            <a class="item" href="../../pages/admin/financeiro.php">
+            <a class="item" href="/app/pages/admin/financeiro.php">
                 <img src="/imgs/icons/financeiro.png">
                 <span>Financeiro</span>
             </a>
-            <a class="item" href="../../pages/admin/relatorios.php">
+            <a class="item" href="/app/pages/admin/relatorios.php">
                 <img src="/imgs/icons/relatorio.png">
                 <span>Relatórios</span>
             </a>
-            <a class="item" href="../../pages/admin/configuracoes.php">
+            <a class="item" href="/app/pages/admin/configuracoes.php">
                 <img src="/imgs/icons/configuracoes.png">
                 <span>Configurações</span>
             </a>
@@ -61,6 +48,3 @@
         </div>
 
     </nav>
-
-</body>
-</html>

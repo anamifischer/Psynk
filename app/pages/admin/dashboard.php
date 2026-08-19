@@ -30,13 +30,13 @@
                 <div class="cartaoLegenda">confirmadas</div>
             </div>
 
-            <div class="cartao" onclick="toggleList('listaAguardaConfirmacaoo')">
+            <div class="cartao" onclick="toggleList('listaAguardaConfirmacao')">
                 <div class="cartaoTitulo">Aguardando Confirmação</div>
                 <div class="cartaoValor">2</div>
                 <div class="cartaoLegenda">pendentes</div>
             </div>
 
-            <div class="cartao" onclick="toggleList('listaPendenteAnotação')">
+            <div class="cartao" onclick="toggleList('listaPendenteAnotacao')">
                 <div class="cartaoTitulo">Pendentes</div>
                 <div class="cartaoValor">2</div>
                 <div class="cartaoLegenda">anotações da consulta</div>
@@ -118,7 +118,7 @@
             </table>
         </div>
 
-        <div id="listaAguardaConfirmacaoo" class="collapse-list">
+        <div id="listaAguardaConfirmacao" class="collapse-list">
             <div class="section-header">
                 <span class="section-title">Aguardando confirmação</span>
             </div>
@@ -148,7 +148,7 @@
             </table>
         </div>
 
-        <div id="listaPendenteAnotação" class="collapse-list">
+        <div id="listaPendenteAnotacao" class="collapse-list">
             <div class="section-header">
                 <span class="section-title">Anotações pendentes de lançar</span>
             </div>
