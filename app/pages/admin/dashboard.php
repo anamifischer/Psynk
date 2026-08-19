@@ -88,31 +88,31 @@
                         <td><span class="link-paciente" onclick="abrirDrawer('Ana Lima')">Ana Lima</span></td>
                         <td>Dr. Carlos Souza</td>
                         <td>08h00</td>
-                        <td><span class="badge badge-green">Confirmado</span></td>
+                        <td><span class="badge badge-verde">Confirmado</span></td>
                     </tr>
                     <tr>
                         <td><span class="link-paciente" onclick="abrirDrawer('Bruno Martins')">Bruno Martins</span></td>
                         <td>Dra. Fernanda Rocha</td>
                         <td>09h30</td>
-                        <td><span class="badge badge-orange">Pendente</span></td>
+                        <td><span class="badge badge-laranja">Pendente</span></td>
                     </tr>
                     <tr>
                         <td><span class="link-paciente" onclick="abrirDrawer('Carla Dias')">Carla Dias</span></td>
                         <td>Dr. Carlos Souza</td>
                         <td>11h00</td>
-                        <td><span class="badge badge-green">Confirmado</span></td>
+                        <td><span class="badge badge-verde">Confirmado</span></td>
                     </tr>
                     <tr>
                         <td><span class="link-paciente" onclick="abrirDrawer('Diego Fernandes')">Diego Fernandes</span></td>
                         <td>Dra. Fernanda Rocha</td>
                         <td>14h00</td>
-                        <td><span class="badge badge-green">Confirmado</span></td>
+                        <td><span class="badge badge-verde">Confirmado</span></td>
                     </tr>
                     <tr>
                         <td><span class="link-paciente" onclick="abrirDrawer('Elisa Costa')">Elisa Costa</span></td>
                         <td>Dr. Carlos Souza</td>
                         <td>15h30</td>
-                        <td><span class="badge badge-orange">Pendente</span></td>
+                        <td><span class="badge badge-laranja">Pendente</span></td>
                     </tr>
                 </tbody>
             </table>

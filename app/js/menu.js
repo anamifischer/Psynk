@@ -15,6 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (localStorage.getItem('menu-retraido') === 'true') {
         sidebar.classList.add('retraida');
         const main = document.querySelector('.main');
-        if (main) main.classList.add('expandida');
+        if (main) main.classList.add('retraido');
     }
 });
