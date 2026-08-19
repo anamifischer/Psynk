@@ -144,3 +144,14 @@ input:focus {
     padding: 2rem 1.5rem;
   }
 }
+
+.reenviar {
+    color: var(--sage);
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.reenviar:hover {
+    color: var(--deep-teal);
+}

@@ -27,7 +27,7 @@
         <label for="senha">Senha</label>
         <input type="password" id="senha" name="senha" placeholder="••••••••">
 
-        <a href="redefinir-senha.php" class="forgot-link">
+        <a href="redefinirSenha.php" class="forgot-link">
             Esqueci minha senha →
         </a>
 
