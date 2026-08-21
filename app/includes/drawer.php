@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drawer</title>
-</head>
-<body>
-
-    <link rel="stylesheet" type="text/css" href="/app/css/drawer.css">
+<link rel="stylesheet" type="text/css" href="/app/css/drawer.css">
     
     <div class="drawer-overlay" id="drawer-overlay" onclick="fecharDrawer()"></div>
 
@@ -132,6 +123,3 @@
     <script>
         const papelUsuario = "<?= $papel ?? 'admin' ?>";
     </script>
-
-</body>
-</html>

@@ -1,160 +1,28 @@
-body{
-  font-family: var(--font);
-}
-
-.main {
-  margin-left: var(--sidebar-width);
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background: var(--gray-150);
-}
-
-.main.retraido {
-  margin-left: var(--sidebar-width-retraido);
-}
-
-.cartoes {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1rem;
-  align-items: stretch;
-  padding: 1rem 2rem;
-}
-
-@media (max-width: 768px) {
-  .cartoes {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-  }
-
-  .calendario {
-    grid-column: 1 / -1;  /* calendário ocupa a linha inteira */
-  }
-}
-
-.cartao {
-  background: #fff;
-  border-radius: var(--radius-md);
-  padding: 1.25rem 1.5rem;
-  box-shadow: var(--shadow);
-  cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
-  min-width: 140px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.25rem;
-}
-
-.cartao:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 36px rgba(20, 30, 40, 0.12);
-}
-
-.cartaoTitulo {
-  font-size: 0.8125rem;
-  color: var(--gray-400);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.cartaoValor {
-  font-size: 2rem;
-  font-weight: 600;
-  color: var(--deep-teal);
-  line-height: 1;
-}
-
-.cartaoLegenda {
-  font-size: 0.8125rem;
-  color: var(--gray-400);
-}
 
 .collapse-list {
-  display: none;
-  margin: 0 2rem 1.5rem;
-  background: #fff;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow);
-  overflow: hidden;
+    display: none;
+
+    margin: 0 2rem 1.5rem;
+
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+
+    box-shadow: var(--shadow-sm);
+
+    overflow: hidden;
 }
 
 .collapse-list.open {
-  display: block;
+    display: block;
 }
-
-.section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.25rem;
-  border-bottom: 1px solid var(--gray-100);
-}
-
-.section-title {
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: var(--gray-900);
-}
-
-.section-link {
-  font-size: 0.8125rem;
-  color: var(--sage);
-  text-decoration: none;
-}
-
-.section-link:hover { color: var(--deep-teal); }
-
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.data-table th {
-  text-align: left;
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--gray-400);
-  padding: 0.625rem 1.25rem;
-  background: var(--gray-100);
-}
-
-.data-table td {
-  padding: 0.75rem 1.25rem;
-  font-size: 0.9375rem;
-  border-bottom: 1px solid var(--gray-100);
-  vertical-align: middle;
-}
-
-.data-table tr:last-child td { border-bottom: none; }
-.data-table tr:hover td { background: #fafafa; }
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.625rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.badge-verde    { background: #e6f5ed; color: var(--verde-500); }
-.badge-laranja  { background: #fdf3e3; color: var(--laranja-500); }
-.badge-vermelho { background: #faeaea; color: var(--vermelho-500); }
-.badge-amarelo  { background: #fef9e7; color: var(--amarelo-500); }
-.badge-azul     { background: #eaf1fd; color: var(--azul-500); }
-.badge-roxo     { background: #f0edf7; color: var(--roxo-500); }
-.badge-cinza    { background: #f2f2f2; color: var(--cinza-500); }
 
 .filtro-secao {
-    margin: 0 2rem 1.5rem;
-    padding-top: 1rem;
     display: flex;
     align-self: flex-end;
+
+    margin: 0 2rem 1.5rem;
+    padding-top: 1rem;
 }
 
 .filtro-dropdown-wrapper {
@@ -166,21 +34,24 @@ body{
     display: none;
     position: absolute;
     top: calc(100% + 6px);
-    left: unset;
     right: 0;
-    background: #fff;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow);
-    padding: 1rem 1.25rem;
     z-index: 100;
+
+    flex-direction: column;
+    gap: 0.75rem;
+
     min-width: 320px;
-    border: 1px solid var(--gray-100);
+    padding: 1rem 1.25rem;
+
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+
+    box-shadow: var(--shadow-md);
 }
 
 .filtro-dropdown.open {
     display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
 }
 
 .filtro-grupo {
@@ -190,53 +61,47 @@ body{
 }
 
 .filtro-titulo {
+    color: var(--text-muted);
     font-size: 0.75rem;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--gray-400);
 }
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-sm);
-  font-family: var(--font);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  border: none;
-  transition: background 0.15s;
-  text-decoration: none;
-}
-
-.btn-sm { padding: 0.3125rem 0.75rem; font-size: 0.8125rem; }
-.btn-primary { background: var(--deep-teal); color: #fff; }
-.btn-primary:hover { background: #1a3338; }
-.btn-secondary { background: var(--gray-100); color: var(--gray-700); }
-.btn-secondary:hover { background: var(--gray-200); }
 
 .chip {
     padding: 0.25rem 0.75rem;
-    border-radius: 999px;
-    border: 1px solid var(--gray-200);
+
     background: transparent;
-    color: var(--gray-700);
-    font-family: var(--font);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+
+    color: var(--text-secondary);
+    font-family: inherit;
     font-size: 0.8125rem;
     font-weight: 500;
+
     cursor: pointer;
-    transition: background 0.15s, border-color 0.15s, color 0.15s;
+
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
 }
 
 .chip:hover {
-    background: var(--gray-100);
-    border-color: var(--gray-300);
+    background: var(--surface-soft);
+    border-color: var(--rose);
+    color: var(--terracotta-dark);
 }
 
 .chip.active {
-    background: var(--deep-teal);
-    border-color: var(--deep-teal);
+    background: var(--terracotta);
+    border-color: var(--terracotta);
     color: #fff;
+}
+
+@media (max-width: 768px) {
+    .cartoes {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }

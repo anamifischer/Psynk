@@ -1,50 +1,52 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
+
 :root {
-  /* Cores primárias */
-  --deep-teal:   #234c58;
-  --teal:        #316372;
-  --sage:        #91a6a4;
-  --warm-sand:   #f1e6dc;
-  --warm-beige:  #e1bba4;
-  --terracotta:  #d97c56;
-  --off-white:   #fbfaf9;
 
-  /* Neutros */
-  --gray-900: #1C1C1C;
-  --gray-700: #555555;
-  --gray-400: #8D8D8D;
-  --gray-200: #D7D7D7;
-  --gray-150: #E6E6E6;
-  --gray-100: #F5F5F5;
+  --cream: #F8F5F0;
+  --beige: #EFE6E1;
+  --rose: #B48688;
+  --terracotta: #A97254;
+  --terracotta-dark: #9D5D47;
+  --taupe: #9C857E;
+  --sage: #99A494;
+  --sage-dark: #687363;
 
-  /* Estados */
-    --verde-500: #4CAF50;
-    --amarelo-500: #F5B942;
-    --azul-500: #5B8DEF;
-    --laranja-500: #F28C5C;
-    --vermelho-500: #f25c5c;
-    --roxo-500: #7B61A8;
-    --cinza-500: #9E9E9E;
+  --text-primary: #403B38;
+  --text-secondary: #6F6661;
+  --text-muted: #918680;
 
-  /* Tipografia */
-  --font: calibri, sans-serif;
+  --background: var(--cream);
+  --surface: #FFFDF9;
+  --surface-soft: var(--beige);
 
-  /* Bordas */
+  --border: #E1D8D2;
+  --border-light: #ECE5DF;
+
+  --success: var(--sage-dark);
+  --warning: var(--terracotta);
+  --error: #A65F5F;
+
+  --font-family: calibri, sans-serif;
+
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 24px;
 
-  /* Sombra */
-  --shadow: 0 8px 30px rgba(20, 30, 40, 0.08);
+  --shadow-sm: 0 2px 8px rgba(78, 64, 56, 0.06);
+  --shadow-md: 0 6px 20px rgba(78, 64, 56, 0.08);
+
+  --sidebar-width: 200px;
+  --sidebar-width-retraido: 64px;
 
   --sidebar-width: 200px;
   --sidebar-width-retraido: 64px;
 }
 
-
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 

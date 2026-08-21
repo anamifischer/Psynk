@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
 
     <link rel="stylesheet" type="text/css" href="/app/css/variables.css">
+    <link rel="stylesheet" type="text/css" href="/app/css/globals.css">
     <link rel="stylesheet" type="text/css" href="/app/css/dashboard.css">
   
     <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/menuRecepcionista.php"); ?>

@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
     <link rel="stylesheet" href="/app/css/variables.css">
-    <link rel="stylesheet" href="/app/css/menu.css">
+    <link rel="stylesheet" type="text/css" href="/app/css/globals.css">
     <link rel="stylesheet" href="/app/css/agenda.css">
 
     <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/menuRecepcionista.php"); ?>
@@ -16,7 +16,7 @@
 </head>
 <body>
 
-<div class="main">
+<div class="main.agenda">
 
     <aside class="painel-filtros">
 

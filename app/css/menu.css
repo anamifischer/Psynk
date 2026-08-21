@@ -24,7 +24,6 @@ nav {
 
 .barraLateral.retraida {
     width: var(--sidebar-width-retraido);
-    padding: 20px 8px;
 }
 
 .barraLateral.retraida .barraItens a,
