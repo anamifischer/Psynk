@@ -1,5 +1,6 @@
 body{
   font-family: var(--font);
+  background: var(--off-white);
 }
 
 .main {
@@ -8,7 +9,32 @@ body{
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: var(--gray-150);
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    width: 520px;
+    height: 520px;
+    top: -230px;
+    right: -180px;
+    background: var(--sage);
+    opacity: 0.38;
+    border-radius: 48% 52% 55% 45%;
+    z-index: -1;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    width: 520px;
+    height: 520px;
+    top: 500px;
+    right: 50%;
+    background: var(--sage);
+    opacity: 0.38;
+    border-radius: 48% 52% 55% 45%;
+    z-index: -1;
 }
 
 .main.retraido {

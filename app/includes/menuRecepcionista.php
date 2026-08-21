@@ -9,7 +9,7 @@
         </button>
     
         <div class="barraLogo">
-            <img class="logo-completo" src = "/imgs/logotipo-escuro.png">
+            <img class="logo-completo" src = "/imgs/logotipo-claro.png">
             <img class="logo-icone" src="/imgs/logo.png">
         </div>
 
@@ -37,10 +37,11 @@
     </div>
 
     <div class = "barraUser">
-
         <img src="/imgs/avatarExemplo.jpg">
-        <p>Nome User</p>
-        <a href="/logout.php">Sair</a>
+        <section id=user-info>
+            <p>Nome User</p>
+            <a href="/logout.php">Sair</a>
+        </section>
     </div>
 
 </nav>

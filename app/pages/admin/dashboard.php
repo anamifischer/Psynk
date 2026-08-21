@@ -21,7 +21,7 @@
  
     <div class="main">
         <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/header.php"); ?>
-        <h1 class="cumprimento"> Olá Frederico </h1>
+        <h1 class="cumprimento"> Olá Fábio</h1>
 
         <div class="cartoes">
             <div class="cartao" onclick="toggleList('listaConsultas')">
@@ -42,12 +42,14 @@
                 <div class="cartaoLegenda">anotações da consulta</div>
             </div>
 
-            <div class="cartao-aviso">
-                <div class="cartaoTitulo">Avisos</div>
-                <div class="cartaoLegenda">Paciente Ana Lima já está aqui | Atendimento 08:00h - 09:30h</div>
-                <div class="link"><a href="agenda.php">Acessar evento 🡪 </a></div>
-            </div> 
+            <div class="cartao">
+                <div class="cartaoTitulo">Consultas</div>
+                <div class="cartaoValor">23</div>
+                <div class="cartaoLegenda">concluídas neste mês</div>
+            </div>
+        </div>
 
+        <div class="calendario-e-avisos">
             <div class="calendario">
                 <div class="calendario-header">
                     <button id="mes-anterior">‹</button>
@@ -67,7 +69,11 @@
 
                 <div id="dias" class="dias"></div>
             </div>
-
+            <div class="cartao-aviso">
+                <div class="cartaoTitulo">Avisos</div>
+                <div class="cartaoLegenda">Paciente Ana Lima já está aqui | Atendimento 08:00h - 09:30h</div>
+                <div class="link"><a href="agenda.php">Acessar evento 🡪 </a></div>
+            </div> 
         </div>
 
         <div id="listaConsultas" class="collapse-list">

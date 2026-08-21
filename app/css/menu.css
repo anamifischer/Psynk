@@ -10,9 +10,8 @@ nav {
 .barraLateral {
     width: var(--sidebar-width);
     height: 100vh;
-    background: var(--off-white);
- 
-    color: var(--text-light);
+    background: var(--deep-teal);
+    color: var(--off-white);
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -27,9 +26,20 @@ nav {
     padding: 20px 8px;
 }
 
-.barraLateral.retraida .barraItens a,
-.barraLateral.retraida .barraUser p,
-.barraLateral.retraida .barraUser a {
+.barraLateral.retraida .barraItens a {
+    justify-content: center;
+    padding: 11px 0;
+}
+
+.barraLateral.retraida .barraItens a span {
+    display: none;
+}
+
+.barraLateral.retraida .barraUser-info {
+    display: none;
+}
+
+.barraLateral.retraida #user-info{
     display: none;
 }
 
@@ -105,7 +115,7 @@ nav {
 }
 
 .item:hover {
-    background: var(--gray-200);
+    background: var(--sage);
 }
 
 .barraItens a {
@@ -113,7 +123,7 @@ nav {
     align-items: center;
     gap: 12px;
     padding: 11px 12px;
-    color: var(--teal);
+    color: var(--gray-200);
     text-decoration: none;
     font-size: 14px;
     border-radius: 8px;
@@ -153,14 +163,14 @@ nav {
 .barraUser p {
     font-size: 13px;
     font-weight: 600;
-    color: var(--teal);
+    color: var(--gray-200);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .barraUser a {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--gray-400);
     text-decoration: none;
     transition: color 0.15s;
@@ -168,6 +178,11 @@ nav {
 
 .barraUser a:hover {
     color: var(--teal);
+}
+
+.barraLateral.retraida .img{
+    display: block;
+    visibility: visible;
 }
 
 .barraLateral.retraida .barraUser-info {

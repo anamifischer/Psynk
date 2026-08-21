@@ -1,5 +1,5 @@
 .barraSuperior {
-  background: var(--off-white);
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -8,6 +8,7 @@
   margin-right: 1.7rem;
   border-bottom-left-radius: var(--radius-md);
   border-bottom-right-radius: var(--radius-md);
+  box-shadow: var(--shadow);
   position: sticky;
   top: 0;
   z-index: 50;
@@ -47,14 +48,13 @@
 .search-input {
   padding: 0.4rem 0.75rem 0.4rem 2.25rem;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--gray-200);
-  background: var(--gray-150);
+  background: var(--warm-sand);
   font-family: var(--font);
   font-size: 0.875rem;
   color: var(--gray-900);
   width: 220px;
-  transition: border-color 0.15s, width 0.2s;
   outline: none;
+  border: none;
 }
 
 .search-input:focus {

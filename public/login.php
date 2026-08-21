@@ -14,7 +14,7 @@
 <div class="login-panel">
 
     <div class="login-img">
-        <img src="../imgs/logotipo-escuro.png" alt="logotipo PsySink">
+        <img src="../imgs/logo.png" alt="logotipo PsySink">
     </div>
     <h1>Bem-vindo(a) ao PsySink</h1>
     <p>Faça login para acessar os recursos do sistema.</p>
@@ -27,8 +27,11 @@
         <label for="senha">Senha</label>
         <input type="password" id="senha" name="senha" placeholder="••••••••">
 
-        <a href="redefinirSenha.php" class="forgot-link">
+        <a href="redefinirSenha.php" class="link">
             Esqueci minha senha →
+        </a>
+        <a href="cadastrar.php" class="link">
+            Ainda não tem uma conta? →
         </a>
 
         <button type="submit" id="botao-login" class="btn-primary">

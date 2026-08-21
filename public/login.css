@@ -13,6 +13,34 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    width: 520px;
+    height: 520px;
+    top: -230px;
+    right: -180px;
+    background: var(--sage);
+    opacity: 0.38;
+    border-radius: 48% 52% 55% 45%;
+    z-index: -1;
+}
+
+body::after {
+    content: "✦";
+    position: fixed;
+    left: 7%;
+    bottom: 12%;
+    color: var(--terracotta);
+    font-size: 64px;
+    opacity: 0.8;
+    transform: rotate(15deg);
+    z-index: -1;
 }
 
 .login-panel {
@@ -88,6 +116,7 @@ input[type="password"] {
   border-radius: var(--radius-sm);
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
+  margin-bottom: 1rem;;
 }
 
 input::placeholder {
@@ -99,18 +128,18 @@ input:focus {
   box-shadow: 0 0 0 3px rgba(145, 166, 164, 0.2);
 }
 
-.forgot-link {
+.link {
   display: block;
   text-align: right;
   font-size: 0.875rem;
   color: var(--sage);
+  opacity: 80%;
   text-decoration: none;
-  margin-top: 0.625rem;
-  margin-bottom: 1.75rem;
+  margin-top: 0.1rem;
   transition: color 0.2s;
 }
 
-.forgot-link:hover {
+.link:hover {
   color: var(--deep-teal);
 }
 
@@ -127,10 +156,11 @@ input:focus {
   cursor: pointer;
   transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
   letter-spacing: 0.01em;
+  margin-top: 1.75rem;
 }
 
 .btn-primary:hover {
-  background: #1a3338;
+  background: var(--terracotta);
   box-shadow: 0 8px 24px rgba(20, 30, 40, 0.15);
 }
 

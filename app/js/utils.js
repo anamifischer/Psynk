@@ -25,11 +25,19 @@ function criarCalendario() {
         const elementoDia = document.createElement("button");
         elementoDia.textContent = dia;
         elementoDia.classList.add("dia");
-        elementoDia.addEventListener("click", function () {
-            selecionarDia(dia, mes, ano);
-        });
-        dias.appendChild(elementoDia);
-    }
+        const hoje = new Date();
+        if (
+            dia === hoje.getDate() &&
+            mes === hoje.getMonth() &&
+            ano === hoje.getFullYear()
+        ) {
+            elementoDia.classList.add("hoje");
+        }
+                elementoDia.addEventListener("click", function () {
+                    selecionarDia(dia, mes, ano);
+                });
+                dias.appendChild(elementoDia);
+            }
 }
 
 function selecionarDia(dia, mes, ano) {
@@ -351,6 +359,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Global
     iniciarSearch();
     iniciarAbasDrawer();
+
+    if (document.getElementById('listaConsultas')) {
+        document.getElementById('listaConsultas').classList.add('open');
+    }
 
     // Pacientes
     if (document.getElementById('listaCadastrados')) {

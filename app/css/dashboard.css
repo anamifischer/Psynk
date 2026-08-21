@@ -1,5 +1,34 @@
 body{
   font-family: var(--font);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    width: 520px;
+    height: 520px;
+    top: -230px;
+    right: -180px;
+    background: var(--sage);
+    opacity: 0.38;
+    border-radius: 48% 52% 55% 45%;
+    z-index: -1;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    width: 520px;
+    height: 520px;
+    top: 500px;
+    right: 50%;
+    background: var(--sage);
+    opacity: 0.38;
+    border-radius: 48% 52% 55% 45%;
+    z-index: -1;
 }
 
 .main {
@@ -8,7 +37,6 @@ body{
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: var(--gray-150);
 }
 
 .main.retraido {
@@ -24,9 +52,17 @@ body{
   padding: 1.75rem 2rem 0.5rem;
 }
 
+.calendario-e-avisos {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1rem 2rem;
+}
+
+
 .cartoes {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 1rem;
   align-items: stretch;
   padding: 1rem 2rem;
@@ -58,16 +94,14 @@ body{
 }
 
 .cartao-aviso {
-  background: #fff;
-  border-radius: var(--radius-md);
-  padding: 1.25rem 1.5rem;
-  box-shadow: var(--shadow);
-  cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
-  grid-column: 1 / 3;
-
-  display: flex;
-  flex-direction: column;
+    flex: 1;
+    background: #fff;
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
 }
 
 .cartao:hover {
@@ -204,7 +238,7 @@ body{
 }
 
 .dia.hoje {
-  background: var(--deep-teal);
+  background: var(--warm-beige);
   color: #fff;
   font-weight: 600;
 }
@@ -216,16 +250,94 @@ body{
 }
 
 .collapse-list {
-  display: none;
-  margin: 0 2rem 1.5rem;
-  background: #fff;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow);
-  overflow: hidden;
+    display: none;
+    margin: 0 2rem 1.5rem;
+    background: #fff;
+    border-radius: var(--radius-md);
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
 }
 
 .collapse-list.open {
-  display: block;
+    display: block;
+}
+
+/* Cabeçalho */
+.collapse-list .section-header {
+    display: flex;
+    align-items: center;
+    padding: 18px 22px;
+    background: #fff;
+}
+
+.collapse-list .section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--deep-teal);
+}
+
+/* Tabela */
+.collapse-list .data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Cabeçalho da tabela */
+.collapse-list .data-table th {
+    padding: 11px 22px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: #fafafa;
+}
+
+/* Conteúdo */
+.collapse-list .data-table td {
+    padding: 15px 22px;
+    font-size: 14px;
+    color: var(--gray-500);
+    border-top: 1px solid #f0f0f0;
+}
+
+/* Hover */
+.collapse-list .data-table tbody tr {
+    transition: background 0.15s ease;
+}
+
+.collapse-list .data-table tbody tr:hover {
+    background: #fafcfc;
+}
+
+/* Paciente */
+.collapse-list .link-paciente {
+    color: var(--deep-teal);
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+.collapse-list .link-paciente:hover {
+    color: var(--teal);
+}
+
+/* Badges */
+.collapse-list .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Botões */
+.collapse-list .btn-sm {
+    padding: 7px 12px;
+    font-size: 12px;
+    border-radius: var(--radius-sm);
 }
 
 #confirmacoes {
