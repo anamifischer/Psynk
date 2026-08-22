@@ -85,7 +85,7 @@
 
 .drawer-campo { display: flex; flex-direction: column; gap: 0.25rem; }
 .drawer-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-400); }
-.drawer-valor { font-size: 0.9375rem; color: var(--gray-900); font-weight: 500; }
+.drawer-valor { font-size: 0.9375rem; color: var(--gray-400); font-weight: 500; }
 
 .sessao-item {
   border: 1px solid var(--gray-100);
@@ -198,7 +198,7 @@
 }
 
 
-.btn-imprimir {
+.btn {
     margin-left: auto;
     background: none;
     border: none;
@@ -208,4 +208,39 @@
     transition: color 0.15s;
 }
 
-.btn-imprimir:hover { color: var(--deep-teal); }
+.btn { color: var(--deep-teal); }
+
+.drawer-input,
+.drawer-select,
+.drawer-textarea {
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    font-family: var(--font);
+    font-size: 0.9rem;
+    color: var(--gray-900);
+    background: var(--off-white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    outline: none;
+    box-shadow: 0 1px 4px rgba(20, 30, 40, 0.06);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.drawer-input:focus,
+.drawer-select:focus,
+.drawer-textarea:focus {
+    border-color: var(--sage);
+    box-shadow: 0 0 0 3px rgba(145, 166, 164, 0.2);
+    background: #fff;
+}
+
+.drawer-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.drawer-acoes {
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--gray-100);
+    margin-top: 0.5rem;
+}

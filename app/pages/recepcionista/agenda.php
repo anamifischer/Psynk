@@ -7,7 +7,6 @@
 
     <link rel="stylesheet" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
     <link rel="stylesheet" href="/app/css/variables.css">
-    <link rel="stylesheet" href="/app/css/menu.css">
     <link rel="stylesheet" href="/app/css/agenda.css">
 
     <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/menuRecepcionista.php"); ?>
@@ -68,9 +67,9 @@
                 <h2 class="periodo-atual" id="periodo-atual"></h2>
                 <button class="botao-nav" id="btn-proximo">›</button>
             </div>
-            <div class="topo-direita">
-                <button class="botao-nova-consulta" onclick="abrirNovaConsulta()">+ Nova consulta</button>
-            </div>
+            <button class="btn" id="btn-consulta" title="Agendar Consulta" onclick="abrirModalConsulta()">
+                <img src="/imgs/icons/add.png" alt="Agendar Consulta" width="18" height="18">
+            </button>
         </header>
 
         
@@ -85,8 +84,8 @@
     </div>
 
 </div>
-<?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/drawer.php"); ?>
 <script src="/app/js/utils.js"></script>
 <script src="/app/js/agenda.js"></script>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/modal-consulta.php"); ?>
 </body>
 </html>

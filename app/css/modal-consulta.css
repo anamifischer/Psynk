@@ -1,0 +1,140 @@
+/* ── MODAL NOVA CONSULTA ── */
+.modal-consulta {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    width: 100%;
+    max-width: 520px;
+    background: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 24px 64px rgba(20, 30, 40, 0.18);
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    max-height: 90vh;
+    overflow: hidden;
+}
+
+.modal-consulta.open {
+    opacity: 1;
+    pointer-events: all;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+#modal-consulta-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 30, 40, 0.5);
+    z-index: 499;
+    display: none;
+}
+
+#modal-consulta-overlay.open {
+    display: block;
+}
+
+.modal-consulta-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 1.5rem 1.5rem 1rem;
+    border-bottom: 1px solid var(--gray-100);
+    flex-shrink: 0;
+}
+
+.modal-consulta-titulo {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--deep-teal);
+}
+
+.modal-consulta-subtitulo {
+    font-size: 0.8125rem;
+    color: var(--gray-400);
+    margin-top: 0.25rem;
+}
+
+.modal-consulta-corpo {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 1rem;
+    overflow-y: auto;
+}
+
+.modal-consulta-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.modal-consulta-campo label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--gray-400);
+}
+
+.modal-consulta-opcional {
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--gray-400);
+    font-size: 0.75rem;
+}
+
+.modal-consulta-campo input,
+.modal-consulta-campo select,
+.modal-consulta-campo textarea {
+    padding: 0.625rem 0.875rem;
+    font-family: var(--font);
+    font-size: 0.9375rem;
+    color: var(--gray-900);
+    background: var(--off-white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    outline: none;
+    box-shadow: 0 1px 4px rgba(20, 30, 40, 0.06);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+}
+
+.modal-consulta-campo input:focus,
+.modal-consulta-campo select:focus,
+.modal-consulta-campo textarea:focus {
+    border-color: var(--sage);
+    box-shadow: 0 0 0 3px rgba(145, 166, 164, 0.2);
+    background: #fff;
+}
+
+.modal-consulta-campo textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.modal-consulta-linha {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.modal-consulta-horario-fim {
+    font-size: 0.8125rem;
+    color: var(--gray-400);
+    margin-top: -0.5rem;
+}
+.modal-rodape {
+    flex-shrink: 0;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--gray-100);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    background: #fff;
+}

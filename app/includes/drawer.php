@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drawer</title>
-</head>
-<body>
-
-    <link rel="stylesheet" type="text/css" href="/app/css/drawer.css">
+<link rel="stylesheet" type="text/css" href="/app/css/drawer.css">
     
     <div class="drawer-overlay" id="drawer-overlay" onclick="fecharDrawer()"></div>
 
@@ -26,8 +17,11 @@
             <button class="drawer-aba active" data-aba="dados">Dados</button>
             <button class="drawer-aba" data-aba="anotacoes">Anotações</button>
             <button class="drawer-aba" data-aba="pagamentos">Pagamentos</button>
-            <button class="btn-imprimir" id="btn-imprimir" title="Imprimir prontuário">
+            <button class="btn" id="btn-imprimir" title="Imprimir prontuário">
                 <img src="/imgs/icons/imprimir.png" alt="Imprimir prontuário" width="18" height="18">
+            </button>
+            <button class="btn" id="btn-consulta" title="Agendar Consulta" onclick="abrirModalConsulta(document.getElementById('drawer-nome').textContent)">
+                <img src="/imgs/icons/add.png" alt="Agendar Consulta" width="18" height="18">
             </button>
         </div>
 
@@ -35,18 +29,56 @@
 
             <!-- Aba Dados -->
             <div class="drawer-painel active" id="aba-dados">
+
+                <div class="drawer-campo">
+                    <span class="drawer-label">Nome completo</span>
+                    <span class="drawer-valor" id="drawer-nome-dados"></span>
+                </div>
+
+                <div class="drawer-campo">
+                    <span class="drawer-label">Status</span>
+                    <select class="drawer-select" id="drawer-status-select">
+                        <option value="Ativo">Ativo</option>
+                        <option value="Em espera">Em espera</option>
+                        <option value="Pausado">Pausado</option>
+                        <option value="Encerrado">Encerrado</option>
+                        <option value="Inativo">Inativo</option>
+                    </select>
+                </div>
+
                 <div class="drawer-campo">
                     <span class="drawer-label">Data de nascimento</span>
-                    <span class="drawer-valor" id="drawer-nascimento">12/03/1990</span>
+                    <input class="drawer-input" type="date" id="drawer-nascimento">
                 </div>
+
                 <div class="drawer-campo">
-                    <span class="drawer-label">Idade</span>
-                    <span class="drawer-valor" id="drawer-idade">36 anos</span>
+                    <span class="drawer-label">Telefone</span>
+                    <input class="drawer-input" type="tel" id="drawer-telefone" placeholder="(00) 00000-0000">
                 </div>
+
+                <div class="drawer-campo">
+                    <span class="drawer-label">Endereço</span>
+                    <input class="drawer-input" type="text" id="drawer-endereco" placeholder="Rua, número — Cidade, UF">
+                </div>
+
                 <div class="drawer-campo">
                     <span class="drawer-label">Psicólogo responsável</span>
-                    <span class="drawer-valor" id="drawer-psicologo">Dr. Carlos Souza</span>
+                    <select class="drawer-select" id="drawer-psicologo-select">
+                        <option value="Dr. Carlos Souza">Dr. Carlos Souza</option>
+                        <option value="Dra. Fernanda Rocha">Dra. Fernanda Rocha</option>
+                        <option value="Dr. Pedro Alves">Dr. Pedro Alves</option>
+                    </select>
                 </div>
+
+                <div class="drawer-campo">
+                    <span class="drawer-label">Observações gerais</span>
+                    <textarea class="drawer-textarea" id="drawer-observacoes" placeholder="Observações sobre o paciente..."></textarea>
+                </div>
+
+                <div class="drawer-acoes">
+                    <button class="btn btn-primary" onclick="salvarDadosPaciente()">Atualizar dados</button>
+                </div>
+
             </div>
 
             <!-- Aba Anotações -->

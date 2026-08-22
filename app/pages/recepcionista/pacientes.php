@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
 
     <link rel="stylesheet" type="text/css" href="/app/css/variables.css">
+    <link rel="stylesheet" href="/app/css/globals.css">
     <link rel="stylesheet" type="text/css" href="/app/css/pacientes.css">
   
     <?php $papel = 'recepcionista'; ?>
@@ -158,6 +159,7 @@
         <script src="/app/js/utils.js"></script>
         <script src="/app/js/pacientes.js"></script>
         <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/drawer.php"); ?>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/modal-consulta.php"); ?>
 </div>
     
 </body>

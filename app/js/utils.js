@@ -187,27 +187,157 @@ function badgeClassStatus(status) {
     return map[status] || 'cinza';
 }
 
+// ── MODAL NOVA CONSULTA ──
+
+function abrirModalConsulta(nomePaciente = null) {
+    const modal = document.getElementById('modal-consulta');
+    const overlay = document.getElementById('modal-consulta-overlay');
+    if (!modal || !overlay) return;
+
+    // popula select de pacientes
+    const selectPaciente = document.getElementById('modal-consulta-paciente');
+    selectPaciente.innerHTML = '<option value="">Selecione o paciente...</option>';
+    pacientesMockados.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.nome;
+        opt.textContent = p.nome;
+        selectPaciente.appendChild(opt);
+    });
+
+    // define data padrão como hoje
+    const hoje = new Date();
+    const dataFormatada = hoje.toISOString().split('T')[0];
+    document.getElementById('modal-consulta-data').value = dataFormatada;
+    document.getElementById('modal-consulta-hora').value = '09:00';
+    document.getElementById('modal-consulta-anotacao').value = '';
+    document.getElementById('modal-consulta-status').value = 'pendente';
+
+    // se veio de um paciente, preenche e já seleciona o psicólogo
+    if (nomePaciente) {
+        const paciente = pacientesMockados.find(p => p.nome === nomePaciente);
+        if (paciente) {
+            selectPaciente.value = paciente.nome;
+            document.getElementById('modal-consulta-psicologo').value = paciente.psicologo;
+            document.getElementById('modal-consulta-subtitulo').textContent = `Agendando para ${paciente.nome}`;
+        }
+    } else {
+        document.getElementById('modal-consulta-psicologo').value = '';
+        document.getElementById('modal-consulta-subtitulo').textContent = '';
+    }
+
+    atualizarHorarioFim();
+
+    modal.classList.add('open');
+    overlay.classList.add('open');
+}
+
+function fecharModalConsulta() {
+    const modal = document.getElementById('modal-consulta');
+    const overlay = document.getElementById('modal-consulta-overlay');
+    if (modal) modal.classList.remove('open');
+    if (overlay) overlay.classList.remove('open');
+}
+
+function preencherPsicologo() {
+    const selectPaciente = document.getElementById('modal-consulta-paciente');
+    const nomeSelecionado = selectPaciente.value;
+    if (!nomeSelecionado) return;
+
+    const paciente = pacientesMockados.find(p => p.nome === nomeSelecionado);
+    if (paciente) {
+        document.getElementById('modal-consulta-psicologo').value = paciente.psicologo;
+    }
+}
+
+function atualizarHorarioFim() {
+    const hora = document.getElementById('modal-consulta-hora').value;
+    const duracao = parseInt(document.getElementById('modal-consulta-duracao').value);
+    const fimEl = document.getElementById('modal-consulta-horario-fim');
+
+    if (!hora || !duracao || !fimEl) return;
+
+    const [h, m] = hora.split(':').map(Number);
+    const totalMinutos = h * 60 + m + duracao;
+    const hFim = String(Math.floor(totalMinutos / 60) % 24).padStart(2, '0');
+    const mFim = String(totalMinutos % 60).padStart(2, '0');
+
+    fimEl.textContent = `Término previsto às ${hFim}:${mFim}`;
+}
+
+function salvarConsulta() {
+    const paciente  = document.getElementById('modal-consulta-paciente').value;
+    const psicologo = document.getElementById('modal-consulta-psicologo').value;
+    const data      = document.getElementById('modal-consulta-data').value;
+    const hora      = document.getElementById('modal-consulta-hora').value;
+    const status    = document.getElementById('modal-consulta-status').value;
+    const anotacao  = document.getElementById('modal-consulta-anotacao').value.trim();
+
+    if (!paciente || !psicologo || !data || !hora) {
+        alert('Preencha todos os campos obrigatórios.');
+        return;
+    }
+
+    // feedback visual
+    const btn = document.querySelector('#modal-consulta .btn-primary');
+    btn.textContent = 'Agendado!';
+    btn.disabled = true;
+
+    setTimeout(() => {
+        fecharModalConsulta();
+        btn.textContent = 'Agendar consulta';
+        btn.disabled = false;
+    }, 1500);
+}
+
+// recalcula horário de fim ao mudar hora ou duração
+document.addEventListener('DOMContentLoaded', () => {
+    const horaInput    = document.getElementById('modal-consulta-hora');
+    const duracaoInput = document.getElementById('modal-consulta-duracao');
+    if (horaInput)    horaInput.addEventListener('change', atualizarHorarioFim);
+    if (duracaoInput) duracaoInput.addEventListener('change', atualizarHorarioFim);
+});
+
 //Drawer
 function abrirDrawer(nomePaciente) {
     const paciente = pacientesMockados.find(p => p.nome === nomePaciente);
     if (!paciente) return;
 
+    // topo do drawer
     document.getElementById('drawer-nome').textContent = paciente.nome;
-    document.getElementById('drawer-nascimento').textContent = paciente.nascimento;
-    document.getElementById('drawer-idade').textContent = paciente.idade + ' anos';
-    document.getElementById('drawer-psicologo').textContent = paciente.psicologo;
 
     const statusEl = document.getElementById('drawer-status');
     statusEl.textContent = paciente.status;
     statusEl.className = `badge badge-${badgeClassStatus(paciente.status)}`;
 
-    // aba anotações
+    // aba dados — campos editáveis
+    const statusSelect = document.getElementById('drawer-status-select');
+    if (statusSelect) statusSelect.value = paciente.status;
+
+    const nascimentoInput = document.getElementById('drawer-nascimento');
+    if (nascimentoInput && paciente.nascimento) {
+        const partes = paciente.nascimento.split('/');
+        nascimentoInput.value = `${partes[2]}-${partes[1]}-${partes[0]}`;
+    }
+
+    const telefoneInput = document.getElementById('drawer-telefone');
+    if (telefoneInput) telefoneInput.value = paciente.telefone || '';
+
+    const enderecoInput = document.getElementById('drawer-endereco');
+    if (enderecoInput) enderecoInput.value = paciente.endereco || '';
+
+    const psicologoSelect = document.getElementById('drawer-psicologo-select');
+    if (psicologoSelect) psicologoSelect.value = paciente.psicologo;
+
+    const observacoesInput = document.getElementById('drawer-observacoes');
+    if (observacoesInput) observacoesInput.value = paciente.observacoes || '';
+
+    // aba anotações — visibilidade
     const abaAnotacoes = document.querySelector('.drawer-aba[data-aba="anotacoes"]');
     if (abaAnotacoes) {
         abaAnotacoes.style.display = paciente.mostrarAnotacoes ? '' : 'none';
     }
 
-    // renderiza sessoes
+    // aba anotações — renderiza sessões
     const abaAnotacoesPanel = document.getElementById('aba-anotacoes');
     if (abaAnotacoesPanel) {
         if (!paciente.sessoes || !paciente.sessoes.length) {
@@ -241,6 +371,63 @@ function abrirDrawer(nomePaciente) {
             }).join('');
         }
     }
+
+    // aba pagamentos — renderiza
+    const abaPagamentosPanel = document.getElementById('aba-pagamentos');
+    if (abaPagamentosPanel) {
+        if (!paciente.pagamentos || !paciente.pagamentos.length) {
+            abaPagamentosPanel.innerHTML = '<p class="drawer-vazio">Nenhum pagamento registrado.</p>';
+        } else {
+            abaPagamentosPanel.innerHTML = paciente.pagamentos.map(pg => `
+                <div class="pagamento-item">
+                    <div class="pagamento-info">
+                        <span class="pagamento-data">${pg.data}</span>
+                        <span class="badge badge-${badgeClassPagamento(pg.status)}">${pg.status}</span>
+                    </div>
+                    <span class="pagamento-valor">R$ ${pg.valor.toFixed(2).replace('.', ',')}</span>
+                </div>
+            `).join('');
+        }
+    }
+
+    // abre o drawer
+    document.getElementById('drawer-paciente').classList.add('open');
+    document.getElementById('drawer-overlay').classList.add('open');
+
+    // reseta abas para "dados"
+    document.querySelectorAll('.drawer-aba').forEach(a => a.classList.remove('active'));
+    document.querySelectorAll('.drawer-painel').forEach(p => p.classList.remove('active'));
+    document.querySelector('.drawer-aba[data-aba="dados"]').classList.add('active');
+    document.getElementById('aba-dados').classList.add('active');
+
+    // limpa search
+    const searchResultados = document.getElementById('search-resultados');
+    const searchInput = document.getElementById('search-paciente');
+    if (searchResultados) searchResultados.classList.remove('open');
+    if (searchInput) searchInput.value = '';
+}
+
+function salvarDadosPaciente() {
+    const nome = document.getElementById('drawer-nome').textContent;
+    const paciente = pacientesMockados.find(p => p.nome === nome);
+    if (!paciente) return;
+
+    paciente.status      = document.getElementById('drawer-status-select').value;
+    paciente.telefone    = document.getElementById('drawer-telefone').value;
+    paciente.endereco    = document.getElementById('drawer-endereco').value;
+    paciente.psicologo   = document.getElementById('drawer-psicologo-select').value;
+    paciente.observacoes = document.getElementById('drawer-observacoes').value;
+
+    // atualiza badge de status no topo do drawer
+    const statusEl = document.getElementById('drawer-status');
+    statusEl.textContent = paciente.status;
+    statusEl.className = `badge badge-${badgeClassStatus(paciente.status)}`;
+
+    // feedback visual
+    const btn = document.querySelector('#aba-dados .btn-primary');
+    btn.textContent = 'Salvo!';
+    setTimeout(() => btn.textContent = 'Atualizar dados', 2000);
+
 
     // renderiza pagamentos
     const abaPagamentosPanel = document.getElementById('aba-pagamentos');
@@ -354,7 +541,6 @@ function abrirDrawerPagamentos(nomePaciente) {
     document.getElementById('aba-pagamentos').classList.add('active');
 }
 
-//Init global
 document.addEventListener('DOMContentLoaded', () => {
     // Global
     iniciarSearch();
@@ -375,7 +561,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('listaVencendo').classList.add('open');
     }
 
-    //lista faturamento
+    // lista faturamento
     if (document.getElementById('faturamento-lista-body')) {
         document.getElementById('faturamentoClinica').classList.add('open');
         renderizarFaturamentoLista();
@@ -383,5 +569,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (document.getElementById('graficoReceita')) {
         iniciarFiltroAnos();
+    }
+
+    // Modal consulta
+    const horaInput    = document.getElementById('modal-consulta-hora');
+    const duracaoInput = document.getElementById('modal-consulta-duracao');
+    if (horaInput)    horaInput.addEventListener('change', atualizarHorarioFim);
+    if (duracaoInput) duracaoInput.addEventListener('change', atualizarHorarioFim);
+
+    // Botão agendar consulta na drawer
+    const btnConsulta = document.getElementById('btn-consulta');
+    if (btnConsulta) {
+        btnConsulta.addEventListener('click', () => {
+            const nome = document.getElementById('drawer-nome').textContent;
+            abrirModalConsulta(nome);
+        });
     }
 });

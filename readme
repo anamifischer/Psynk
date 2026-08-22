@@ -1,18 +1,52 @@
-Sobre as páginas de cada usuário
+---------------------------------------------------
+COMO ACESSAR PÁGINAS DOS USUÁRIOS
 
-O usuário psicólogo nao possui páginas próprias pois as páginas serão as mesmas do admin, 
-com a diferença de que na lógica do código a visualização entre esses usuários será diferente, 
-tendo o psicólogo acesso limitado a seus próprios pacientes e o administrador podendo 
-visualizar tudo
+Escreva no campo de login 'administrador' para acessar a página dos administradores e psicólogos e, para acessar dos recepcionistas, escreva 'recepcionista'
 
+---------------------------------------------------
+SOBRE ALTERAÇÕES APÓS 21/08
 
-Sobre o tipo dos arquivos
+Estou realizando um commit hoje (21/08) com um projeto funcional de exibição das telas.
+Entretanto, seguirei realizando algumas alterações que dizem respeito, principalmente, ao css e adições nas estruturas das páginas que eu não havia previsto no modelo inicial de telas que entendo que tornarão o projeto melhor, nada de mudanças radicais.
 
-Considerando a necessidade de uso de includes para melhor organização e logísitica
-do código, as páginas foram criadas diretamente em php
+Para avaliar, peço que busque pela versão comitada em 'commit 21.08' para ter acesso à versão entregue no dia correto
 
-Pendências Front:
-- Lógica para acessar a página recepcionista
-- Página de configurações
-- Tem escuro
-- Melhorias css
+---------------------------------------------------
+
+DADOS MOCKADOS
+
+Para acessar um exemplo de drawer com todas as permissões, pesquise pela paciente 'Ana Lima' ou clique no nome dela quando aparecer na tabela de consultas hoje na página principal do administrador. 
+
+Para acessar um exemplo de drawer com permissões RESTRITAS, pesquise pelo paciente 'José Gonçalves', voce notará que a página de anotações não aparece
+
+---------------------------------------------------
+SOBRE O USO DE PHP
+
+Considerando a proposta do sistema, fazer as páginas em html tornaria inviável a elaboração do projeto, isso pois os drawers e modais utilizados teriam que ter código replicado em todas as páginas do projeto e seria um caos generalizado organizar isso depois em páginas php, entendi que seria um retrabalho
+
+---------------------------------------------------
+
+COMO RODAR O PROJETO
+
+Abra o terminal na pasta do projeto e execut 'docker compose -d up'
+
+---------------------------------------------------
+
+SOBRE A VISUALIZAÇÃO DO ADMIN E PSICÓLOGO SER A MESMA
+
+A maior diferença entre a visualização do psicólogo e do administrador são os dados que serão puxados do banco, ou seja, o que definirá será o permissionamento.
+O layout das páginas é identidoe penso que isso faz mais sentido com a proposta de sistema.
+Desta forma, aponto aqui as diferenças em cada página consziderando os dados mockados que existem ali:
+
+  - Na página de dashboard, o psicologo logado só enxergará as p´ropias consultas hoje e aguardando confirmação
+
+  - Na agenda, o psicologo logado só enxergará as próprias consultas
+
+  - Nos pacientes o psicólogo enxergará todos os pacientes, mas só conseguira fazer alterações no drawer que abre ao clicar no paciente se ele for o responsável (isso foi uma alteração em relação ao modelo de telas, considerando que é um sistema conjunto, não acho que faça sentido indiviualizar totalmente os cadastros entre psicólogos)
+
+  - Nas drawers que abrem ao clicar no paciente, tanto o psicólogo quanto o administrador só enxergam a aba 'anotações clínicas' se forem o psicólogo responsável
+
+  - Apenas o administrador consegue alterar o psicólogo responsável de um paciente, mas isso notifiará o atual psicólogo da mudança
+
+  - No financeiro e relatórios, o psicólogo só terá acesso aos números próprios, enquanto o administrador enxergará de todos
+

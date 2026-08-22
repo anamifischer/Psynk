@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
 
     <link rel="stylesheet" type="text/css" href="/app/css/variables.css">
+    <link rel="stylesheet" href="/app/css/globals.css">
     <link rel="stylesheet" type="text/css" href="/app/css/dashboard.css">
   
     <?php 
@@ -191,6 +192,7 @@
             
         <script src="/app/js/utils.js"></script>
         <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/drawer.php"); ?>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/modal-consulta.php"); ?>
 
 </body>
 </html>

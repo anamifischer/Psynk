@@ -246,17 +246,14 @@ body {
 
 
 /* Nova consulta */
-.botao-nova-consulta {
-    background: var(--deep-teal);
-    color: #fff;
+.btn-consulta {
+    margin-left: auto;
+    background: none;
     border: none;
-    border-radius: 9px;
-    font-family: var(--font);
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 0.6rem 1rem;
     cursor: pointer;
-    transition: all 0.15s ease;
+    color: var(--gray-400);
+    padding: 0.25rem 0.5rem;
+    transition: color 0.15s;
 }
 
 .botao-nova-consulta:hover {
@@ -264,7 +261,25 @@ body {
     transform: translateY(-1px);
 }
 
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s;
+  text-decoration: none;
+}
 
+.btn-sm { padding: 0.3125rem 0.75rem; font-size: 0.8125rem; }
+.btn-primary { background: var(--deep-teal); color: #fff; }
+.btn-primary:hover { background: #1a3338; }
+.btn-secondary { background: var(--gray-100); color: var(--gray-700); }
+.btn-secondary:hover { background: var(--gray-200); }
 
 .cabecalho-semana {
     display: grid;
