@@ -20,22 +20,22 @@
  
     <div class="main">
         <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/header.php"); ?>
-        <h1 class="cumprimento"> Olá Frederico </h1>
+        <h1 class="cumprimento"><?php ?></h1>
 
         <div class="cartoes">
             <div class="cartao" onclick="toggleList('listaConsultas')">
                 <div class="cartaoTitulo">Consultas Hoje</div>
-                <div class="cartaoValor">24</div>
+                <div class="cartaoValor"><?php ?></div>
             </div>
 
             <div class="cartao" onclick="toggleList('listaAguardando')">
                 <div class="cartaoTitulo">Aguardando Confirmação</div>
-                <div class="cartaoValor">2</div>
+                <div class="cartaoValor"><?php ?></div>
             </div>
 
             <div class="cartao" onclick="toggleList('listaConsultasAmanha')">
                 <div class="cartaoTitulo">Aguardando Confirmação</div>
-                <div class="cartaoValor">5</div>
+                <div class="cartaoValor"><?php ?></div>
                 <div class="cartaoLegenda">de amanhã</div>
             </div>
     </div>
@@ -60,30 +60,6 @@
                         <td>Dr. Carlos Souza</td>
                         <td>08h00</td>
                         <td><span class="badge badge-green">Confirmado</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Bruno Martins')">Bruno Martins</span></td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td>09h30</td>
-                        <td><span class="badge badge-orange">Pendente</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Carla Dias')">Carla Dias</span></td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>11h00</td>
-                        <td><span class="badge badge-green">Confirmado</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Diego Fernandes')">Diego Fernandes</span></td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td>14h00</td>
-                        <td><span class="badge badge-green">Confirmado</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Elisa Costa')">Elisa Costa</span></td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>15h30</td>
-                        <td><span class="badge badge-orange">Pendente</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -110,12 +86,6 @@
                             <td>09h30</td>
                             <td><button class="btn btn-sm">Confirmar</button></td>
                         </tr>
-                        <tr>
-                            <td><span class="link-paciente" onclick="abrirDrawer('Elisa Costa')">Elisa Costa</span></td>
-                            <td>Dr. Carlos Souza</td>
-                            <td>15h30</td>
-                            <td><button class="btn btn-sm">Confirmar</button></td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -139,34 +109,6 @@
                             <td>Ana Lima</td>
                             <td>Dr. Carlos Souza</td>
                             <td>08h00</td>
-                            <td><span class="badge badge-orange">Pendente</span></td>
-                            <td><button class="btn btn-sm">Confirmar</button></td>
-                        </tr>
-                        <tr>
-                            <td>Bruno Martins</td>
-                            <td>Dra. Fernanda Rocha</td>
-                            <td>09h30</td>
-                            <td><span class="badge badge-orange">Pendente</span></td>
-                            <td><button class="btn btn-sm">Confirmar</button></td>
-                        </tr>
-                        <tr>
-                            <td>Carla Dias</td>
-                            <td>Dr. Carlos Souza</td>
-                            <td>11h00</td>
-                            <td><span class="badge badge-orange">Pendente</span></td>
-                            <td><button class="btn btn-sm">Confirmar</button></td>
-                        </tr>
-                        <tr>
-                            <td>Diego Fernandes</td>
-                            <td>Dra. Fernanda Rocha</td>
-                            <td>14h00</td>
-                            <td><span class="badge badge-orange">Pendente</span></td>
-                            <td><button class="btn btn-sm">Confirmar</button></td>
-                        </tr>
-                        <tr>
-                            <td>Elisa Costa</td>
-                            <td>Dr. Carlos Souza</td>
-                            <td>15h30</td>
                             <td><span class="badge badge-orange">Pendente</span></td>
                             <td><button class="btn btn-sm">Confirmar</button></td>
                         </tr>

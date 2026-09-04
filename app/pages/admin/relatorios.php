@@ -47,7 +47,7 @@
         <div class="cartoes">
             <div class="cartao" onclick="toggleList('faturamentoClinica')">
                 <div class="cartaoTitulo">Faturamento Clínica</div>
-                <div class="cartaoValor">R$ 12520,60</div>
+                <div class="cartaoValor"><?php ?></div>
                 <div class="cartaoLegenda">mês</div>
             </div>
 

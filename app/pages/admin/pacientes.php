@@ -23,17 +23,17 @@
 
             <div class="cartoes">
                 <div class="cartao" onclick="toggleList('listaCadastrados')">
-                    <div class="cartaoValor">68</div>
+                    <div class="cartaoValor"><?php ?></div>
                     <div class="cartaoTitulo">Pacientes Cadastrados</div>
                 </div>
 
                 <div class="cartao" onclick="toggleList('listaEspera')">
-                    <div class="cartaoValor">2</div>
+                    <div class="cartaoValor"><?php ?></div>
                     <div class="cartaoTitulo">Pacientes em fila de espera</div>
                 </div>
 
                 <div class="cartao" onclick="toggleList('listaAtivos')">
-                    <div class="cartaoValor">40</div>
+                    <div class="cartaoValor"><?php ?></div>
                     <div class="cartaoTitulo">Pacientes ativos</div>
                 </div>
             </div>
@@ -51,8 +51,6 @@
                             <div class="lista-chips" id="filtro-psicologo">
                                 <button class="chip active" data-valor="todos">Todos</button>
                                 <button class="chip" data-valor="Dr. Carlos Souza">Dr. Carlos Souza</button>
-                                <button class="chip" data-valor="Dra. Fernanda Rocha">Dra. Fernanda Rocha</button>
-                                <button class="chip" data-valor="Dr. Pedro Alves">Dr. Pedro Alves</button>
                             </div>
                         </div>
                         <div class="filtro-grupo">
@@ -88,26 +86,6 @@
                         <td>Ana Lima</td>
                         <td>Dr. Carlos Souza</td>
                         <td><span class="badge badge-green">Ativo</span></td>
-                    </tr>
-                    <tr>
-                        <td>Maria Laura Silva</td>
-                        <td>Dr. Carlos Souza</td>
-                        <td><span class="badge badge-green">Em espera</span></td>
-                    </tr>
-                    <tr>
-                        <td>José Gonçalves</td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td><span class="badge badge-green">Encerrado</span></td>
-                    </tr>
-                    <tr>
-                        <td>Gabriela Moreira</td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td><span class="badge badge-green">Pausado</span></td>
-                    </tr>
-                    <tr>
-                        <td>Gabriel Mussoi</td>
-                        <td>Dr. Pedro Alves</td>
-                        <td><span class="badge badge-green">Inativo</span></td>
                     </tr>
                 </tbody>
             </table>

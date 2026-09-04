@@ -34,7 +34,6 @@
                             <button class="chip" data-valor="todos">Todos</button>
                             <button class="chip active" data-valor="Dr. Carlos Souza">Dr. Carlos Souza</button>
                             <button class="chip" data-valor="Dra. Fernanda Rocha">Dra. Fernanda Rocha</button>
-                            <button class="chip" data-valor="Dr. Pedro Alves">Dr. Pedro Alves</button>
                         </div>
                     </div>
                 </div>
@@ -50,17 +49,17 @@
 
             <div class="cartao" onclick="toggleList('listaPendentes')">
                 <div class="cartaoTitulo">Pendente</div>
-                <div class="cartaoValor" id="valor-pendente">R$ 630,00</div>
+                <div class="cartaoValor" id="valor-pendente"><?php ?></div>
                 <div class="cartaoLegenda">pagamentos pendentes</div>
             </div>
 
             <div class="cartao" onclick="toggleList('listaAtrasados')">
-                <div class="cartaoValor" id="valor-atrasados">4</div>
+                <div class="cartaoValor" id="valor-atrasados"><?php ?></div>
                 <div class="cartaoLegenda">pagamentos atrasados</div>
             </div>
 
             <div class="cartao" onclick="toggleList('listaVencendo')">
-                <div class="cartaoValor" id="valor-vencendo">3</div>
+                <div class="cartaoValor" id="valor-vencendo"><?php ?></div>
                 <div class="cartaoLegenda">pagamentos vencendo hoje</div>
             </div>
         </div>
@@ -85,20 +84,6 @@
                         <td>Dr. Carlos Souza</td>
                         <td>10/08/2026</td>
                         <td>R$ 180,00</td>
-                        <td><span class="badge badge-laranja">Pendente</span></td>
-                    </tr>
-                    <tr>
-                        <td>Gabriela Moreira</td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td>12/08/2026</td>
-                        <td>R$ 200,00</td>
-                        <td><span class="badge badge-laranja">Pendente</span></td>
-                    </tr>
-                    <tr>
-                        <td>José Gonçalves</td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td>14/08/2026</td>
-                        <td>R$ 250,00</td>
                         <td><span class="badge badge-laranja">Pendente</span></td>
                     </tr>
                 </tbody>
@@ -127,27 +112,6 @@
                         <td>R$ 180,00</td>
                         <td><span class="badge badge-vermelho">Atrasado</span></td>
                     </tr>
-                    <tr>
-                        <td>Maria Laura Silva</td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>03/08/2026</td>
-                        <td>R$ 200,00</td>
-                        <td><span class="badge badge-vermelho">Atrasado</span></td>
-                    </tr>
-                    <tr>
-                        <td>Ana Lima</td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>05/08/2026</td>
-                        <td>R$ 150,00</td>
-                        <td><span class="badge badge-vermelho">Atrasado</span></td>
-                    </tr>
-                    <tr>
-                        <td>Gabriela Moreira</td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td>06/08/2026</td>
-                        <td>R$ 200,00</td>
-                        <td><span class="badge badge-vermelho">Atrasado</span></td>
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -172,20 +136,6 @@
                         <td>Dra. Fernanda Rocha</td>
                         <td>10/08/2026</td>
                         <td>R$ 250,00</td>
-                        <td><span class="badge badge-laranja">Vence hoje</span></td>
-                    </tr>
-                    <tr>
-                        <td>Gabriel Mussoi</td>
-                        <td>Dr. Pedro Alves</td>
-                        <td>10/08/2026</td>
-                        <td>R$ 180,00</td>
-                        <td><span class="badge badge-laranja">Vence hoje</span></td>
-                    </tr>
-                    <tr>
-                        <td>Ana Lima</td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>10/08/2026</td>
-                        <td>R$ 180,00</td>
                         <td><span class="badge badge-laranja">Vence hoje</span></td>
                     </tr>
                 </tbody>
