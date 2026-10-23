@@ -5,9 +5,9 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 const PAGINAS_POR_PERMISSAO = [
-    "ADMIN"         => "../pages/admin/dashboard.php",
-    "PSICOLOGO"     => "../pages/psicologo/dashboard.php",
-    "RECEPCIONISTA" => "../pages/recepcionista/dashboard.php",
+    "ADMIN"         => "../app/pages/admin/dashboard.php",
+    "PSICOLOGO"     => "../app/pages/psicologo/dashboard.php",
+    "RECEPCIONISTA" => "../app/pages/recepcionista/dashboard.php",
 ];
 
 function verificarLogin() {

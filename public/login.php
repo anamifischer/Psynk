@@ -13,32 +13,16 @@
  
 <div class="login-panel">
 
-    <script>
-        function fazerLogin() {
-            const email = document.getElementById('email').value.trim().toLowerCase();
-            
-            if (email === 'administrador') {
-                window.location.href = '/app/pages/admin/dashboard.php';
-            } else if (email === 'psicologo') {
-                window.location.href = '/app/pages/psicologo/dashboard.php';
-            } else if (email === 'recepcionista') {
-                window.location.href = '/app/pages/recepcionista/dashboard.php';
-            } else {
-                alert('Usuário não encontrado. Tente: administrador, psicologo ou recepcionista');
-            }
-        }
-    </script>
-
     <div class="login-img">
         <img src="../imgs/logo.png" alt="logotipo PsySink">
     </div>
     <h1>Bem-vindo(a) ao PsySink</h1>
     <p>Faça login para acessar os recursos do sistema.</p>
 
-    <form action="../app/pages/admin/dashboard.php" method="get">
+    <form action="../config/processa_login.php" method="post">
 
         <label for="email">E-mail</label>
-        <input type="text" id="email" name="email" placeholder="seu@email.com">
+        <input type="email" id="email" name="email" placeholder="seu@email.com">
 
         <label for="senha">Senha</label>
         <input type="password" id="senha" name="senha" placeholder="••••••••">
@@ -50,7 +34,7 @@
             Ainda não tem uma conta? →
         </a>
 
-        <button type="button" onclick="fazerLogin()" class="btn-primary">
+        <button type="submit" class="btn-primary">
             Entrar
         </button>
 
