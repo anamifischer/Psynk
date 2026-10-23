@@ -44,7 +44,7 @@
             <img src="/imgs/avatarExemplo.jpg">
             <section id=user-info>
                 <p>Nome User</p>
-                <a href="/logout.php">Sair</a>
+                <a href="/../../config/logout.php">Sair</a>
             </section>
         </div>
 
