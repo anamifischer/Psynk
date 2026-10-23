@@ -12,7 +12,7 @@ const PAGINAS_POR_PERMISSAO = [
 
 function verificarLogin() {
     if (!isset($_SESSION["id"])) {
-        header("Location: ../pages/auth/login.php");
+        header("Location: ../public/login.php");
         exit;
     }
 }

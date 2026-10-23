@@ -1,3 +1,8 @@
+<?php
+    require_once __DIR__ . "/../../../config/sessao.php";
+    verificarPermissao(["ADMIN"]);
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

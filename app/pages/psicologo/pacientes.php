@@ -1,3 +1,8 @@
+<?php
+    require_once __DIR__ . "/../../../config/sessao.php";
+    verificarPermissao(["PSICOLOGO"]);
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
