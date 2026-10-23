@@ -3,7 +3,7 @@
 $servidor = "mysql";
 $usuario = "root";
 $senha = "1234";
-$banco = "psynk";
+$banco = "mydb";
 
 $conexao = new mysqli($servidor, $usuario, $senha, $banco);
 
