@@ -164,3 +164,16 @@ CREATE TABLE IF NOT EXISTS `Notificacao` (
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+ALTER TABLE Paciente
+  ADD COLUMN status_novo ENUM('ativo','em_espera','pausado','encerrado','inativo')
+  NOT NULL DEFAULT 'ativo';
+
+UPDATE Paciente SET status_novo = IF(status = 1, 'ativo', 'inativo');
+
+ALTER TABLE Paciente DROP COLUMN status;
+
+ALTER TABLE Paciente
+  CHANGE status_novo status
+  ENUM('ativo','em_espera','pausado','encerrado','inativo')
+  NOT NULL DEFAULT 'ativo';

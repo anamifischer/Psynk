@@ -1,7 +1,17 @@
 <?php
     require_once __DIR__ . "/../../../config/sessao.php";
     verificarPermissao(["ADMIN"]);
+    require_once __DIR__ . "/../../../config/conexao.php";
+    require_once __DIR__ . "/../../includes/consultas.php";
+
+    $idClinica = (int) $_SESSION['id_clinica'];
+
+    $consultasHoje        = buscarConsultasDeHoje($conexao, $idClinica);
+    $consultasAtrasadas   = buscarConsultasAtrasadas($conexao, $idClinica);
+    $consultasSemAnotacao = buscarConsultasSemAnotacao($conexao, $idClinica);
+    $totalConcluidasNoMes = contarConsultasConcluidasNoMes($conexao, $idClinica);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,30 +37,30 @@
  
     <div class="main">
         <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/header.php"); ?>
-        <h1 class="cumprimento"> Olá Fábio</h1>
+        <h1 class="cumprimento">Olá, <?php echo htmlspecialchars($_SESSION['nome'])?></h1>
 
         <div class="cartoes">
             <div class="cartao" onclick="toggleList('listaConsultas')">
                 <div class="cartaoTitulo">Consultas Hoje</div>
-                <div class="cartaoValor">8</div>
+                <div class="cartaoValor"><?= count($consultasHoje) ?></div>
                 <div class="cartaoLegenda">confirmadas</div>
             </div>
 
             <div class="cartao" onclick="toggleList('listaAguardaConfirmacao')">
                 <div class="cartaoTitulo">Aguardando Confirmação</div>
-                <div class="cartaoValor">2</div>
+                <div class="cartaoValor"><?= count($consultasAtrasadas) ?></div>
                 <div class="cartaoLegenda">pendentes</div>
             </div>
 
             <div class="cartao" onclick="toggleList('listaPendenteAnotacao')">
                 <div class="cartaoTitulo">Pendentes</div>
-                <div class="cartaoValor">2</div>
+                <div class="cartaoValor"><?= count($consultasSemAnotacao) ?></div>
                 <div class="cartaoLegenda">anotações da consulta</div>
             </div>
 
             <div class="cartao">
                 <div class="cartaoTitulo">Consultas</div>
-                <div class="cartaoValor">23</div>
+                <div class="cartaoValor"><?= $totalConcluidasNoMes ?></div>
                 <div class="cartaoLegenda">concluídas neste mês</div>
             </div>
         </div>
@@ -96,36 +106,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Ana Lima')">Ana Lima</span></td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>08h00</td>
-                        <td><span class="badge badge-verde">Confirmado</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Bruno Martins')">Bruno Martins</span></td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td>09h30</td>
-                        <td><span class="badge badge-laranja">Pendente</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Carla Dias')">Carla Dias</span></td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>11h00</td>
-                        <td><span class="badge badge-verde">Confirmado</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Diego Fernandes')">Diego Fernandes</span></td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td>14h00</td>
-                        <td><span class="badge badge-verde">Confirmado</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Elisa Costa')">Elisa Costa</span></td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>15h30</td>
-                        <td><span class="badge badge-laranja">Pendente</span></td>
-                    </tr>
+                    <?php if (empty($consultasHoje)): ?>
+                    <tr><td colspan="4">Nenhuma consulta hoje.</td></tr>
+                        <?php endif; ?>
+                        <?php foreach ($consultasHoje as $consulta): ?>
+                            <tr>
+                                <td>
+                                    <span class="link-paciente"
+                                        onclick="abrirDrawer(<?= htmlspecialchars(json_encode($consulta['nome_paciente']), ENT_QUOTES) ?>)">
+                                        <?= htmlspecialchars($consulta['nome_paciente']) ?>
+                                    </span>
+                                </td>
+                                <td><?= htmlspecialchars($consulta['nome_psicologo']) ?></td>
+                                <td><?= formatarHora($consulta['hora_inicio']) ?></td>
+                                <td><span class="badge"><?= htmlspecialchars($consulta['status']) ?></span></td>
+                            </tr>
+                        <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
@@ -144,18 +140,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Bruno Martins')">Bruno Martins</span></td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td>09h30</td>
-                        <td><button class="btn btn-sm">Confirmar</button></td>
-                    </tr>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Elisa Costa')">Elisa Costa</span></td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>15h30</td>
-                        <td><button class="btn btn-sm">Confirmar</button></td>
-                    </tr>
+                    <?php foreach ($consultasAtrasadas as $consulta): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($consulta['nome_paciente']) ?></td>
+                            <td><?= htmlspecialchars($consulta['nome_psicologo']) ?></td>
+                            <td><?= formatarHora($consulta['hora_inicio']) ?></td>
+                            <td><button class="btn btn-sm">Atualizar</button></td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
@@ -175,20 +167,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Ana Lima')">Ana Lima</span></td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>05/08/2026</td>
-                        <td>14h00</td>
-                        <td><button class="btn btn-sm btn-secondary" onclick="abrirModal('Ana Lima', 1)">Lançar</button></td>
-                    </tr>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Bruno Lima')">Bruno Lima</span></td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td>04/08/2026</td>
-                        <td>09h30</td>
-                        <td><button class="btn btn-sm btn-secondary" onclick="abrirModal('Bruno Martins', 0)">Lançar</button></td>
-                    </tr>
+                    <?php foreach ($consultasSemAnotacao as $consulta): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($consulta['nome_paciente']) ?></td>
+                            <td><?= htmlspecialchars($consulta['nome_psicologo']) ?></td>
+                            <td><?= date('d/m/Y', strtotime($consulta['data'])) ?></td>
+                            <td><?= formatarHora($consulta['hora_inicio']) ?></td>
+                            <td>
+                                <button class="btn btn-sm btn-secondary"
+                                        onclick="abrirModal(<?= htmlspecialchars(json_encode($consulta['nome_paciente']), ENT_QUOTES) ?>, <?= (int) $consulta['idconsulta'] ?>)">
+                                    Lançar
+                                </button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>

@@ -20,7 +20,7 @@
             <button class="btn" id="btn-imprimir" title="Imprimir prontuário">
                 <img src="/imgs/icons/imprimir.png" alt="Imprimir prontuário" width="18" height="18">
             </button>
-            <button class="btn" id="btn-consulta" title="Agendar Consulta" onclick="abrirModalConsulta(document.getElementById('drawer-nome').textContent)">
+            <button class="btn" id="btn-consulta" title="Agendar Consulta" onclick="abrirModalConsulta(pacienteAbertoId)">
                 <img src="/imgs/icons/add.png" alt="Agendar Consulta" width="18" height="18">
             </button>
         </div>
@@ -38,11 +38,11 @@
                 <div class="drawer-campo">
                     <span class="drawer-label">Status</span>
                     <select class="drawer-select" id="drawer-status-select">
-                        <option value="Ativo">Ativo</option>
-                        <option value="Em espera">Em espera</option>
-                        <option value="Pausado">Pausado</option>
-                        <option value="Encerrado">Encerrado</option>
-                        <option value="Inativo">Inativo</option>
+                        <option value="ativo">Ativo</option>
+                        <option value="em_espera">Em espera</option>
+                        <option value="pausado">Pausado</option>
+                        <option value="encerrado">Encerrado</option>
+                        <option value="inativo">Inativo</option>
                     </select>
                 </div>
 
@@ -63,11 +63,7 @@
 
                 <div class="drawer-campo">
                     <span class="drawer-label">Psicólogo responsável</span>
-                    <select class="drawer-select" id="drawer-psicologo-select">
-                        <option value="Dr. Carlos Souza">Dr. Carlos Souza</option>
-                        <option value="Dra. Fernanda Rocha">Dra. Fernanda Rocha</option>
-                        <option value="Dr. Pedro Alves">Dr. Pedro Alves</option>
-                    </select>
+                    <select class="drawer-select" id="drawer-psicologo-select"></select>
                 </div>
 
                 <div class="drawer-campo">

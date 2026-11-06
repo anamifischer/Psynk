@@ -1,17 +1,4 @@
 services:
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: psynk_web
-    ports:
-      - "8080:80"
-    volumes:
-      - ./:/var/www/html
-    depends_on:
-      - db
-    restart: unless-stopped
-
   db:
     image: mysql:8.0
     container_name: psynk_db
@@ -26,6 +13,20 @@ services:
       - psynk_db_data:/var/lib/mysql
       - ./db/init:/docker-entrypoint-initdb.d
     restart: unless-stopped
+  
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: psynk_web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - db
+    restart: unless-stopped
+
 
   phpmyadmin:
     image: phpmyadmin:latest

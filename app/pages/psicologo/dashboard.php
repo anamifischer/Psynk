@@ -27,7 +27,7 @@
  
     <div class="main">
         <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/header.php"); ?>
-        <h1 class="cumprimento"> Olá Fábio</h1>
+        <h1 class="cumprimento">Olá, <?php echo htmlspecialchars($_SESSION['nome'])?></h1>
 
         <div class="cartoes">
             <div class="cartao" onclick="toggleList('listaConsultas')">
@@ -102,30 +102,6 @@
                         <td>08h00</td>
                         <td><span class="badge badge-verde">Confirmado</span></td>
                     </tr>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Bruno Martins')">Bruno Martins</span></td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td>09h30</td>
-                        <td><span class="badge badge-laranja">Pendente</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Carla Dias')">Carla Dias</span></td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>11h00</td>
-                        <td><span class="badge badge-verde">Confirmado</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Diego Fernandes')">Diego Fernandes</span></td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td>14h00</td>
-                        <td><span class="badge badge-verde">Confirmado</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Elisa Costa')">Elisa Costa</span></td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>15h30</td>
-                        <td><span class="badge badge-laranja">Pendente</span></td>
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -148,12 +124,6 @@
                         <td><span class="link-paciente" onclick="abrirDrawer('Bruno Martins')">Bruno Martins</span></td>
                         <td>Dra. Fernanda Rocha</td>
                         <td>09h30</td>
-                        <td><button class="btn btn-sm">Confirmar</button></td>
-                    </tr>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Elisa Costa')">Elisa Costa</span></td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>15h30</td>
                         <td><button class="btn btn-sm">Confirmar</button></td>
                     </tr>
                 </tbody>
@@ -181,13 +151,6 @@
                         <td>05/08/2026</td>
                         <td>14h00</td>
                         <td><button class="btn btn-sm btn-secondary" onclick="abrirModal('Ana Lima', 1)">Lançar</button></td>
-                    </tr>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Bruno Lima')">Bruno Lima</span></td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td>04/08/2026</td>
-                        <td>09h30</td>
-                        <td><button class="btn btn-sm btn-secondary" onclick="abrirModal('Bruno Martins', 0)">Lançar</button></td>
                     </tr>
                 </tbody>
             </table>

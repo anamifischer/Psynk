@@ -85,20 +85,6 @@
                         <td>R$ 180,00</td>
                         <td><span class="badge badge-laranja">Pendente</span></td>
                     </tr>
-                    <tr>
-                        <td>Gabriela Moreira</td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td>12/08/2026</td>
-                        <td>R$ 200,00</td>
-                        <td><span class="badge badge-laranja">Pendente</span></td>
-                    </tr>
-                    <tr>
-                        <td>José Gonçalves</td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td>14/08/2026</td>
-                        <td>R$ 250,00</td>
-                        <td><span class="badge badge-laranja">Pendente</span></td>
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -125,27 +111,6 @@
                         <td>R$ 180,00</td>
                         <td><span class="badge badge-vermelho">Atrasado</span></td>
                     </tr>
-                    <tr>
-                        <td>Maria Laura Silva</td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>03/08/2026</td>
-                        <td>R$ 200,00</td>
-                        <td><span class="badge badge-vermelho">Atrasado</span></td>
-                    </tr>
-                    <tr>
-                        <td>Ana Lima</td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>05/08/2026</td>
-                        <td>R$ 150,00</td>
-                        <td><span class="badge badge-vermelho">Atrasado</span></td>
-                    </tr>
-                    <tr>
-                        <td>Gabriela Moreira</td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td>06/08/2026</td>
-                        <td>R$ 200,00</td>
-                        <td><span class="badge badge-vermelho">Atrasado</span></td>
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -170,20 +135,6 @@
                         <td>Dra. Fernanda Rocha</td>
                         <td>10/08/2026</td>
                         <td>R$ 250,00</td>
-                        <td><span class="badge badge-laranja">Vence hoje</span></td>
-                    </tr>
-                    <tr>
-                        <td>Gabriel Mussoi</td>
-                        <td>Dr. Pedro Alves</td>
-                        <td>10/08/2026</td>
-                        <td>R$ 180,00</td>
-                        <td><span class="badge badge-laranja">Vence hoje</span></td>
-                    </tr>
-                    <tr>
-                        <td>Ana Lima</td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>10/08/2026</td>
-                        <td>R$ 180,00</td>
                         <td><span class="badge badge-laranja">Vence hoje</span></td>
                     </tr>
                 </tbody>
