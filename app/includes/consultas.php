@@ -147,9 +147,8 @@ function buscarPsicologosDaClinica(mysqli $conexao, int $idClinica): array {
     $sql = "SELECT idUsuario, nome
             FROM Usuario
             WHERE id_clinica = ?
-              AND permissao = 'PSICOLOGO'
+            AND permissao IN ('ADMIN', 'PSICOLOGO')
             ORDER BY nome";
-
     $comando = $conexao->prepare($sql);
     $comando->bind_param("i", $idClinica);
     $comando->execute();

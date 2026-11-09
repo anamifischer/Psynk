@@ -87,84 +87,36 @@ document.addEventListener('click', (e) => {
     }
 });
 
-//Search
-const pacientesMockados = [
-    { 
-        nome: 'Ana Lima', 
-        status: 'Ativo', 
-        psicologo: 'Dr. Carlos Souza', 
-        nascimento: '12/03/1990', 
-        idade: 36, 
-        mostrarAnotacoes: true,
-        pagamentos: [
-            { data: '05/08/2026', valor: 180.00, status: 'Pago' },
-            { data: '29/07/2026', valor: 180.00, status: 'Pago' },
-            { data: '22/07/2026', valor: 180.00, status: 'Atrasado' },
-        ],
-        sessoes: [
-            {
-                data: '15/08/2026',
-                hora: '14:00',
-                realizada: false,
-                anotacao: null,
-                futuro: true
-            },
-            {
-                data: '05/08/2026',
-                hora: '14:00',
-                realizada: true,
-                anotacao: null,
-                futuro: false
-            },
-            {
-                data: '29/07/2026',
-                hora: '14:00',
-                realizada: true,
-                anotacao: 'Paciente relatou melhora significativa na qualidade do sono. Continuamos trabalhando técnicas de respiração.',
-                futuro: false
-            },
-        ]
-    },
-    { nome: 'Maria Laura Silva', status: 'Em espera', psicologo: 'Dr. Carlos Souza', nascimento: '05/07/1995', idade: 31, mostrarAnotacoes: true, pagamentos: [
-          { data: '01/08/2026', valor: 160.00, status: 'Pendente' },
-          { data: '18/07/2026', valor: 160.00, status: 'Pago' },
-        ] },
-    { nome: 'José Gonçalves', status: 'Encerrado', psicologo: 'Dra. Fernanda Rocha', nascimento: '22/11/1985', idade: 40, mostrarAnotacoes: false, pagamentos: [
-          { data: '10/06/2026', valor: 200.00, status: 'Pago' },
-          { data: '03/06/2026', valor: 200.00, status: 'Pago' },
-      ] },
-    { nome: 'Gabriela Moreira', status: 'Pausado', psicologo: 'Dra. Fernanda Rocha', nascimento: '18/04/1992', idade: 34, mostrarAnotacoes: true, pagamentos: [
-          { data: '20/07/2026', valor: 170.00, status: 'Atrasado' },
-          { data: '13/07/2026', valor: 170.00, status: 'Pago' },
-      ]},
-    { nome: 'Gabriel Mussoi', status: 'Inativo', psicologo: 'Dr. Pedro Alves', nascimento: '30/09/1998', idade: 27, mostrarAnotacoes: true, pagamentos: [
-          { data: '15/07/2026', valor: 150.00, status: 'Pago' },
-          { data: '08/07/2026', valor: 150.00, status: 'Pendente' },
-      ] },
-];
 
 function iniciarSearch() {
     const input = document.getElementById('search-paciente');
     const resultados = document.getElementById('search-resultados');
     if (!input || !resultados) return;
 
-    input.addEventListener('input', () => {
-        const termo = input.value.trim().toLowerCase();
+    input.addEventListener('input', async () => {
+        const termo = input.value.trim();
         if (!termo) { resultados.classList.remove('open'); return; }
 
-        const filtrados = pacientesMockados.filter(p => p.nome.toLowerCase().includes(termo));
+        const resp = await fetch('/app/api/buscar_pacientes.php?q=' + encodeURIComponent(termo));
+        const pacientes = await resp.json();
 
-        if (!filtrados.length) { resultados.classList.remove('open'); return; }
+        if (!pacientes.length) { resultados.classList.remove('open'); return; }
 
-        resultados.innerHTML = filtrados.map(p => `
-            <div class="search-resultado-item" onclick="abrirDrawer('${p.nome}')">
+        resultados.innerHTML = '';
+        pacientes.forEach(p => {
+            const item = document.createElement('div');
+            item.className = 'search-resultado-item';
+            item.innerHTML = `
                 <div>
-                    <div class="search-resultado-nome">${p.nome}</div>
-                    <div class="search-resultado-psicologo">${p.psicologo}</div>
+                    <div class="search-resultado-nome"></div>
+                    <div class="search-resultado-psicologo"></div>
                 </div>
-                <span class="badge badge-${badgeClassStatus(p.status)}">${p.status}</span>
-            </div>
-        `).join('');
+            `;
+            item.querySelector('.search-resultado-nome').textContent = p.nome;
+            item.querySelector('.search-resultado-psicologo').textContent = p.nome_psicologo;
+            item.onclick = () => abrirDrawer(p.idpaciente);
+            resultados.appendChild(item);
+        });
 
         resultados.classList.add('open');
     });
@@ -298,12 +250,23 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 //Drawer
-function abrirDrawer(nomePaciente) {
-    const paciente = pacientesMockados.find(p => p.nome === nomePaciente);
-    if (!paciente) return;
+let pacienteAbertoId = null;
+
+async function abrirDrawer(idPaciente) {
+    let paciente;
+    try {
+        const resp = await fetch('/app/api/paciente_detalhes.php?id=' + encodeURIComponent(idPaciente));
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        paciente = await resp.json();
+    } catch (erro) {
+        console.error('Erro ao carregar paciente:', erro);
+        return;
+    }
+    pacienteAbertoId = paciente.id;
 
     // topo do drawer
     document.getElementById('drawer-nome').textContent = paciente.nome;
+    document.getElementById('drawer-nome-input').value = paciente.nome;
 
     const statusEl = document.getElementById('drawer-status');
     statusEl.textContent = paciente.status;
@@ -311,7 +274,7 @@ function abrirDrawer(nomePaciente) {
 
     // aba dados — campos editáveis
     const statusSelect = document.getElementById('drawer-status-select');
-    if (statusSelect) statusSelect.value = paciente.status;
+    if (statusSelect) statusSelect.value = paciente.statusValor;
 
     const nascimentoInput = document.getElementById('drawer-nascimento');
     if (nascimentoInput && paciente.nascimento) {
@@ -326,7 +289,12 @@ function abrirDrawer(nomePaciente) {
     if (enderecoInput) enderecoInput.value = paciente.endereco || '';
 
     const psicologoSelect = document.getElementById('drawer-psicologo-select');
-    if (psicologoSelect) psicologoSelect.value = paciente.psicologo;
+    if (psicologoSelect) {
+        psicologoSelect.innerHTML = paciente.psicologos
+            .map(ps => `<option value="${ps.id}">${ps.nome}</option>`)
+            .join('');
+        psicologoSelect.value = paciente.idPsicologo;
+    }
 
     const observacoesInput = document.getElementById('drawer-observacoes');
     if (observacoesInput) observacoesInput.value = paciente.observacoes || '';

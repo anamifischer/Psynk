@@ -33,6 +33,7 @@
                 <div class="drawer-campo">
                     <span class="drawer-label">Nome completo</span>
                     <span class="drawer-valor" id="drawer-nome-dados"></span>
+                    <input class="drawer-input" type="text" id="drawer-nome-input">
                 </div>
 
                 <div class="drawer-campo">

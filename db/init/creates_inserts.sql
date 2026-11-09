@@ -194,7 +194,8 @@ INSERT INTO `Paciente` (`idpaciente`, `nome`, `cpf`, `telefone`, `endereco`, `st
   (3, 'Carla Mendes',   '333.222.111-00', '(51) 97777-0003', 'Rua C, 30',  'em_espera', 1, 4),
   (4, 'Diego Rocha',    '444.555.666-77', '(51) 97777-0004', 'Rua D, 40',  'pausado',   1, 4),
   (5, 'Elisa Ferreira', '555.666.777-88', '(51) 97777-0005', 'Rua E, 50',  'encerrado', 1, 2),
-  (6, 'Felipe Santos',  '666.777.888-99', '(51) 97777-0006', NULL,         'inativo',   1, 4);
+  (6, 'Felipe Santos',  '666.777.888-99', '(51) 97777-0006', NULL,         'inativo',   1, 4),
+  (7, 'Lucas Rodrigues', '111.444.666-35', '(51) 97777-0001', 'Rua A, 10',  'ativo',     1, 1);
 
 -- Consulta -----------------------------------------------------------
 INSERT INTO `Consulta` (`idconsulta`, `data`, `hora_inicio`, `hora_fim`, `status`, `id_psicologo`, `id_paciente`, `Clinica_idtable1`) VALUES
@@ -231,3 +232,7 @@ INSERT INTO `Notificacao` (`idNotificacao`, `mensagem`, `criado_em`, `Usuario_id
   (2, 'Você tem consulta amanhã às 14:00 com Ana Souza.', '2026-11-09', 2),
   (3, 'Pagamento de Ana Souza está atrasado.',            '2026-11-09', 3),
   (4, 'Consulta de Carla Mendes marcada para 12/11.',     '2026-11-09', 4);
+
+  ALTER TABLE Paciente
+  ADD COLUMN data_nascimento DATE NULL,
+  ADD COLUMN observacoes TEXT NULL;
