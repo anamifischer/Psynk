@@ -3,6 +3,7 @@
 // ============ CONSULTAS ============
 function buscarConsultasDeHoje(mysqli $conexao, int $idClinica): array {
     $sql = "SELECT consulta.idconsulta,
+                    consulta.id_paciente,
                    paciente.nome AS nome_paciente,
                    psicologo.nome AS nome_psicologo,
                    consulta.hora_inicio,
@@ -22,6 +23,7 @@ function buscarConsultasDeHoje(mysqli $conexao, int $idClinica): array {
 
 function buscarConsultasAtrasadas(mysqli $conexao, int $idClinica): array {
     $sql = "SELECT consulta.idconsulta,
+                    consulta.id_paciente,
                    paciente.nome AS nome_paciente,
                    psicologo.nome AS nome_psicologo,
                    consulta.data,
@@ -41,6 +43,7 @@ function buscarConsultasAtrasadas(mysqli $conexao, int $idClinica): array {
 
 function buscarConsultasSemAnotacao(mysqli $conexao, int $idClinica): array {
     $sql = "SELECT consulta.idconsulta,
+                    consulta.id_paciente,
                    paciente.nome AS nome_paciente,
                    psicologo.nome AS nome_psicologo,
                    consulta.data,

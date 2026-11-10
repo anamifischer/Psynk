@@ -100,6 +100,7 @@
 
 <script src="/app/js/utils.js"></script>
 <script src="/app/js/agenda.js"></script>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/drawer.php"); ?>
 <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/modal-consulta.php"); ?>
 </body>
 </html>

@@ -53,7 +53,7 @@
             return;
         }
         foreach ($pacientes as $paciente) {
-            echo '<tr>';
+            echo '<tr onclick="abrirDrawer(' . (int) $paciente['idpaciente'] . ')" style="cursor:pointer">';
             echo '<td>' . htmlspecialchars($paciente['nome_paciente']) . '</td>';
             echo '<td>' . htmlspecialchars($paciente['nome_psicologo']) . '</td>';
             echo '<td><span class="badge badge-green">' . htmlspecialchars($nomesDosStatus[$paciente['status']]) . '</span></td>';

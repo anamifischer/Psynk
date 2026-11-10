@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `Consulta` (
   `hora_inicio` TIME NOT NULL,
   `hora_fim` TIME NOT NULL,
   `criado_em` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` ENUM('aguarda data', 'atrasada', 'concluida') NOT NULL,
+  `status` ENUM('aguarda data', 'atrasada', 'concluida', 'cancelada') NOT NULL,
   `id_psicologo` INT NOT NULL,
   `id_paciente` INT NOT NULL,
   `Clinica_idtable1` INT NOT NULL,

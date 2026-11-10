@@ -113,7 +113,7 @@
                             <tr>
                                 <td>
                                     <span class="link-paciente"
-                                        onclick="abrirDrawer(<?= htmlspecialchars(json_encode($consulta['nome_paciente']), ENT_QUOTES) ?>)">
+                                        onclick="abrirDrawer(<?= (int) $consulta['id_paciente'] ?>)">>
                                         <?= htmlspecialchars($consulta['nome_paciente']) ?>
                                     </span>
                                 </td>
@@ -142,7 +142,11 @@
                 <tbody>
                     <?php foreach ($consultasAtrasadas as $consulta): ?>
                         <tr>
-                            <td><?= htmlspecialchars($consulta['nome_paciente']) ?></td>
+                            <td>
+                                <span class="link-paciente" onclick="abrirDrawer(<?= (int) $consulta['id_paciente'] ?>)">
+                                    <?= htmlspecialchars($consulta['nome_paciente']) ?>
+                                </span>
+                            </td>
                             <td><?= htmlspecialchars($consulta['nome_psicologo']) ?></td>
                             <td><?= formatarHora($consulta['hora_inicio']) ?></td>
                             <td><button class="btn btn-sm">Atualizar</button></td>
@@ -169,7 +173,11 @@
                 <tbody>
                     <?php foreach ($consultasSemAnotacao as $consulta): ?>
                         <tr>
-                            <td><?= htmlspecialchars($consulta['nome_paciente']) ?></td>
+                            <td>
+                                <span class="link-paciente" onclick="abrirDrawer(<?= (int) $consulta['id_paciente'] ?>)">
+                                        <?= htmlspecialchars($consulta['nome_paciente']) ?>
+                                </span>
+                            </td>
                             <td><?= htmlspecialchars($consulta['nome_psicologo']) ?></td>
                             <td><?= date('d/m/Y', strtotime($consulta['data'])) ?></td>
                             <td><?= formatarHora($consulta['hora_inicio']) ?></td>
