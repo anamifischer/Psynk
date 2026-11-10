@@ -214,3 +214,58 @@ function buscarPacientesPorNome(mysqli $conexao, int $idClinica, string $termo =
     $comando->execute();
     return $comando->get_result()->fetch_all(MYSQLI_ASSOC);
 }
+
+// ============ FINANCEIRO ============
+function resumoFinanceiro(mysqli $conexao, int $idClinica, ?int $idPsicologo = null): array {
+    $sql = "SELECT
+                COALESCE(SUM(CASE WHEN pag.status = 'pago'
+                                   AND YEAR(pag.data_pagamento)  = YEAR(CURDATE())
+                                   AND MONTH(pag.data_pagamento) = MONTH(CURDATE())
+                                  THEN pag.valor END), 0) AS receita,
+                COALESCE(SUM(CASE WHEN pag.status = 'pendente' THEN pag.valor END), 0) AS pendente,
+                COUNT(CASE WHEN pag.status = 'atrasado' THEN 1 END) AS atrasados,
+                COUNT(CASE WHEN pag.status = 'pendente'
+                            AND pag.data_vencimento = CURDATE() THEN 1 END) AS vencendo_hoje
+            FROM Pagamento pag
+            JOIN Paciente paciente ON paciente.idpaciente = pag.Paciente_idpaciente
+            JOIN Consulta consulta ON consulta.idconsulta = pag.Consulta_idconsulta
+            WHERE paciente.idClinica = ?
+              AND (? IS NULL OR consulta.id_psicologo = ?)";
+
+    $comando = $conexao->prepare($sql);
+    $comando->bind_param("iii", $idClinica, $idPsicologo, $idPsicologo);
+    $comando->execute();
+    return $comando->get_result()->fetch_assoc();
+}
+
+// tipo: 'pendentes', 'atrasados' ou 'vencendo'. Se $idPsicologo for null, traz todos.
+function buscarPagamentos(mysqli $conexao, int $idClinica, string $tipo, ?int $idPsicologo = null): array {
+    $filtros = [
+        'pendentes' => "pag.status = 'pendente'",
+        'atrasados' => "pag.status = 'atrasado'",
+        'vencendo'  => "pag.status = 'pendente' AND pag.data_vencimento = CURDATE()",
+        'recebidos' => "pag.status = 'pago'
+            AND YEAR(pag.data_pagamento)  = YEAR(CURDATE())
+            AND MONTH(pag.data_pagamento) = MONTH(CURDATE())",
+    ];
+    if (!isset($filtros[$tipo])) {
+        return [];
+    }
+
+    $sql = "SELECT pag.idPagamento, pag.valor, pag.data_vencimento, pag.data_pagamento,
+                   paciente.idpaciente, paciente.nome AS nome_paciente,
+                   psicologo.nome AS nome_psicologo
+            FROM Pagamento pag
+            JOIN Paciente paciente ON paciente.idpaciente = pag.Paciente_idpaciente
+            JOIN Consulta consulta ON consulta.idconsulta = pag.Consulta_idconsulta
+            JOIN Usuario psicologo ON psicologo.idUsuario = consulta.id_psicologo
+            WHERE paciente.idClinica = ?
+              AND (? IS NULL OR consulta.id_psicologo = ?)
+              AND {$filtros[$tipo]}
+            ORDER BY pag.data_vencimento";
+
+    $comando = $conexao->prepare($sql);
+    $comando->bind_param("iii", $idClinica, $idPsicologo, $idPsicologo);
+    $comando->execute();
+    return $comando->get_result()->fetch_all(MYSQLI_ASSOC);
+}

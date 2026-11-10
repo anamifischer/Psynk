@@ -1,7 +1,44 @@
 <?php
     require_once __DIR__ . "/../../../config/sessao.php";
     verificarPermissao(["ADMIN"]);
+    require_once __DIR__ . "/../../../config/conexao.php";
+    require_once __DIR__ . "/../../includes/consultas.php";
+
+    $idClinica = (int) $_SESSION['id_clinica'];
+        $psicologosDaClinica = buscarPsicologosDaClinica($conexao, $idClinica);
+
+    // Filtro de psicólogo (só aceita quem é mesmo da clínica)
+    $idPsicologoFiltro = null;
+    if (isset($_GET['psicologo'])) {
+        foreach ($psicologosDaClinica as $psicologo) {
+            if ((int) $psicologo['idUsuario'] === (int) $_GET['psicologo']) {
+                $idPsicologoFiltro = (int) $psicologo['idUsuario'];
+            }
+        }
+    }
+
+    $resumo = resumoFinanceiro($conexao, $idClinica, $idPsicologoFiltro);
+
+    function mostrarLinhasPagamentos(array $pagamentos, string $rotulo, string $classeBadge): void {
+        if (empty($pagamentos)) {
+            echo '<tr><td colspan="5">Nenhum pagamento encontrado.</td></tr>';
+            return;
+        }
+        foreach ($pagamentos as $pagamento) {
+            $data = $pagamento['data_pagamento'] ?: $pagamento['data_vencimento'];
+
+            echo '<tr class="linha-clicavel" onclick="abrirDrawer(' . (int) $pagamento['idpaciente'] . ')">';
+echo '<td>' . htmlspecialchars($pagamento['nome_paciente']) . '</td>';
+            echo '<td>' . htmlspecialchars($pagamento['nome_psicologo']) . '</td>';
+            echo '<td>' . date('d/m/Y', strtotime($data)) . '</td>';
+            echo '<td>R$ ' . number_format($pagamento['valor'], 2, ',', '.') . '</td>';
+            echo '<td><span class="badge ' . $classeBadge . '">' . $rotulo . '</span></td>';
+            echo '</tr>';
+        }
+    }
 ?>
+
+<!DOCTYPE html>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -36,10 +73,14 @@
                     <div class="filtro-grupo">
                         <p class="filtro-titulo">Psicólogo</p>
                         <div class="lista-chips" id="filtro-profissional">
-                            <button class="chip" data-valor="todos">Todos</button>
-                            <button class="chip active" data-valor="Dr. Carlos Souza">Dr. Carlos Souza</button>
-                            <button class="chip" data-valor="Dra. Fernanda Rocha">Dra. Fernanda Rocha</button>
-                            <button class="chip" data-valor="Dr. Pedro Alves">Dr. Pedro Alves</button>
+                            <a class="chip <?= $idPsicologoFiltro === null ? 'active' : '' ?>"
+                            href="financeiro.php">Todos</a>
+                            <?php foreach ($psicologosDaClinica as $psicologo): ?>
+                                <a class="chip <?= $idPsicologoFiltro === (int) $psicologo['idUsuario'] ? 'active' : '' ?>"
+                                href="financeiro.php?psicologo=<?= (int) $psicologo['idUsuario'] ?>">
+                                    <?= htmlspecialchars($psicologo['nome']) ?>
+                                </a>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
@@ -47,27 +88,47 @@
         </div>
 
         <div class="cartoes">
-            <div class="cartao">
+            <div class="cartao" onclick="toggleList('listaReceita')">
                 <div class="cartaoTitulo">Receita</div>
-                <div class="cartaoValor" id="valor-receita">R$ 12150,76</div>
+                <div class="cartaoValor" id="valor-receita">R$ <?= number_format($resumo['receita'], 2, ',', '.') ?></div>
                 <div class="cartaoLegenda">total mês</div>
             </div>
 
             <div class="cartao" onclick="toggleList('listaPendentes')">
                 <div class="cartaoTitulo">Pendente</div>
-                <div class="cartaoValor" id="valor-pendente">R$ 630,00</div>
+                <div class="cartaoValor" id="valor-pendente">R$ <?= number_format($resumo['pendente'], 2, ',', '.') ?></div>
                 <div class="cartaoLegenda">pagamentos pendentes</div>
             </div>
 
             <div class="cartao" onclick="toggleList('listaAtrasados')">
-                <div class="cartaoValor" id="valor-atrasados">4</div>
+                <div class="cartaoValor" id="valor-atrasados"><?= (int) $resumo['atrasados'] ?></div>
                 <div class="cartaoLegenda">pagamentos atrasados</div>
             </div>
 
             <div class="cartao" onclick="toggleList('listaVencendo')">
-                <div class="cartaoValor" id="valor-vencendo">3</div>
+                <div class="cartaoValor" id="valor-vencendo"><?= (int) $resumo['vencendo_hoje'] ?></div>
                 <div class="cartaoLegenda">pagamentos vencendo hoje</div>
             </div>
+        </div>
+
+        <div id="listaReceita" class="collapse-list">
+            <div class="section-header">
+                <span class="section-title">Receita do mês</span>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Paciente</th>
+                        <th>Psicólogo(a)</th>
+                        <th>Data do pagamento</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php mostrarLinhasPagamentos(buscarPagamentos($conexao, $idClinica, 'recebidos', $idPsicologoFiltro), 'Pago', 'badge-verde'); ?>
+                </tbody>
+            </table>
         </div>
 
         <div id="listaPendentes" class="collapse-list">
@@ -85,13 +146,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Ana Lima</td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>10/08/2026</td>
-                        <td>R$ 180,00</td>
-                        <td><span class="badge badge-laranja">Pendente</span></td>
-                    </tr>
+                    <?php mostrarLinhasPagamentos(buscarPagamentos($conexao, $idClinica, 'pendentes', $idPsicologoFiltro), 'Pendente', 'badge-laranja'); ?>
                 </tbody>
             </table>
         </div>
@@ -111,13 +166,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Gabriel Mussoi</td>
-                        <td>Dr. Pedro Alves</td>
-                        <td>01/08/2026</td>
-                        <td>R$ 180,00</td>
-                        <td><span class="badge badge-vermelho">Atrasado</span></td>
-                    </tr>
+                    <?php mostrarLinhasPagamentos(buscarPagamentos($conexao, $idClinica, 'atrasados', $idPsicologoFiltro), 'Atrasado', 'badge-vermelho'); ?>
                 </tbody>
             </table>
         </div>
@@ -137,13 +186,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>José Gonçalves</td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td>10/08/2026</td>
-                        <td>R$ 250,00</td>
-                        <td><span class="badge badge-laranja">Vence hoje</span></td>
-                    </tr>
+                    <?php mostrarLinhasPagamentos(buscarPagamentos($conexao, $idClinica, 'vencendo', $idPsicologoFiltro), 'Vence hoje', 'badge-laranja'); ?>
                 </tbody>
             </table>
         </div>

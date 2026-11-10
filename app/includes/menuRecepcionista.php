@@ -1,5 +1,5 @@
-
 <link rel="stylesheet" type="text/css" href="/app/css/menu.css">
+<link rel="icon" type="image/png" href="/imgs/logo.png">
 <script src="/app/js/menu.js"></script>
 
 <nav class="barraLateral">

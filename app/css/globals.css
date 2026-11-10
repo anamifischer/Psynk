@@ -329,7 +329,15 @@ body::after {
     color: var(--gray-400);
 }
 
+.lista-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
 .chip {
+    text-decoration: none;
+    white-space: nowrap;
     padding: 0.25rem 0.75rem;
     border-radius: 999px;
     border: 1px solid var(--gray-200);
@@ -351,4 +359,12 @@ body::after {
     background: var(--deep-teal);
     border-color: var(--deep-teal);
     color: #fff;
+}
+
+.linha-clicavel {
+    cursor: pointer;
+}
+
+.linha-clicavel:hover {
+    background: var(--gray-100);
 }

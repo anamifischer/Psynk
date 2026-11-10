@@ -1,31 +1,3 @@
-//Dados mockados
-const dadosProfissionais = {
-    'todos': {
-        receita: 12150.76,
-        pendente: 630,
-        atrasados: 4,
-        vencendoHoje: 3
-    },
-    'Dr. Carlos Souza': {
-        receita: 2800,
-        pendente: 180,
-        atrasados: 2,
-        vencendoHoje: 1
-    },
-    'Dra. Fernanda Rocha': {
-        receita: 3500,
-        pendente: 250,
-        atrasados: 1,
-        vencendoHoje: 1
-    },
-    'Dr. Pedro Alves': {
-        receita: 4700,
-        pendente: 200,
-        atrasados: 1,
-        vencendoHoje: 1
-    },
-};
-
 //Atualizar Cards
 function atualizarCards(profissional) {
     const dados = dadosProfissionais[profissional];
@@ -74,5 +46,4 @@ function iniciarFiltrosProfissional() {
 
 //Init
 document.addEventListener('DOMContentLoaded', () => {
-    iniciarFiltrosProfissional();
 });
