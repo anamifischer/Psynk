@@ -1,6 +1,11 @@
 <?php
     require_once __DIR__ . "/../../../config/sessao.php";
     verificarPermissao(["ADMIN"]);
+
+    require_once __DIR__ . "/../../../config/conexao.php";
+    require_once __DIR__ . "/../../includes/consultas.php";
+
+    $valorConsulta = buscarValorConsulta($conexao, (int) $_SESSION['id']);
 ?>
 
 <!DOCTYPE html>
@@ -164,7 +169,9 @@
                         <label>Valor padrão</label>
                         <div class="input-prefixo">
                             <span>R$</span>
-                            <input type="number" value="180" min="0" step="0.01" placeholder="0,00">
+                            <input type="number" id="valor-consulta-input"
+                                value="<?= number_format($valorConsulta, 2, '.', '') ?>"
+                                min="0" step="0.01" placeholder="0,00">
                         </div>
                     </div>
 
@@ -180,7 +187,7 @@
                     <?php endif; ?>
 
                     <div class="config-acoes">
-                        <button class="btn btn-primary">Salvar valor</button>
+                        <button class="btn btn-primary" id="btn-salvar-valor">Salvar valor</button>
                     </div>
                 </div>
             </section>

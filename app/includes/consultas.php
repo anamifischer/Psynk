@@ -1,9 +1,36 @@
 <?php
+// ====================================================================
+// COMUM
+// ====================================================================
 
-// ============ CONSULTAS ============
-function buscarConsultasDeHoje(mysqli $conexao, int $idClinica): array {
+function formatarHora(string $hora): string {
+    return date('H\hi', strtotime($hora));
+}
+
+// Psicólogos e admins da clínica (os admins também atendem pacientes).
+// Usada em: filtro de pacientes, filtro do financeiro, agenda e drawer.
+function buscarPsicologosDaClinica(mysqli $conexao, int $idClinica): array {
+    $sql = "SELECT idUsuario, nome
+            FROM Usuario
+            WHERE id_clinica = ?
+              AND permissao IN ('ADMIN', 'PSICOLOGO')
+            ORDER BY nome";
+
+    $comando = $conexao->prepare($sql);
+    $comando->bind_param("i", $idClinica);
+    $comando->execute();
+    return $comando->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+
+// ====================================================================
+// DASHBOARD
+// ====================================================================
+
+// Tabela "Consultas de hoje"
+function buscarConsultasDeHoje(mysqli $conexao, int $idClinica, ?int $idPsicologo = null): array {
     $sql = "SELECT consulta.idconsulta,
-                    consulta.id_paciente,
+                   consulta.id_paciente,
                    paciente.nome AS nome_paciente,
                    psicologo.nome AS nome_psicologo,
                    consulta.hora_inicio,
@@ -12,18 +39,20 @@ function buscarConsultasDeHoje(mysqli $conexao, int $idClinica): array {
             JOIN Paciente paciente ON paciente.idpaciente = consulta.id_paciente
             JOIN Usuario psicologo ON psicologo.idUsuario = consulta.id_psicologo
             WHERE consulta.Clinica_idtable1 = ?
+              AND (? IS NULL OR consulta.id_psicologo = ?)
               AND consulta.data = CURDATE()
             ORDER BY consulta.hora_inicio";
 
     $comando = $conexao->prepare($sql);
-    $comando->bind_param("i", $idClinica);
+    $comando->bind_param("iii", $idClinica, $idPsicologo, $idPsicologo);
     $comando->execute();
     return $comando->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
-function buscarConsultasAtrasadas(mysqli $conexao, int $idClinica): array {
+// Tabela "Aguardando confirmação"
+function buscarConsultasAtrasadas(mysqli $conexao, int $idClinica, ?int $idPsicologo = null): array {
     $sql = "SELECT consulta.idconsulta,
-                    consulta.id_paciente,
+                   consulta.id_paciente,
                    paciente.nome AS nome_paciente,
                    psicologo.nome AS nome_psicologo,
                    consulta.data,
@@ -32,18 +61,20 @@ function buscarConsultasAtrasadas(mysqli $conexao, int $idClinica): array {
             JOIN Paciente paciente ON paciente.idpaciente = consulta.id_paciente
             JOIN Usuario psicologo ON psicologo.idUsuario = consulta.id_psicologo
             WHERE consulta.Clinica_idtable1 = ?
+              AND (? IS NULL OR consulta.id_psicologo = ?)
               AND consulta.status = 'atrasada'
             ORDER BY consulta.data, consulta.hora_inicio";
 
     $comando = $conexao->prepare($sql);
-    $comando->bind_param("i", $idClinica);
+    $comando->bind_param("iii", $idClinica, $idPsicologo, $idPsicologo);
     $comando->execute();
     return $comando->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
-function buscarConsultasSemAnotacao(mysqli $conexao, int $idClinica): array {
+// Tabela "Anotações pendentes de lançar"
+function buscarConsultasSemAnotacao(mysqli $conexao, int $idClinica, ?int $idPsicologo = null): array {
     $sql = "SELECT consulta.idconsulta,
-                    consulta.id_paciente,
+                   consulta.id_paciente,
                    paciente.nome AS nome_paciente,
                    psicologo.nome AS nome_psicologo,
                    consulta.data,
@@ -53,38 +84,65 @@ function buscarConsultasSemAnotacao(mysqli $conexao, int $idClinica): array {
             JOIN Usuario psicologo ON psicologo.idUsuario = consulta.id_psicologo
             LEFT JOIN AnotacaoClinica anotacao ON anotacao.Consulta_idconsulta = consulta.idconsulta
             WHERE consulta.Clinica_idtable1 = ?
+              AND (? IS NULL OR consulta.id_psicologo = ?)
               AND consulta.status = 'concluida'
               AND anotacao.idAnotacaoClinica IS NULL
             ORDER BY consulta.data, consulta.hora_inicio";
 
     $comando = $conexao->prepare($sql);
-    $comando->bind_param("i", $idClinica);
+    $comando->bind_param("iii", $idClinica, $idPsicologo, $idPsicologo);
     $comando->execute();
     return $comando->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
-function contarConsultasConcluidasNoMes(mysqli $conexao, int $idClinica): int {
+// Tabela "Consultas concluídas neste mês"
+function buscarConsultasConcluidasNoMes(mysqli $conexao, int $idClinica, ?int $idPsicologo = null): array {
+    $sql = "SELECT consulta.idconsulta,
+                   consulta.id_paciente,
+                   paciente.nome AS nome_paciente,
+                   psicologo.nome AS nome_psicologo,
+                   consulta.data,
+                   consulta.hora_inicio
+            FROM Consulta consulta
+            JOIN Paciente paciente ON paciente.idpaciente = consulta.id_paciente
+            JOIN Usuario psicologo ON psicologo.idUsuario = consulta.id_psicologo
+            WHERE consulta.Clinica_idtable1 = ?
+              AND (? IS NULL OR consulta.id_psicologo = ?)
+              AND consulta.status = 'concluida'
+              AND YEAR(consulta.data) = YEAR(CURDATE())
+              AND MONTH(consulta.data) = MONTH(CURDATE())
+            ORDER BY consulta.data DESC, consulta.hora_inicio DESC";
+
+    $comando = $conexao->prepare($sql);
+    $comando->bind_param("iii", $idClinica, $idPsicologo, $idPsicologo);
+    $comando->execute();
+    return $comando->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+// Número do cartão "Consultas concluídas neste mês"
+function contarConsultasConcluidasNoMes(mysqli $conexao, int $idClinica, ?int $idPsicologo = null): int {
     $sql = "SELECT COUNT(*)
             FROM Consulta
             WHERE Clinica_idtable1 = ?
+              AND (? IS NULL OR id_psicologo = ?)
               AND status = 'concluida'
               AND YEAR(data) = YEAR(CURDATE())
               AND MONTH(data) = MONTH(CURDATE())";
 
     $comando = $conexao->prepare($sql);
-    $comando->bind_param("i", $idClinica);
+    $comando->bind_param("iii", $idClinica, $idPsicologo, $idPsicologo);
     $comando->execute();
     return (int) $comando->get_result()->fetch_row()[0];
 }
 
-function formatarHora(string $hora): string {
-    return date('H\hi', strtotime($hora));
-}
 
+// ====================================================================
+// PACIENTES
+// ====================================================================
 
-// ============ PACIENTES ============
 const STATUS_PACIENTE_VALIDOS = ['ativo', 'em_espera', 'pausado', 'encerrado', 'inativo'];
 
+// Tabelas da página de pacientes (com filtros opcionais)
 function buscarPacientes(mysqli $conexao, int $idClinica, ?int $idPsicologo = null, ?string $status = null): array {
     $sql = "SELECT paciente.idpaciente,
                    paciente.nome AS nome_paciente,
@@ -117,6 +175,7 @@ function buscarPacientes(mysqli $conexao, int $idClinica, ?int $idPsicologo = nu
     return $comando->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
+// Números dos cartões da página de pacientes
 function contarPacientesPorStatus(mysqli $conexao, int $idClinica, ?int $idPsicologo = null): array {
     $sql = "SELECT status, COUNT(*) AS total
             FROM Paciente
@@ -146,59 +205,7 @@ function contarPacientesPorStatus(mysqli $conexao, int $idClinica, ?int $idPsico
     return $contagem;
 }
 
-function buscarPsicologosDaClinica(mysqli $conexao, int $idClinica): array {
-    $sql = "SELECT idUsuario, nome
-            FROM Usuario
-            WHERE id_clinica = ?
-            AND permissao IN ('ADMIN', 'PSICOLOGO')
-            ORDER BY nome";
-    $comando = $conexao->prepare($sql);
-    $comando->bind_param("i", $idClinica);
-    $comando->execute();
-    return $comando->get_result()->fetch_all(MYSQLI_ASSOC);
-}
-
-// ============ DRAWER DO PACIENTE ============
-function buscarPacientePorId(mysqli $conexao, int $idPaciente, int $idClinica): ?array {
-    $sql = "SELECT paciente.idpaciente, paciente.nome, paciente.telefone, paciente.endereco,
-                   paciente.status, paciente.idPsicologo, paciente.data_nascimento, paciente.observacoes,
-                   psicologo.nome AS nome_psicologo
-            FROM Paciente paciente
-            JOIN Usuario psicologo ON psicologo.idUsuario = paciente.idPsicologo
-            WHERE paciente.idpaciente = ? AND paciente.idClinica = ?";
-
-    $comando = $conexao->prepare($sql);
-    $comando->bind_param("ii", $idPaciente, $idClinica);
-    $comando->execute();
-    return $comando->get_result()->fetch_assoc() ?: null;
-}
-
-function buscarSessoesDoPaciente(mysqli $conexao, int $idPaciente): array {
-    $sql = "SELECT consulta.idconsulta, consulta.data, consulta.hora_inicio, consulta.status,
-                   anotacao.conteudo
-            FROM Consulta consulta
-            LEFT JOIN AnotacaoClinica anotacao ON anotacao.Consulta_idconsulta = consulta.idconsulta
-            WHERE consulta.id_paciente = ?
-            ORDER BY consulta.data DESC, consulta.hora_inicio DESC";
-
-    $comando = $conexao->prepare($sql);
-    $comando->bind_param("i", $idPaciente);
-    $comando->execute();
-    return $comando->get_result()->fetch_all(MYSQLI_ASSOC);
-}
-
-function buscarPagamentosDoPaciente(mysqli $conexao, int $idPaciente): array {
-    $sql = "SELECT valor, status, data_vencimento, data_pagamento
-            FROM Pagamento
-            WHERE Paciente_idpaciente = ?
-            ORDER BY data_vencimento DESC";
-
-    $comando = $conexao->prepare($sql);
-    $comando->bind_param("i", $idPaciente);
-    $comando->execute();
-    return $comando->get_result()->fetch_all(MYSQLI_ASSOC);
-}
-
+// Barra de busca do header (api/paciente_buscar.php)
 function buscarPacientesPorNome(mysqli $conexao, int $idClinica, string $termo = ''): array {
     $sql = "SELECT paciente.idpaciente, paciente.nome, paciente.status,
                    paciente.idPsicologo, psicologo.nome AS nome_psicologo
@@ -215,7 +222,59 @@ function buscarPacientesPorNome(mysqli $conexao, int $idClinica, string $termo =
     return $comando->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
-// ============ FINANCEIRO ============
+
+// ====================================================================
+// DRAWER DO PACIENTE
+// ====================================================================
+
+function buscarPacientePorId(mysqli $conexao, int $idPaciente, int $idClinica): ?array {
+    $sql = "SELECT paciente.idpaciente, paciente.nome, paciente.telefone, paciente.endereco,
+                   paciente.status, paciente.idPsicologo, paciente.data_nascimento, paciente.observacoes,
+                   psicologo.nome AS nome_psicologo
+            FROM Paciente paciente
+            JOIN Usuario psicologo ON psicologo.idUsuario = paciente.idPsicologo
+            WHERE paciente.idpaciente = ? AND paciente.idClinica = ?";
+
+    $comando = $conexao->prepare($sql);
+    $comando->bind_param("ii", $idPaciente, $idClinica);
+    $comando->execute();
+    return $comando->get_result()->fetch_assoc() ?: null;
+}
+
+// Aba "Anotações" (o texto só deve ser enviado ao psicólogo responsável)
+function buscarSessoesDoPaciente(mysqli $conexao, int $idPaciente): array {
+    $sql = "SELECT consulta.idconsulta, consulta.data, consulta.hora_inicio, consulta.status,
+                   anotacao.conteudo
+            FROM Consulta consulta
+            LEFT JOIN AnotacaoClinica anotacao ON anotacao.Consulta_idconsulta = consulta.idconsulta
+            WHERE consulta.id_paciente = ?
+            ORDER BY consulta.data DESC, consulta.hora_inicio DESC";
+
+    $comando = $conexao->prepare($sql);
+    $comando->bind_param("i", $idPaciente);
+    $comando->execute();
+    return $comando->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+// Aba "Pagamentos"
+function buscarPagamentosDoPaciente(mysqli $conexao, int $idPaciente): array {
+    $sql = "SELECT valor, status, data_vencimento, data_pagamento
+            FROM Pagamento
+            WHERE Paciente_idpaciente = ?
+            ORDER BY data_vencimento DESC";
+
+    $comando = $conexao->prepare($sql);
+    $comando->bind_param("i", $idPaciente);
+    $comando->execute();
+    return $comando->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+
+// ====================================================================
+// FINANCEIRO
+// ====================================================================
+
+// Os 4 cartões: receita do mês, pendente, atrasados e vencendo hoje
 function resumoFinanceiro(mysqli $conexao, int $idClinica, ?int $idPsicologo = null): array {
     $sql = "SELECT
                 COALESCE(SUM(CASE WHEN pag.status = 'pago'
@@ -238,15 +297,16 @@ function resumoFinanceiro(mysqli $conexao, int $idClinica, ?int $idPsicologo = n
     return $comando->get_result()->fetch_assoc();
 }
 
-// tipo: 'pendentes', 'atrasados' ou 'vencendo'. Se $idPsicologo for null, traz todos.
+// As 4 tabelas do financeiro.
+// $tipo: 'recebidos', 'pendentes', 'atrasados' ou 'vencendo'
 function buscarPagamentos(mysqli $conexao, int $idClinica, string $tipo, ?int $idPsicologo = null): array {
     $filtros = [
+        'recebidos' => "pag.status = 'pago'
+                        AND YEAR(pag.data_pagamento)  = YEAR(CURDATE())
+                        AND MONTH(pag.data_pagamento) = MONTH(CURDATE())",
         'pendentes' => "pag.status = 'pendente'",
         'atrasados' => "pag.status = 'atrasado'",
         'vencendo'  => "pag.status = 'pendente' AND pag.data_vencimento = CURDATE()",
-        'recebidos' => "pag.status = 'pago'
-            AND YEAR(pag.data_pagamento)  = YEAR(CURDATE())
-            AND MONTH(pag.data_pagamento) = MONTH(CURDATE())",
     ];
     if (!isset($filtros[$tipo])) {
         return [];
@@ -268,4 +328,26 @@ function buscarPagamentos(mysqli $conexao, int $idClinica, string $tipo, ?int $i
     $comando->bind_param("iii", $idClinica, $idPsicologo, $idPsicologo);
     $comando->execute();
     return $comando->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+// ====================================================================
+// CONFIGURAÇÕES
+// ====================================================================
+
+// Valor padrão da consulta do profissional
+function buscarValorConsulta(mysqli $conexao, int $idUsuario): float {
+    $sql = "SELECT valor_consulta FROM Usuario WHERE idUsuario = ?";
+
+    $comando = $conexao->prepare($sql);
+    $comando->bind_param("i", $idUsuario);
+    $comando->execute();
+    return (float) $comando->get_result()->fetch_row()[0];
+}
+
+function salvarValorConsulta(mysqli $conexao, int $idUsuario, float $valor): void {
+    $sql = "UPDATE Usuario SET valor_consulta = ? WHERE idUsuario = ?";
+
+    $comando = $conexao->prepare($sql);
+    $comando->bind_param("di", $valor, $idUsuario);
+    $comando->execute();
 }

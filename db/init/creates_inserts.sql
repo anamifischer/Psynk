@@ -224,7 +224,8 @@ INSERT INTO `Pagamento` (`idPagamento`, `status`, `valor`, `data_vencimento`, `d
   (4, 'pendente', 150.00, '2026-11-20', NULL,         4, 4, 3),
   (5, 'atrasado', 150.00, '2026-11-06', NULL,         1, 5, 3),
   (6, 'pendente', 150.00, '2026-11-10', NULL,         1, 6, 3),
-  (7, 'pendente', 150.00, '2026-11-11', NULL,         2, 7, 3);
+  (7, 'pendente', 150.00, '2026-11-11', NULL,         2, 7, 3),
+    (7, 'pendente', 150.00, '2026-11-11', NULL,         2, 7, 3);
 
 -- Notificacao --------------------------------------------------------
 INSERT INTO `Notificacao` (`idNotificacao`, `mensagem`, `criado_em`, `Usuario_idUsuario`) VALUES
@@ -236,3 +237,26 @@ INSERT INTO `Notificacao` (`idNotificacao`, `mensagem`, `criado_em`, `Usuario_id
   ALTER TABLE Paciente
   ADD COLUMN data_nascimento DATE NULL,
   ADD COLUMN observacoes TEXT NULL;
+
+  -- Valor padrão da consulta de cada profissional
+ALTER TABLE Usuario
+  ADD COLUMN valor_consulta DECIMAL(10,2) NOT NULL DEFAULT 150.00;
+
+-- No máximo um pagamento por consulta
+ALTER TABLE Pagamento
+  ADD UNIQUE KEY uq_pagamento_consulta (Consulta_idconsulta);
+
+-- Toda consulta nova (exceto cancelada) já nasce com o pagamento,
+-- usando o valor padrão do psicólogo da consulta.
+-- Fica no final de propósito: não dispara nos dados de exemplo acima.
+CREATE TRIGGER trg_consulta_cria_pagamento
+AFTER INSERT ON Consulta
+FOR EACH ROW
+INSERT INTO Pagamento (status, valor, data_vencimento, data_pagamento,
+                       Paciente_idpaciente, Consulta_idconsulta, Usuario_idUsuario)
+SELECT CASE WHEN NEW.data < CURDATE() THEN 'atrasado' ELSE 'pendente' END,
+       u.valor_consulta, NEW.data, NULL,
+       NEW.id_paciente, NEW.idconsulta, NEW.id_psicologo
+FROM Usuario u
+WHERE u.idUsuario = NEW.id_psicologo
+  AND NEW.status <> 'cancelada';

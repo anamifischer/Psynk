@@ -6,10 +6,13 @@
 
     $idClinica = (int) $_SESSION['id_clinica'];
 
-    $consultasHoje        = buscarConsultasDeHoje($conexao, $idClinica);
-    $consultasAtrasadas   = buscarConsultasAtrasadas($conexao, $idClinica);
-    $consultasSemAnotacao = buscarConsultasSemAnotacao($conexao, $idClinica);
-    $totalConcluidasNoMes = contarConsultasConcluidasNoMes($conexao, $idClinica);
+    $idPsicologo = (int) $_SESSION['id'];
+
+    $consultasHoje        = buscarConsultasDeHoje($conexao, $idClinica, $idPsicologo);
+    $consultasAtrasadas   = buscarConsultasAtrasadas($conexao, $idClinica, $idPsicologo);
+    $consultasSemAnotacao = buscarConsultasSemAnotacao($conexao, $idClinica, $idPsicologo);
+    $consultasConcluidas  = buscarConsultasConcluidasNoMes($conexao, $idClinica, $idPsicologo);
+    $totalConcluidasNoMes = contarConsultasConcluidasNoMes($conexao, $idClinica, $idPsicologo);
 ?>
 
 
@@ -58,7 +61,7 @@
                 <div class="cartaoLegenda">anotações da consulta</div>
             </div>
 
-            <div class="cartao">
+            <div class="cartao" onclick="toggleList('listaConcluidas')">
                 <div class="cartaoTitulo">Consultas</div>
                 <div class="cartaoValor"><?= $totalConcluidasNoMes ?></div>
                 <div class="cartaoLegenda">concluídas neste mês</div>
@@ -193,6 +196,34 @@
             </table>
         </div>
 
+        <div id="listaConcluidas" class="collapse-list">
+            <div class="section-header">
+                <span class="section-title">Consultas concluídas neste mês</span>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Paciente</th>
+                        <th>Psicólogo(a)</th>
+                        <th>Data</th>
+                        <th>Horário</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($consultasConcluidas)): ?>
+                        <tr><td colspan="4">Nenhuma consulta concluída neste mês.</td></tr>
+                    <?php endif; ?>
+                    <?php foreach ($consultasConcluidas as $consulta): ?>
+                        <tr class="linha-clicavel" onclick="abrirDrawer(<?= (int) $consulta['id_paciente'] ?>)">
+                            <td><?= htmlspecialchars($consulta['nome_paciente']) ?></td>
+                            <td><?= htmlspecialchars($consulta['nome_psicologo']) ?></td>
+                            <td><?= date('d/m/Y', strtotime($consulta['data'])) ?></td>
+                            <td><?= formatarHora($consulta['hora_inicio']) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     
             
         <script src="/app/js/utils.js"></script>

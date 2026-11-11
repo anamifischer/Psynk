@@ -31,3 +31,26 @@ function abrirFormUsuario() {
 function fecharFormUsuario() {
     document.getElementById('form-novo-usuario').style.display = 'none';
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const botao = document.getElementById('btn-salvar-valor');
+    const campo = document.getElementById('valor-consulta-input');
+    if (!botao || !campo) return;
+
+    botao.addEventListener('click', async () => {
+        const dados = new FormData();
+        dados.append('valor', campo.value);
+
+        try {
+            const resp = await fetch('/app/api/config_valor_consulta.php', {
+                method: 'POST',
+                body: dados
+            });
+            if (!resp.ok) throw new Error('HTTP ' + resp.status);
+            alert('Valor salvo!');
+        } catch (erro) {
+            console.error(erro);
+            alert('Não foi possível salvar o valor.');
+        }
+    });
+});

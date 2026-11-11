@@ -8,12 +8,21 @@
         $psicologosDaClinica = buscarPsicologosDaClinica($conexao, $idClinica);
 
     // Filtro de psicólogo (só aceita quem é mesmo da clínica)
-    $idPsicologoFiltro = null;
+        // Padrão: o próprio usuário. Só troca se o ID pedido for de alguém da clínica.
+    $idPsicologoFiltro = (int) $_SESSION['id'];
     if (isset($_GET['psicologo'])) {
         foreach ($psicologosDaClinica as $psicologo) {
             if ((int) $psicologo['idUsuario'] === (int) $_GET['psicologo']) {
                 $idPsicologoFiltro = (int) $psicologo['idUsuario'];
             }
+        }
+    }
+
+    // Nome mostrado no botão do filtro
+    $nomeFiltro = 'Profissional';
+    foreach ($psicologosDaClinica as $psicologo) {
+        if ((int) $psicologo['idUsuario'] === $idPsicologoFiltro) {
+            $nomeFiltro = $psicologo['nome'];
         }
     }
 
@@ -66,15 +75,13 @@ echo '<td>' . htmlspecialchars($pagamento['nome_paciente']) . '</td>';
             <div class="filtro-dropdown-wrapper">
                 <button class="btn btn-secondary" id="btn-filtrar" onclick="toggleFiltroDropdown()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
-                    Profissional
+                    <?= htmlspecialchars($nomeFiltro) ?>
                 </button>
 
                 <div class="filtro-dropdown" id="filtro-dropdown">
                     <div class="filtro-grupo">
                         <p class="filtro-titulo">Psicólogo</p>
                         <div class="lista-chips" id="filtro-profissional">
-                            <a class="chip <?= $idPsicologoFiltro === null ? 'active' : '' ?>"
-                            href="financeiro.php">Todos</a>
                             <?php foreach ($psicologosDaClinica as $psicologo): ?>
                                 <a class="chip <?= $idPsicologoFiltro === (int) $psicologo['idUsuario'] ? 'active' : '' ?>"
                                 href="financeiro.php?psicologo=<?= (int) $psicologo['idUsuario'] ?>">
