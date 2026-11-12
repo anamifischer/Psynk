@@ -6,6 +6,24 @@
     require_once __DIR__ . "/../../includes/consultas.php";
 
     $valorConsulta = buscarValorConsulta($conexao, (int) $_SESSION['id']);
+
+    $usuarios = buscarUsuariosDaClinica($conexao, (int) $_SESSION['id_clinica']);
+    $nomesPapeis = [
+        'ADMIN'         => 'Administrador(a)',
+        'PSICOLOGO'     => 'Psicólogo(a)',
+        'RECEPCIONISTA' => 'Recepcionista',
+    ];
+
+    $perfil = buscarUsuarioPorId($conexao, (int) $_SESSION['id']);
+
+    // Iniciais para o avatar (primeiras letras dos dois primeiros nomes)
+    $iniciais = '';
+    foreach (array_slice(preg_split('/\s+/', trim($perfil['nome'])), 0, 2) as $parte) {
+        $iniciais .= mb_strtoupper(mb_substr($parte, 0, 1));
+    }
+
+    $clinica = buscarClinica($conexao, (int) $_SESSION['id_clinica']);
+
 ?>
 
 <!DOCTYPE html>
@@ -13,7 +31,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configurações — Psynk</title>
+    <title>PsySink — Configurações</title>
 
     <?php $papelUsuario = "admin";?>
 
@@ -53,7 +71,7 @@
                 <h2 class="config-titulo">Dados pessoais</h2>
 
                 <div class="config-avatar-wrapper">
-                    <div class="config-avatar" id="config-avatar-preview">MF</div>
+                    <div class="config-avatar" id="config-avatar-preview"><?= $iniciais ?></div>
                     <div>
                         <button class="btn btn-secondary btn-sm">Alterar foto</button>
                         <p class="config-dica">JPG ou PNG, máximo 2MB</p>
@@ -63,20 +81,20 @@
                 <div class="config-form">
                     <div class="config-campo">
                         <label>Nome completo</label>
-                        <input type="text" value="Marcos Ferreira" placeholder="Seu nome completo">
+                        <input type="text" value="<?= htmlspecialchars($perfil['nome']) ?>" placeholder="Seu nome completo">
                     </div>
                     <div class="config-campo">
                         <label>E-mail</label>
-                        <input type="email" value="marcos@psynk.com" placeholder="seu@email.com">
+                        <input type="email" value="<?= htmlspecialchars($perfil['email']) ?>" placeholder="seu@email.com">
                     </div>
                     <div class="config-campo">
                         <label>Telefone</label>
-                        <input type="tel" value="(51) 99999-0000" placeholder="(00) 00000-0000">
+                        <input type="tel" value="<?= htmlspecialchars($perfil['telefone'] ?? '') ?>" placeholder="(00) 00000-0000">
                     </div>
                     <?php if ($papelUsuario === 'psicologo' || $papelUsuario === 'admin'): ?>
                     <div class="config-campo">
                         <label>CRP</label>
-                        <input type="text" value="07/12345" placeholder="00/00000">
+                        <input type="text" value="<?= htmlspecialchars($perfil['crp'] ?? '') ?>" placeholder="00/00000">
                     </div>
                     <?php endif; ?>
                     <div class="config-acoes">
@@ -179,7 +197,7 @@
                     <div class="config-campo">
                         <label>Percentual de repasse aos psicólogos</label>
                         <div class="input-sufixo">
-                            <input type="number" value="30" min="0" max="100" style="max-width:100px">
+                            <input type="number" value="<?= rtrim(rtrim(number_format($clinica['percentual_repasse'], 2, '.', ''), '0'), '.') ?>" min="0" max="100" style="max-width:100px">
                             <span>%</span>
                         </div>
                         <p class="config-dica">Percentual padrão aplicado ao faturamento de cada psicólogo.</p>
@@ -199,16 +217,16 @@
 
                 <div class="config-form">
                     <div class="config-campo">
-                        <label>Nome da clínica</label>
+                        <input type="text" value="<?= htmlspecialchars($clinica['nome']) ?>" placeholder="Nome da clínica">
                         <input type="text" value="Clínica Psynk" placeholder="Nome da clínica">
                     </div>
                     <div class="config-campo">
                         <label>CNPJ</label>
-                        <input type="text" value="00.000.000/0001-00" placeholder="00.000.000/0001-00">
+                        <input type="text" value="<?= htmlspecialchars($clinica['CNPJ'] ?? '') ?>" placeholder="00.000.000/0001-00">
                     </div>
                     <div class="config-campo">
                         <label>Endereço</label>
-                        <input type="text" value="Rua Exemplo, 123 — Porto Alegre, RS" placeholder="Rua, número — Cidade, UF">
+                        <input type="text" value="<?= htmlspecialchars($clinica['Endereco'] ?? '') ?>" placeholder="Rua, número — Cidade, UF">
                     </div>
                     <div class="config-campo">
                         <label>Telefone</label>
@@ -263,41 +281,26 @@
                             <th>Nome</th>
                             <th>E-mail</th>
                             <th>Papel</th>
-                            <th>Status</th>
                             <th>Ação</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Ana Souza</td>
-                            <td>ana@psynk.com</td>
-                            <td>Psicóloga</td>
-                            <td><span class="badge badge-verde">Ativo</span></td>
-                            <td>
-                                <button class="btn btn-secondary btn-sm">Editar</button>
-                                <button class="btn btn-sm" style="color:var(--vermelho-500)">Desativar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Carlos Lima</td>
-                            <td>carlos@psynk.com</td>
-                            <td>Psicólogo</td>
-                            <td><span class="badge badge-verde">Ativo</span></td>
-                            <td>
-                                <button class="btn btn-secondary btn-sm">Editar</button>
-                                <button class="btn btn-sm" style="color:var(--vermelho-500)">Desativar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Carol Andrade</td>
-                            <td>carol@psynk.com</td>
-                            <td>Recepcionista</td>
-                            <td><span class="badge badge-verde">Ativo</span></td>
-                            <td>
-                                <button class="btn btn-secondary btn-sm">Editar</button>
-                                <button class="btn btn-sm" style="color:var(--vermelho-500)">Desativar</button>
-                            </td>
-                        </tr>
+                        <?php foreach ($usuarios as $usuario): ?>
+                            <tr>
+                                <td>
+                                    <?= htmlspecialchars($usuario['nome']) ?>
+                                    <?php if ((int) $usuario['idUsuario'] === (int) $_SESSION['id']): ?>
+                                        <span style="color:var(--gray-400)">(você)</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td><?= htmlspecialchars($usuario['email']) ?></td>
+                                <td><?= $nomesPapeis[$usuario['permissao']] ?? $usuario['permissao'] ?></td>
+                                <td>
+                                    <button class="btn btn-secondary btn-sm">Editar</button>
+                                    <button class="btn btn-sm" style="color:var(--vermelho-500)">Desativar</button>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </section>

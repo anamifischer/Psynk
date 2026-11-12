@@ -44,7 +44,7 @@
         <div class = "barraUser">
             <img src="/imgs/avatarExemplo.jpg">
             <section id=user-info>
-                <p>Nome User</p>
+                <p><?= htmlspecialchars($_SESSION['nome']) ?></p>
                 <a href="/../../config/logout.php">Sair</a>
             </section>
         </div>

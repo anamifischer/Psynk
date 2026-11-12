@@ -353,6 +353,43 @@ function salvarValorConsulta(mysqli $conexao, int $idUsuario, float $valor): voi
     $comando->execute();
 }
 
+// Todos os usuários da clínica, de qualquer permissão (sem a senha)
+function buscarUsuariosDaClinica(mysqli $conexao, int $idClinica): array {
+    $sql = "SELECT idUsuario, nome, email, permissao
+            FROM Usuario
+            WHERE id_clinica = ?
+            ORDER BY nome";
+
+    $comando = $conexao->prepare($sql);
+    $comando->bind_param("i", $idClinica);
+    $comando->execute();
+    return $comando->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+// Dados pessoais de um usuário (nunca traz a senha)
+function buscarUsuarioPorId(mysqli $conexao, int $idUsuario): ?array {
+    $sql = "SELECT idUsuario, nome, email, telefone, crp, permissao
+            FROM Usuario
+            WHERE idUsuario = ?";
+
+    $comando = $conexao->prepare($sql);
+    $comando->bind_param("i", $idUsuario);
+    $comando->execute();
+    return $comando->get_result()->fetch_assoc() ?: null;
+}
+
+// Dados cadastrais da clínica (sem o logo, que é um arquivo pesado)
+function buscarClinica(mysqli $conexao, int $idClinica): ?array {
+    $sql = "SELECT nome, CNPJ, Endereco, telefone, percentual_repasse
+            FROM Clinica
+            WHERE idtable1 = ?";
+
+    $comando = $conexao->prepare($sql);
+    $comando->bind_param("i", $idClinica);
+    $comando->execute();
+    return $comando->get_result()->fetch_assoc() ?: null;
+}
+
 // ====================================================================
 // RELATÓRIOS
 // ====================================================================

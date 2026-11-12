@@ -264,3 +264,7 @@ WHERE u.idUsuario = NEW.id_psicologo
   -- Percentual de repasse da clínica (só o admin edita)
 ALTER TABLE Clinica
   ADD COLUMN percentual_repasse DECIMAL(5,2) NOT NULL DEFAULT 15.00;
+
+  -- CRP do profissional
+ALTER TABLE Usuario
+  ADD COLUMN crp VARCHAR(20) NULL;

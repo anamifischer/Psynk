@@ -55,7 +55,7 @@ echo '<td>' . htmlspecialchars($pagamento['nome_paciente']) . '</td>';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financeiro</title>
+    <title>PsySink — Financeiro</title>
 
         <link rel="stylesheet" type="text/css" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
 
