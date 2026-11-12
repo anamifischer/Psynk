@@ -3,6 +3,7 @@
     verificarPermissao(["ADMIN"]);
     require_once __DIR__ . "/../../../config/conexao.php";
     require_once __DIR__ . "/../../includes/consultas.php";
+    $tituloPagina = 'Pacientes';
 
     $idClinica = (int) $_SESSION['id_clinica'];
 

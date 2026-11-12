@@ -282,6 +282,7 @@ function resumoFinanceiro(mysqli $conexao, int $idClinica, ?int $idPsicologo = n
                                    AND MONTH(pag.data_pagamento) = MONTH(CURDATE())
                                   THEN pag.valor END), 0) AS receita,
                 COALESCE(SUM(CASE WHEN pag.status = 'pendente' THEN pag.valor END), 0) AS pendente,
+                COALESCE(SUM(CASE WHEN pag.status = 'atrasado' THEN pag.valor END), 0) AS atrasado_valor,
                 COUNT(CASE WHEN pag.status = 'atrasado' THEN 1 END) AS atrasados,
                 COUNT(CASE WHEN pag.status = 'pendente'
                             AND pag.data_vencimento = CURDATE() THEN 1 END) AS vencendo_hoje
@@ -350,4 +351,69 @@ function salvarValorConsulta(mysqli $conexao, int $idUsuario, float $valor): voi
     $comando = $conexao->prepare($sql);
     $comando->bind_param("di", $valor, $idUsuario);
     $comando->execute();
+}
+
+// ====================================================================
+// RELATÓRIOS
+// ====================================================================
+
+// Receita e pendente de cada mês do ano (12 posições cada).
+// Se $idPsicologo for null, soma a clínica toda.
+function receitaMensal(mysqli $conexao, int $idClinica, int $ano, ?int $idPsicologo = null): array {
+    $tipos = [
+        'receita'  => ["pag.status = 'pago'",     'pag.data_pagamento'],
+        'pendente' => ["pag.status = 'pendente'", 'pag.data_vencimento'],
+        'atrasado' => ["pag.status = 'atrasado'", 'pag.data_vencimento'],
+    ];
+
+    $resultado = [];
+    foreach ($tipos as $chave => [$condicao, $coluna]) {
+        $sql = "SELECT MONTH($coluna) AS mes, SUM(pag.valor) AS total
+                FROM Pagamento pag
+                JOIN Paciente paciente ON paciente.idpaciente = pag.Paciente_idpaciente
+                JOIN Consulta consulta ON consulta.idconsulta = pag.Consulta_idconsulta
+                WHERE paciente.idClinica = ?
+                  AND (? IS NULL OR consulta.id_psicologo = ?)
+                  AND $condicao
+                  AND YEAR($coluna) = ?
+                GROUP BY mes";
+
+        $comando = $conexao->prepare($sql);
+        $comando->bind_param("iiii", $idClinica, $idPsicologo, $idPsicologo, $ano);
+        $comando->execute();
+
+        $meses = array_fill(0, 12, 0.0);
+        foreach ($comando->get_result()->fetch_all(MYSQLI_ASSOC) as $linha) {
+            $meses[(int) $linha['mes'] - 1] = (float) $linha['total'];
+        }
+        $resultado[$chave] = $meses;
+    }
+    return $resultado;
+}
+
+// Consultas do mês atual: total, concluídas e canceladas
+function resumoConsultasDoMes(mysqli $conexao, int $idClinica, ?int $idPsicologo = null): array {
+    $sql = "SELECT COUNT(*) AS total,
+                   COUNT(CASE WHEN status = 'concluida' THEN 1 END) AS concluidas,
+                   COUNT(CASE WHEN status = 'cancelada' THEN 1 END) AS canceladas
+            FROM Consulta
+            WHERE Clinica_idtable1 = ?
+              AND (? IS NULL OR id_psicologo = ?)
+              AND YEAR(data) = YEAR(CURDATE())
+              AND MONTH(data) = MONTH(CURDATE())";
+
+    $comando = $conexao->prepare($sql);
+    $comando->bind_param("iii", $idClinica, $idPsicologo, $idPsicologo);
+    $comando->execute();
+    return $comando->get_result()->fetch_assoc();
+}
+
+// Percentual de repasse definido pela clínica
+function buscarPercentualRepasse(mysqli $conexao, int $idClinica): float {
+    $sql = "SELECT percentual_repasse FROM Clinica WHERE idtable1 = ?";
+
+    $comando = $conexao->prepare($sql);
+    $comando->bind_param("i", $idClinica);
+    $comando->execute();
+    return (float) $comando->get_result()->fetch_row()[0];
 }

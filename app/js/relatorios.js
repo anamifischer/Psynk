@@ -1,26 +1,18 @@
-//Gráfico Financeiro
-const dadosReceita = {
-    2024: {
-        receita:  [2800, 3100, 3400, 3200, 3900, 4100, 3700, 4200, 3800, 4400, 4100, 4800],
-        pendente: [300,  200,  400,  350,  250,  300,  200,  400,  300,  250,  350,  500],
-    },
-    2025: {
-        receita:  [3200, 2900, 3800, 4100, 4300, 3900, 4600, 4800, 4200, 5000, 4700, 5300],
-        pendente: [400,  350,  300,  500,  200,  450,  350,  300,  400,  200,  300,  600],
-    },
-    2026: {
-        receita:  [3500, 3800, 4200, 3900, 4500, 4100, 4800, 3100, 0, 0, 0, 0],
-        pendente: [300,  250,  350,  400,  200,  300,  280,  630, 0, 0, 0, 0],
-    },
-};
-
 const mesesLabels = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 let graficoReceita = null;
 let anoAtivo = new Date().getFullYear();
 
-function atualizarGrafico() {
-    const d = dadosReceita[anoAtivo];
-    if (!d) return;
+async function atualizarGrafico() {
+    let d;
+    try {
+        const psicologo = document.getElementById('graficoReceita')?.dataset.psicologo || '0';
+        const resp = await fetch('/app/api/relatorio_receita.php?ano=' + anoAtivo + '&psicologo=' + psicologo);
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        d = await resp.json();
+    } catch (erro) {
+        console.error('Erro ao carregar o gráfico:', erro);
+        return;
+    }
 
     const datasets = [
         {
@@ -45,12 +37,25 @@ function atualizarGrafico() {
             tension: 0.1,
             fill: true,
             borderDash: [4, 4],
+        },
+        {
+            label: 'Atrasado',
+            data: d.atrasado,
+            borderColor: '#f25c5c',
+            backgroundColor: 'rgba(35,76,88, 0.02)',
+            borderWidth: 2,
+            pointBackgroundColor: '#f25c5c',
+            pointRadius: 2,
+            tension: 0.1,
+            fill: true,
+            borderDash: [4, 4],
         }
     ];
 
     if (graficoReceita) {
         graficoReceita.data.datasets[0].data = d.receita;
         graficoReceita.data.datasets[1].data = d.pendente;
+        graficoReceita.data.datasets[2].data = d.atrasado;
         graficoReceita.update();
         return;
     }
@@ -133,31 +138,4 @@ function iniciarFiltroAnos() {
     });
 
     atualizarGrafico();
-}
-
-function renderizarFaturamentoLista() {
-    const tbody = document.getElementById('faturamento-lista-body');
-    if (!tbody) return;
-
-    const linhas = [];
-    pacientesMockados.forEach(p => {
-        (p.pagamentos || []).forEach(pg => {
-            linhas.push({ nome: p.nome, ...pg });
-        });
-    });
-
-    linhas.sort((a, b) => {
-        const [da, ma, aa] = a.data.split('/').map(Number);
-        const [db, mb, ab] = b.data.split('/').map(Number);
-        return new Date(ab, mb-1, db) - new Date(aa, ma-1, da);
-    });
-
-    tbody.innerHTML = linhas.map(l => `
-        <tr class="faturamento-linha" onclick="abrirDrawerPagamentos('${l.nome}')">
-            <td>${l.nome}</td>
-            <td>${l.data}</td>
-            <td>R$ ${l.valor.toFixed(2).replace('.', ',')}</td>
-            <td><span class="badge badge-${badgeClassPagamento(l.status)}">${l.status}</span></td>
-        </tr>
-    `).join('');
 }

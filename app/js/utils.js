@@ -529,11 +529,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('listaVencendo').classList.add('open');
     }
 
-    // lista faturamento
-    if (document.getElementById('faturamento-lista-body')) {
-        document.getElementById('faturamentoClinica').classList.add('open');
-        renderizarFaturamentoLista();
-    }
 
     if (document.getElementById('graficoReceita')) {
         iniciarFiltroAnos();

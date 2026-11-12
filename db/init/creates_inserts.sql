@@ -260,3 +260,7 @@ SELECT CASE WHEN NEW.data < CURDATE() THEN 'atrasado' ELSE 'pendente' END,
 FROM Usuario u
 WHERE u.idUsuario = NEW.id_psicologo
   AND NEW.status <> 'cancelada';
+
+  -- Percentual de repasse da clínica (só o admin edita)
+ALTER TABLE Clinica
+  ADD COLUMN percentual_repasse DECIMAL(5,2) NOT NULL DEFAULT 15.00;
