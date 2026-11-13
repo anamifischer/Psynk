@@ -141,40 +141,63 @@ function badgeClassStatus(status) {
 
 // ── MODAL NOVA CONSULTA ──
 
-function abrirModalConsulta(nomePaciente = null) {
+let pacientesModal = [];
+
+async function abrirModalConsulta(idPaciente = null) {
     const modal = document.getElementById('modal-consulta');
     const overlay = document.getElementById('modal-consulta-overlay');
     if (!modal || !overlay) return;
 
-    // popula select de pacientes
+    // pacientes e psicólogos reais da clínica
+    let dados;
+    try {
+        const resp = await fetch('/app/api/modal_consulta_dados.php');
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        dados = await resp.json();
+    } catch (erro) {
+        console.error('Erro ao carregar dados do modal:', erro);
+        return;
+    }
+    pacientesModal = dados.pacientes;
+
     const selectPaciente = document.getElementById('modal-consulta-paciente');
     selectPaciente.innerHTML = '<option value="">Selecione o paciente...</option>';
-    pacientesMockados.forEach(p => {
+    dados.pacientes.forEach(p => {
         const opt = document.createElement('option');
-        opt.value = p.nome;
+        opt.value = p.id;
         opt.textContent = p.nome;
         selectPaciente.appendChild(opt);
     });
 
-    // define data padrão como hoje
+    const selectPsicologo = document.getElementById('modal-consulta-psicologo');
+    selectPsicologo.innerHTML = '<option value="">Selecione o psicólogo...</option>';
+    dados.psicologos.forEach(ps => {
+        const opt = document.createElement('option');
+        opt.value = ps.id;
+        opt.textContent = ps.nome;
+        selectPsicologo.appendChild(opt);
+    });
+
+    // data padrão: hoje (pela data local, e não pelo horário UTC)
     const hoje = new Date();
-    const dataFormatada = hoje.toISOString().split('T')[0];
+    const dataFormatada = hoje.getFullYear() + '-'
+        + String(hoje.getMonth() + 1).padStart(2, '0') + '-'
+        + String(hoje.getDate()).padStart(2, '0');
     document.getElementById('modal-consulta-data').value = dataFormatada;
     document.getElementById('modal-consulta-hora').value = '09:00';
     document.getElementById('modal-consulta-anotacao').value = '';
     document.getElementById('modal-consulta-status').value = 'pendente';
 
-    // se veio de um paciente, preenche e já seleciona o psicólogo
-    if (nomePaciente) {
-        const paciente = pacientesMockados.find(p => p.nome === nomePaciente);
-        if (paciente) {
-            selectPaciente.value = paciente.nome;
-            document.getElementById('modal-consulta-psicologo').value = paciente.psicologo;
-            document.getElementById('modal-consulta-subtitulo').textContent = `Agendando para ${paciente.nome}`;
-        }
+    // se veio de um paciente, já seleciona ele e o psicólogo responsável
+    const subtitulo = document.getElementById('modal-consulta-subtitulo');
+    const paciente = idPaciente ? dados.pacientes.find(p => p.id === Number(idPaciente)) : null;
+    if (paciente) {
+        selectPaciente.value = paciente.id;
+        selectPsicologo.value = paciente.idPsicologo;
+        subtitulo.textContent = 'Agendando para ' + paciente.nome;
     } else {
-        document.getElementById('modal-consulta-psicologo').value = '';
-        document.getElementById('modal-consulta-subtitulo').textContent = '';
+        selectPsicologo.value = '';
+        subtitulo.textContent = '';
     }
 
     atualizarHorarioFim();
@@ -183,22 +206,21 @@ function abrirModalConsulta(nomePaciente = null) {
     overlay.classList.add('open');
 }
 
+function preencherPsicologo() {
+    const idSelecionado = Number(document.getElementById('modal-consulta-paciente').value);
+    if (!idSelecionado) return;
+
+    const paciente = pacientesModal.find(p => p.id === idSelecionado);
+    if (paciente) {
+        document.getElementById('modal-consulta-psicologo').value = paciente.idPsicologo;
+    }
+}
+
 function fecharModalConsulta() {
     const modal = document.getElementById('modal-consulta');
     const overlay = document.getElementById('modal-consulta-overlay');
     if (modal) modal.classList.remove('open');
     if (overlay) overlay.classList.remove('open');
-}
-
-function preencherPsicologo() {
-    const selectPaciente = document.getElementById('modal-consulta-paciente');
-    const nomeSelecionado = selectPaciente.value;
-    if (!nomeSelecionado) return;
-
-    const paciente = pacientesMockados.find(p => p.nome === nomeSelecionado);
-    if (paciente) {
-        document.getElementById('modal-consulta-psicologo').value = paciente.psicologo;
-    }
 }
 
 function atualizarHorarioFim() {

@@ -146,6 +146,7 @@ const STATUS_PACIENTE_VALIDOS = ['ativo', 'em_espera', 'pausado', 'encerrado', '
 function buscarPacientes(mysqli $conexao, int $idClinica, ?int $idPsicologo = null, ?string $status = null): array {
     $sql = "SELECT paciente.idpaciente,
                    paciente.nome AS nome_paciente,
+                   paciente.idPsicologo,
                    psicologo.nome AS nome_psicologo,
                    paciente.status
             FROM Paciente paciente

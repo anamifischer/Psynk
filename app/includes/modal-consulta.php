@@ -29,9 +29,6 @@
             <label>Psicólogo(a)</label>
             <select id="modal-consulta-psicologo">
                 <option value="">Selecione o psicólogo...</option>
-                <option value="Dr. Carlos Souza">Dr. Carlos Souza</option>
-                <option value="Dra. Fernanda Rocha">Dra. Fernanda Rocha</option>
-                <option value="Dr. Pedro Alves">Dr. Pedro Alves</option>
             </select>
         </div>
 
