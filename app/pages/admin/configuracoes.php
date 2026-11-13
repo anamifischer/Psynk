@@ -23,6 +23,7 @@
     }
 
     $clinica = buscarClinica($conexao, (int) $_SESSION['id_clinica']);
+    $horarios = buscarHorariosAtendimento($conexao, (int) $_SESSION['id']);
 
 ?>
 
@@ -133,42 +134,46 @@
 
                     <div class="horarios-grid">
                         <?php
-                        $dias = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
-                        $ativos = [true, true, true, true, true, false, false];
-                        foreach ($dias as $i => $dia):
-                        ?>
-                        <div class="horario-linha <?= $ativos[$i] ? 'ativo' : '' ?>">
-                            <label class="horario-toggle">
-                                <input type="checkbox" <?= $ativos[$i] ? 'checked' : '' ?>
-                                    onchange="toggleDia(this)">
-                                <span class="horario-dia"><?= $dia ?></span>
-                            </label>
-                            <div class="horario-campos <?= $ativos[$i] ? '' : 'desabilitado' ?>">
-                                <input type="time" value="<?= $ativos[$i] ? '08:00' : '' ?>" <?= $ativos[$i] ? '' : 'disabled' ?>>
-                                <span class="horario-ate">até</span>
-                                <input type="time" value="<?= $ativos[$i] ? '18:00' : '' ?>" <?= $ativos[$i] ? '' : 'disabled' ?>>
+                            $dias = [1 => 'Segunda', 2 => 'Terça', 3 => 'Quarta', 4 => 'Quinta', 5 => 'Sexta', 6 => 'Sábado', 7 => 'Domingo'];
+                            foreach ($dias as $numero => $dia):
+                                $ativo  = isset($horarios[$numero]);
+                                $inicio = $horarios[$numero]['inicio'] ?? '';
+                                $fim    = $horarios[$numero]['fim'] ?? '';
+                            ?>
+                            <div class="horario-linha <?= $ativo ? 'ativo' : '' ?>">
+                                <label class="horario-toggle">
+                                    <input type="checkbox" <?= $ativo ? 'checked' : '' ?>
+                                        onchange="toggleDia(this)">
+                                    <span class="horario-dia"><?= $dia ?></span>
+                                </label>
+                                <div class="horario-campos <?= $ativo ? '' : 'desabilitado' ?>">
+                                    <input type="time" value="<?= $inicio ?>" <?= $ativo ? '' : 'disabled' ?>>
+                                    <span class="horario-ate">até</span>
+                                    <input type="time" value="<?= $fim ?>" <?= $ativo ? '' : 'disabled' ?>>
+                                </div>
                             </div>
-                        </div>
                         <?php endforeach; ?>
                     </div>
 
                     <div class="config-campo" style="margin-top:1.5rem">
                         <label>Duração padrão da consulta</label>
                         <select>
-                            <option>30 minutos</option>
-                            <option selected>45 minutos</option>
-                            <option>50 minutos</option>
-                            <option>60 minutos</option>
+                            <?php foreach ([30, 45, 50, 60] as $minutos): ?>
+                                <option value="<?= $minutos ?>" <?= (int) $perfil['duracao_consulta'] === $minutos ? 'selected' : '' ?>>
+                                    <?= $minutos ?> minutos
+                                </option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
 
                     <div class="config-campo">
                         <label>Intervalo entre consultas</label>
                         <select>
-                            <option>Sem intervalo</option>
-                            <option selected>10 minutos</option>
-                            <option>15 minutos</option>
-                            <option>30 minutos</option>
+                            <?php foreach ([0, 10, 15, 30] as $minutos): ?>
+                                <option value="<?= $minutos ?>" <?= (int) $perfil['intervalo_consulta'] === $minutos ? 'selected' : '' ?>>
+                                    <?= $minutos === 0 ? 'Sem intervalo' : $minutos . ' minutos' ?>
+                                </option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
 
@@ -218,7 +223,6 @@
                 <div class="config-form">
                     <div class="config-campo">
                         <input type="text" value="<?= htmlspecialchars($clinica['nome']) ?>" placeholder="Nome da clínica">
-                        <input type="text" value="Clínica Psynk" placeholder="Nome da clínica">
                     </div>
                     <div class="config-campo">
                         <label>CNPJ</label>

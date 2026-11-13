@@ -368,7 +368,8 @@ function buscarUsuariosDaClinica(mysqli $conexao, int $idClinica): array {
 
 // Dados pessoais de um usuário (nunca traz a senha)
 function buscarUsuarioPorId(mysqli $conexao, int $idUsuario): ?array {
-    $sql = "SELECT idUsuario, nome, email, telefone, crp, permissao
+    $sql = "SELECT idUsuario, nome, email, telefone, crp, permissao,
+                   duracao_consulta, intervalo_consulta
             FROM Usuario
             WHERE idUsuario = ?";
 
@@ -388,6 +389,27 @@ function buscarClinica(mysqli $conexao, int $idClinica): ?array {
     $comando->bind_param("i", $idClinica);
     $comando->execute();
     return $comando->get_result()->fetch_assoc() ?: null;
+}
+
+// Dias e horários de atendimento do profissional.
+// Devolve [dia_semana => ['inicio' => 'HH:MM', 'fim' => 'HH:MM']] (1 = segunda ... 7 = domingo)
+function buscarHorariosAtendimento(mysqli $conexao, int $idUsuario): array {
+    $sql = "SELECT dia_semana, hora_inicio, hora_fim
+            FROM HorarioAtendimento
+            WHERE Usuario_idUsuario = ?";
+
+    $comando = $conexao->prepare($sql);
+    $comando->bind_param("i", $idUsuario);
+    $comando->execute();
+
+    $horarios = [];
+    foreach ($comando->get_result()->fetch_all(MYSQLI_ASSOC) as $linha) {
+        $horarios[(int) $linha['dia_semana']] = [
+            'inicio' => substr($linha['hora_inicio'], 0, 5),
+            'fim'    => substr($linha['hora_fim'], 0, 5),
+        ];
+    }
+    return $horarios;
 }
 
 // ====================================================================

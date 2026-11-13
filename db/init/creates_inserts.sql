@@ -225,7 +225,7 @@ INSERT INTO `Pagamento` (`idPagamento`, `status`, `valor`, `data_vencimento`, `d
   (5, 'atrasado', 150.00, '2026-11-06', NULL,         1, 5, 3),
   (6, 'pendente', 150.00, '2026-11-10', NULL,         1, 6, 3),
   (7, 'pendente', 150.00, '2026-11-11', NULL,         2, 7, 3),
-    (7, 'pendente', 150.00, '2026-11-11', NULL,         2, 7, 3);
+  (8, 'pendente', 150.00, '2026-11-11', NULL,         2, 8, 3);
 
 -- Notificacao --------------------------------------------------------
 INSERT INTO `Notificacao` (`idNotificacao`, `mensagem`, `criado_em`, `Usuario_idUsuario`) VALUES
@@ -268,3 +268,25 @@ ALTER TABLE Clinica
   -- CRP do profissional
 ALTER TABLE Usuario
   ADD COLUMN crp VARCHAR(20) NULL;
+
+  CREATE TABLE IF NOT EXISTS `HorarioAtendimento` (
+  `idHorario` INT NOT NULL AUTO_INCREMENT,
+  `dia_semana` TINYINT NOT NULL,   -- 1 = segunda ... 7 = domingo
+  `hora_inicio` TIME NOT NULL,
+  `hora_fim` TIME NOT NULL,
+  `Usuario_idUsuario` INT NOT NULL,
+  PRIMARY KEY (`idHorario`),
+  UNIQUE KEY `uq_horario_usuario_dia` (`Usuario_idUsuario`, `dia_semana`),
+  CONSTRAINT `fk_Horario_Usuario1`
+    FOREIGN KEY (`Usuario_idUsuario`) REFERENCES `Usuario` (`idUsuario`)
+    ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+ALTER TABLE Usuario
+  ADD COLUMN duracao_consulta SMALLINT NOT NULL DEFAULT 45,
+  ADD COLUMN intervalo_consulta SMALLINT NOT NULL DEFAULT 10;
+
+  INSERT INTO HorarioAtendimento (dia_semana, hora_inicio, hora_fim, Usuario_idUsuario) VALUES
+  (1,'08:00','18:00',1),(2,'08:00','18:00',1),(3,'08:00','18:00',1),(4,'08:00','18:00',1),(5,'08:00','18:00',1),
+  (1,'08:00','18:00',2),(2,'08:00','18:00',2),(3,'08:00','18:00',2),(4,'08:00','18:00',2),(5,'08:00','18:00',2),
+  (2,'13:00','19:00',4),(4,'13:00','19:00',4),(6,'09:00','13:00',4);

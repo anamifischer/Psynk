@@ -1,0 +1,129 @@
+/* Estilo do prontuário em PDF (gerado pelo Dompdf).
+   O Dompdf entende CSS 2.1: sem flex, grid, gap nem variáveis (var()). */
+
+/* Margens da página: o espaço de cima e de baixo é onde ficam o cabeçalho e o rodapé */
+@page {
+    margin: 36mm 15mm 22mm 15mm;
+}
+
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 10.5pt;
+    color: #1c1c1c;
+}
+
+/* ---------- Cabeçalho e rodapé (repetem em todas as páginas) ---------- */
+#cabecalho {
+    position: fixed;
+    top: -28mm;
+    left: 0;
+    right: 0;
+    padding-bottom: 3mm;
+    border-bottom: 2px solid #234c58;
+}
+
+.clinica-nome {
+    font-size: 17pt;
+    font-weight: bold;
+    color: #234c58;
+}
+
+.clinica-dados {
+    margin-top: 1mm;
+    font-size: 8.5pt;
+    color: #6b7977;
+}
+
+#rodape {
+    position: fixed;
+    bottom: -16mm;
+    left: 0;
+    right: 0;
+    padding-top: 2mm;
+    border-top: 1px solid #91a6a4;
+    font-size: 7.5pt;
+    line-height: 1.4;
+    color: #6b7977;
+}
+
+/* ---------- Títulos ---------- */
+h1 {
+    margin: 0 0 4mm;
+    font-size: 13pt;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #234c58;
+}
+
+h2 {
+    margin: 8mm 0 3mm;
+    font-size: 9pt;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #91a6a4;
+}
+
+/* ---------- Dados do paciente ---------- */
+table.dados {
+    width: 100%;
+    border-collapse: collapse;
+    background: #f3f6f5;
+}
+
+table.dados td {
+    padding: 2mm 4mm;
+    border-bottom: 1px solid #ffffff;
+}
+
+td.rotulo {
+    width: 38mm;
+    font-size: 8pt;
+    text-transform: uppercase;
+    color: #6b7977;
+}
+
+td.valor {
+    font-weight: bold;
+}
+
+/* ---------- Registros de atendimento ---------- */
+.registro {
+    margin-bottom: 5mm;
+    padding-left: 4mm;
+    border-left: 3px solid #91a6a4;
+    page-break-inside: avoid;
+}
+
+.registro-data {
+    margin-bottom: 1mm;
+    font-size: 9.5pt;
+    font-weight: bold;
+    color: #234c58;
+}
+
+.registro-texto {
+    line-height: 1.5;
+}
+
+.vazio {
+    font-style: italic;
+    color: #6b7977;
+}
+
+/* ---------- Assinatura ---------- */
+.assinatura {
+    width: 80mm;
+    margin: 18mm auto 0;
+    text-align: center;
+    font-size: 10pt;
+    page-break-inside: avoid;
+}
+
+.assinatura .linha {
+    margin-bottom: 1mm;
+    border-top: 1px solid #1c1c1c;
+}
+
+.assinatura small {
+    color: #6b7977;
+}

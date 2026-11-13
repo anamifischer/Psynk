@@ -1,3 +1,9 @@
+<?php
+    $nomesMeses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                   'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    $dataHoje = date('d') . ' de ' . $nomesMeses[(int) date('n') - 1] . ' de ' . date('Y');
+?>
+
 <link rel="stylesheet" type="text/css" href="/app/css/header.css">
 
     <header class="barraSuperior">
@@ -8,6 +14,6 @@
                 <input type="text" id="search-paciente" class="search-input" placeholder="Buscar paciente...">
                 <div class="search-resultados" id="search-resultados"></div>
             </div>
-            <p class="barraSuperior-data">07 de Agosto de 2026</p>
+            <p class="barraSuperior-data"><?= $dataHoje ?></p>
         </div>
     </header>

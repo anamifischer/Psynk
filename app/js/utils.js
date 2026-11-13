@@ -305,6 +305,12 @@ async function abrirDrawer(idPaciente) {
         abaAnotacoes.style.display = paciente.mostrarAnotacoes ? '' : 'none';
     }
 
+    const btnImprimir = document.getElementById('btn-imprimir');
+    if (btnImprimir) {
+        btnImprimir.style.display = paciente.mostrarAnotacoes ? '' : 'none';
+        btnImprimir.onclick = () => window.open('/app/api/prontuario_pdf.php?id=' + paciente.id, '_blank');
+    }
+
     // aba anotações — renderiza sessões
     const abaAnotacoesPanel = document.getElementById('aba-anotacoes');
     if (abaAnotacoesPanel) {
