@@ -27,6 +27,7 @@ foreach (buscarPsicologosDaClinica($conexao, $idClinica) as $ps) {
 }
 
 echo json_encode(
-    ['pacientes' => $pacientes, 'psicologos' => $psicologos],
+    ['pacientes' => $pacientes, 'psicologos' => $psicologos,
+     'usuario' => ['id' => (int) $_SESSION['id'], 'permissao' => $_SESSION['permissao']]],
     JSON_UNESCAPED_UNICODE
 );

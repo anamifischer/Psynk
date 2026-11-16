@@ -37,6 +37,11 @@
                 </div>
 
                 <div class="drawer-campo">
+                    <span class="drawer-label">CPF</span>
+                    <input class="drawer-input" type="text" id="drawer-cpf" placeholder="000.000.000-00" maxlength="14">
+                </div>
+
+                <div class="drawer-campo">
                     <span class="drawer-label">Status</span>
                     <select class="drawer-select" id="drawer-status-select">
                         <option value="ativo">Ativo</option>
@@ -79,82 +84,10 @@
             </div>
 
             <!-- Aba Anotações -->
-            <div class="drawer-painel" id="aba-anotacoes">
-                <div class="sessao-item">
-                    <div class="sessao-header">
-                        <span class="sessao-data">05/08/2026</span>
-                        <span class="sessao-hora">14:00</span>
-                    </div>
-                    <p class="sessao-anotacao">Paciente relatou melhora significativa na qualidade do sono. Continuamos trabalhando técnicas de respiração.</p>
-                </div>
-                <div class="sessao-item">
-                    <div class="sessao-header">
-                        <span class="sessao-data">29/07/2026</span>
-                        <span class="sessao-hora">14:00</span>
-                    </div>
-                    <p class="sessao-anotacao">Sessão focada em reestruturação cognitiva. Paciente demonstrou boa adesão às técnicas propostas.</p>
-                </div>
-            </div>
+            <div class="drawer-painel" id="aba-anotacoes"></div>
 
             <!-- Aba Pagamentos -->
-            <div class="drawer-painel" id="aba-pagamentos">
-                <div class="pagamento-item">
-                    <div class="pagamento-info">
-                        <span class="pagamento-data">05/08/2026</span>
-                        <span class="badge badge-verde">Pago</span>
-                    </div>
-                    <span class="pagamento-valor">R$ 180,00</span>
-                </div>
-                <div class="pagamento-item">
-                    <div class="pagamento-info">
-                        <span class="pagamento-data">29/07/2026</span>
-                        <span class="badge badge-verde">Pago</span>
-                    </div>
-                    <span class="pagamento-valor">R$ 180,00</span>
-                </div>
-                <div class="pagamento-item">
-                    <div class="pagamento-info">
-                        <span class="pagamento-data">22/07/2026</span>
-                        <span class="badge badge-vermelho">Atrasado</span>
-                    </div>
-                    <span class="pagamento-valor">R$ 180,00</span>
-                </div>
-            </div>
-
-            <!-- Drawer anotações -->
-            <div class="modal-overlay" id="modal-overlay" onclick="fecharModal()"></div>
-
-            <div class="modal" id="modal-anotacao">
-                <div class="modal-header">
-                    <div>
-                        <h3 class="modal-titulo">Lançar Anotação</h3>
-                        <p class="modal-subtitulo" id="modal-subtitulo"></p>
-                    </div>
-                    <button class="drawer-fechar" onclick="fecharModal()">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                    </button>
-                </div>
-                <div class="modal-info">
-                    <div class="drawer-campo">
-                        <span class="drawer-label">Paciente</span>
-                        <span class="drawer-valor" id="modal-paciente"></span>
-                    </div>
-                    <div class="drawer-campo">
-                        <span class="drawer-label">Data da consulta</span>
-                        <span class="drawer-valor" id="modal-data"></span>
-                    </div>
-                    <div class="drawer-campo">
-                        <span class="drawer-label">Psicólogo</span>
-                        <span class="drawer-valor" id="modal-psicologo"></span>
-                    </div>
-                </div>
-                <textarea class="modal-textarea" id="modal-textarea" placeholder="Digite a anotação clínica..."></textarea>
-                <div class="modal-rodape">
-                    <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
-                    <button class="btn btn-primary" onclick="salvarAnotacao()">Salvar anotação</button>
-                </div>
-            </div>
-
+            <div class="drawer-painel" id="aba-pagamentos"></div>
         </div>
     </div>
 

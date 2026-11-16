@@ -14,6 +14,20 @@
                 <input type="text" id="search-paciente" class="search-input" placeholder="Buscar paciente...">
                 <div class="search-resultados" id="search-resultados"></div>
             </div>
+            <div class="notificacoes-wrapper">
+                <button class="btn-notificacoes" id="btn-notificacoes" title="Notificações">
+                    <img src="/imgs/icons/notificacoes.png" alt="Notificações" width="20" height="20">
+                    <span class="selo-notificacoes" id="selo-notificacoes" style="display:none">0</span>
+                </button>
+                <div class="painel-notificacoes" id="painel-notificacoes">
+                    <div class="painel-notificacoes-topo">
+                        <span>Notificações</span>
+                        <button id="btn-marcar-todas">Marcar todas como lidas</button>
+                    </div>
+                    <div id="lista-notificacoes"></div>
+                </div>
+            </div>
             <p class="barraSuperior-data"><?= $dataHoje ?></p>
         </div>
     </header>
+<script src="/app/js/notificacoes.js"></script>

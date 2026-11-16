@@ -1,3 +1,10 @@
+<?php
+    // Iniciais do usuário logado (primeiras letras dos dois primeiros nomes)
+    $iniciaisMenu = '';
+    foreach (array_slice(preg_split('/\s+/', trim($_SESSION['nome'] ?? '')), 0, 2) as $parteNome) {
+        $iniciaisMenu .= mb_strtoupper(mb_substr($parteNome, 0, 1));
+    }
+?>
 <link rel="stylesheet" type="text/css" href="/app/css/menu.css">
 <link rel="icon" type="image/png" href="/imgs/logo.png">
 <script src="/app/js/menu.js"></script>
@@ -37,10 +44,10 @@
     </div>
 
     <div class = "barraUser">
-        <img src="/imgs/avatarExemplo.jpg">
+        <div class="avatar-iniciais"><?= htmlspecialchars($iniciaisMenu) ?></div>
         <section id=user-info>
             <p><?= htmlspecialchars($_SESSION['nome']) ?></p>
-            <a href="../../config/logout.php">Sair</a>
+            <a href="/config/logout.php">Sair</a>
         </section>
     </div>
 

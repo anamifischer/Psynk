@@ -27,18 +27,47 @@ $nomesStatus = [
 
 $sessoes = [];
 foreach (buscarSessoesDoPaciente($conexao, $idPaciente) as $s) {
+    $s['id_responsavel'] = $paciente['idPsicologo'];
+    $perm = permissoesDaConsulta($s);
     $sessoes[] = [
-        'data'      => date('d/m/Y', strtotime($s['data'])),
-        'hora'      => substr($s['hora_inicio'], 0, 5),
-        'realizada' => $s['status'] === 'concluida',
-        'futuro'    => $s['status'] === 'aguarda data',
-        'anotacao'  => $mostrarAnotacoes ? $s['conteudo'] : null,
+        'id'              => (int) $s['idconsulta'],
+        'data'            => date('d/m/Y', strtotime($s['data'])),
+        'dataIso'         => $s['data'],
+        'hora'            => substr($s['hora_inicio'], 0, 5),
+        'duracao'         => (int) round((strtotime($s['hora_fim']) - strtotime($s['hora_inicio'])) / 60),
+        'psicologoId'     => (int) $s['id_psicologo'],
+        'status'          => $s['status'],
+        'pagamentoPago'   => (int) $s['pagamento_pago'] > 0,
+        'anotacao'        => $mostrarAnotacoes ? $s['conteudo'] : null,
+        'jaComecou'       => $perm['jaComecou'],
+        'podeConcluir'    => $perm['podeConcluir'],
+        'podeDesconcluir' => $perm['podeDesconcluir'],
+        'podeAnotar'      => $perm['podeAnotar'],
+        'podeRemarcar'    => $perm['podeRemarcar'],
+        'podeCancelar'    => $perm['podeCancelar'],
+        'podeConfirmar'   => $perm['podeConfirmar'],
+        'confirmada'      => !empty($s['confirmada_em']),
     ];
+}
+
+// Histórico de troca de responsável (só quem vê as anotações; não vai para o prontuário)
+$historico = [];
+if ($mostrarAnotacoes) {
+    foreach (buscarHistoricoResponsavel($conexao, $idPaciente) as $h) {
+        $historico[] = [
+            'quando' => $h['criado_em'],
+            'data'   => date('d/m/Y', strtotime($h['criado_em'])),
+            'texto'  => 'Usuário ' . $h['nome_admin'] . ' alterou o responsável do paciente para ' . $h['nome_novo'],
+        ];
+    }
 }
 
 $pagamentos = [];
 foreach (buscarPagamentosDoPaciente($conexao, $idPaciente) as $p) {
     $pagamentos[] = [
+        'id'     => (int) $p['idPagamento'],
+        'podeReceber' => podeReceberPagamento($p),
+        'dataPagamento' => $p['data_pagamento'] ? date('d/m/Y', strtotime($p['data_pagamento'])) : null,
         'data'   => date('d/m/Y', strtotime($p['data_vencimento'])),
         'valor'  => (float) $p['valor'],
         'status' => ucfirst($p['status']),
@@ -53,6 +82,7 @@ foreach (buscarPsicologosDaClinica($conexao, $idClinica) as $ps) {
 echo json_encode([
     'id'               => (int) $paciente['idpaciente'],
     'nome'             => $paciente['nome'],
+    'cpf'              => $paciente['cpf'],
     'status'           => $nomesStatus[$paciente['status']],
     'statusValor'      => $paciente['status'],
     'nascimento'       => $paciente['data_nascimento']
@@ -63,6 +93,8 @@ echo json_encode([
     'psicologo'        => $paciente['nome_psicologo'],
     'mostrarAnotacoes' => $mostrarAnotacoes,
     'sessoes'          => $sessoes,
+    'historicoResponsavel' => $historico,
+    'podeAlterarResponsavel' => $_SESSION['permissao'] === 'ADMIN',
     'pagamentos'       => $pagamentos,
     'idPsicologo' => (int) $paciente['idPsicologo'],
     'psicologos'  => $psicologos,

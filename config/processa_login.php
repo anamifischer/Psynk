@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 $email = trim($_POST["email"] ?? "");
 $senha = $_POST["senha"] ?? "";
 
-$sql = "SELECT idUsuario, nome, senha, permissao, id_clinica
+$sql = "SELECT idUsuario, nome, senha, permissao, id_clinica, ativo
         FROM Usuario
         WHERE email = ?
         LIMIT 1";
@@ -21,6 +21,7 @@ $consulta->execute();
 $usuario = $consulta->get_result()->fetch_assoc();
 
 if ($usuario
+    && (int) $usuario["ativo"] === 1
     && password_verify($senha, $usuario["senha"])
     && isset(PAGINAS_POR_PERMISSAO[$usuario["permissao"]])) {
 

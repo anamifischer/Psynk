@@ -289,3 +289,38 @@ ALTER TABLE Usuario
   (1,'08:00','18:00',1),(2,'08:00','18:00',1),(3,'08:00','18:00',1),(4,'08:00','18:00',1),(5,'08:00','18:00',1),
   (1,'08:00','18:00',2),(2,'08:00','18:00',2),(3,'08:00','18:00',2),(4,'08:00','18:00',2),(5,'08:00','18:00',2),
   (2,'13:00','19:00',4),(4,'13:00','19:00',4),(6,'09:00','13:00',4);
+
+-- Momento em que a consulta foi concluída (janela de 3h para desfazer/editar)
+ALTER TABLE Consulta ADD COLUMN concluida_em DATETIME NULL;
+
+
+-- Histórico de troca de responsável pelo paciente (não entra no prontuário)
+CREATE TABLE IF NOT EXISTS `HistoricoResponsavel` (
+  `idHistorico` INT NOT NULL AUTO_INCREMENT,
+  `Paciente_idpaciente` INT NOT NULL,
+  `id_admin` INT NOT NULL,
+  `id_novo_responsavel` INT NOT NULL,
+  `criado_em` DATETIME NOT NULL,
+  PRIMARY KEY (`idHistorico`),
+  CONSTRAINT `fk_HistResp_Paciente` FOREIGN KEY (`Paciente_idpaciente`) REFERENCES `Paciente` (`idpaciente`),
+  CONSTRAINT `fk_HistResp_Admin` FOREIGN KEY (`id_admin`) REFERENCES `Usuario` (`idUsuario`),
+  CONSTRAINT `fk_HistResp_Novo` FOREIGN KEY (`id_novo_responsavel`) REFERENCES `Usuario` (`idUsuario`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+
+-- Confirmação da consulta com o paciente (NULL = aguardando confirmação)
+ALTER TABLE Consulta ADD COLUMN confirmada_em DATETIME NULL;
+
+
+-- Usuário ativo/desativado (nunca apagamos usuários: histórico clínico e financeiro depende deles)
+ALTER TABLE Usuario ADD COLUMN ativo TINYINT(1) NOT NULL DEFAULT 1;
+
+
+-- Notificações: texto maior, data+hora, lida, e a que paciente/consulta se referem
+ALTER TABLE Notificacao
+  MODIFY `mensagem` VARCHAR(255) NOT NULL,
+  MODIFY `criado_em` DATETIME NOT NULL,
+  ADD COLUMN `lida` TINYINT(1) NOT NULL DEFAULT 0,
+  ADD COLUMN `id_paciente` INT NULL,
+  ADD COLUMN `tipo` VARCHAR(30) NOT NULL DEFAULT 'geral',
+  ADD COLUMN `id_consulta` INT NULL;

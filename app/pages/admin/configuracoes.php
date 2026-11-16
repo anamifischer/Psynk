@@ -73,33 +73,29 @@
 
                 <div class="config-avatar-wrapper">
                     <div class="config-avatar" id="config-avatar-preview"><?= $iniciais ?></div>
-                    <div>
-                        <button class="btn btn-secondary btn-sm">Alterar foto</button>
-                        <p class="config-dica">JPG ou PNG, máximo 2MB</p>
-                    </div>
                 </div>
 
                 <div class="config-form">
                     <div class="config-campo">
                         <label>Nome completo</label>
-                        <input type="text" value="<?= htmlspecialchars($perfil['nome']) ?>" placeholder="Seu nome completo">
+                        <input type="text" id="perfil-nome" maxlength="45" value="<?= htmlspecialchars($perfil['nome']) ?>" placeholder="Seu nome completo">
                     </div>
                     <div class="config-campo">
                         <label>E-mail</label>
-                        <input type="email" value="<?= htmlspecialchars($perfil['email']) ?>" placeholder="seu@email.com">
+                        <input type="email" id="perfil-email" maxlength="45" value="<?= htmlspecialchars($perfil['email']) ?>" placeholder="seu@email.com">
                     </div>
                     <div class="config-campo">
                         <label>Telefone</label>
-                        <input type="tel" value="<?= htmlspecialchars($perfil['telefone'] ?? '') ?>" placeholder="(00) 00000-0000">
+                        <input type="tel" id="perfil-telefone" maxlength="45" value="<?= htmlspecialchars($perfil['telefone'] ?? '') ?>" placeholder="(00) 00000-0000">
                     </div>
                     <?php if ($papelUsuario === 'psicologo' || $papelUsuario === 'admin'): ?>
                     <div class="config-campo">
                         <label>CRP</label>
-                        <input type="text" value="<?= htmlspecialchars($perfil['crp'] ?? '') ?>" placeholder="00/00000">
+                        <input type="text" id="perfil-crp" maxlength="20" value="<?= htmlspecialchars($perfil['crp'] ?? '') ?>" placeholder="00/00000">
                     </div>
                     <?php endif; ?>
                     <div class="config-acoes">
-                        <button class="btn btn-primary">Salvar alterações</button>
+                        <button class="btn btn-primary" id="btn-salvar-perfil">Salvar alterações</button>
                     </div>
                 </div>
             </section>
@@ -110,18 +106,19 @@
                 <div class="config-form">
                     <div class="config-campo">
                         <label>Senha atual</label>
-                        <input type="password" placeholder="••••••••">
+                        <input type="password" id="senha-atual" autocomplete="current-password" placeholder="••••••••">
                     </div>
                     <div class="config-campo">
                         <label>Nova senha</label>
-                        <input type="password" placeholder="••••••••">
+                        <input type="password" id="senha-nova" autocomplete="new-password" placeholder="••••••••">
                     </div>
                     <div class="config-campo">
                         <label>Confirmar nova senha</label>
-                        <input type="password" placeholder="••••••••">
+                        <input type="password" id="senha-confirmar" autocomplete="new-password" placeholder="••••••••">
                     </div>
+                    <p class="config-dica">A nova senha precisa ter pelo menos 8 caracteres.</p>
                     <div class="config-acoes">
-                        <button class="btn btn-primary">Alterar senha</button>
+                        <button class="btn btn-primary" id="btn-alterar-senha">Alterar senha</button>
                     </div>
                 </div>
             </section>
@@ -132,7 +129,7 @@
 
                 <div class="config-form">
 
-                    <div class="horarios-grid">
+                    <div class="horarios-grid" id="horarios-grid">
                         <?php
                             $dias = [1 => 'Segunda', 2 => 'Terça', 3 => 'Quarta', 4 => 'Quinta', 5 => 'Sexta', 6 => 'Sábado', 7 => 'Domingo'];
                             foreach ($dias as $numero => $dia):
@@ -157,7 +154,7 @@
 
                     <div class="config-campo" style="margin-top:1.5rem">
                         <label>Duração padrão da consulta</label>
-                        <select>
+                        <select id="horario-duracao">
                             <?php foreach ([30, 45, 50, 60] as $minutos): ?>
                                 <option value="<?= $minutos ?>" <?= (int) $perfil['duracao_consulta'] === $minutos ? 'selected' : '' ?>>
                                     <?= $minutos ?> minutos
@@ -168,7 +165,7 @@
 
                     <div class="config-campo">
                         <label>Intervalo entre consultas</label>
-                        <select>
+                        <select id="horario-intervalo">
                             <?php foreach ([0, 10, 15, 30] as $minutos): ?>
                                 <option value="<?= $minutos ?>" <?= (int) $perfil['intervalo_consulta'] === $minutos ? 'selected' : '' ?>>
                                     <?= $minutos === 0 ? 'Sem intervalo' : $minutos . ' minutos' ?>
@@ -178,7 +175,7 @@
                     </div>
 
                     <div class="config-acoes">
-                        <button class="btn btn-primary">Salvar horários</button>
+                        <button class="btn btn-primary" id="btn-salvar-horarios">Salvar horários</button>
                     </div>
                 </div>
             </section>
@@ -202,7 +199,7 @@
                     <div class="config-campo">
                         <label>Percentual de repasse aos psicólogos</label>
                         <div class="input-sufixo">
-                            <input type="number" value="<?= rtrim(rtrim(number_format($clinica['percentual_repasse'], 2, '.', ''), '0'), '.') ?>" min="0" max="100" style="max-width:100px">
+                            <input type="number" id="percentual-repasse-input" value="<?= rtrim(rtrim(number_format($clinica['percentual_repasse'], 2, '.', ''), '0'), '.') ?>" min="0" max="100" style="max-width:100px">
                             <span>%</span>
                         </div>
                         <p class="config-dica">Percentual padrão aplicado ao faturamento de cada psicólogo.</p>
@@ -210,7 +207,7 @@
                     <?php endif; ?>
 
                     <div class="config-acoes">
-                        <button class="btn btn-primary" id="btn-salvar-valor">Salvar valor</button>
+                        <button class="btn btn-primary" id="btn-salvar-valor">Salvar</button>
                     </div>
                 </div>
             </section>
@@ -222,22 +219,23 @@
 
                 <div class="config-form">
                     <div class="config-campo">
-                        <input type="text" value="<?= htmlspecialchars($clinica['nome']) ?>" placeholder="Nome da clínica">
+                        <label>Nome da clínica</label>
+                        <input type="text" id="clinica-nome" maxlength="45" value="<?= htmlspecialchars($clinica['nome']) ?>" placeholder="Nome da clínica">
                     </div>
                     <div class="config-campo">
                         <label>CNPJ</label>
-                        <input type="text" value="<?= htmlspecialchars($clinica['CNPJ'] ?? '') ?>" placeholder="00.000.000/0001-00">
+                        <input type="text" id="clinica-cnpj" maxlength="18" value="<?= htmlspecialchars($clinica['CNPJ'] ?? '') ?>" placeholder="00.000.000/0001-00">
                     </div>
                     <div class="config-campo">
                         <label>Endereço</label>
-                        <input type="text" value="<?= htmlspecialchars($clinica['Endereco'] ?? '') ?>" placeholder="Rua, número — Cidade, UF">
+                        <input type="text" id="clinica-endereco" maxlength="60" value="<?= htmlspecialchars($clinica['Endereco'] ?? '') ?>" placeholder="Rua, número — Cidade, UF">
                     </div>
                     <div class="config-campo">
                         <label>Telefone</label>
-                        <input type="tel" value="(51) 3000-0000" placeholder="(00) 00000-0000">
+                        <input type="tel" id="clinica-telefone" maxlength="45" value="<?= htmlspecialchars($clinica['telefone'] ?? '') ?>" placeholder="(00) 00000-0000">
                     </div>
                     <div class="config-acoes">
-                        <button class="btn btn-primary">Salvar dados da clínica</button>
+                        <button class="btn btn-primary" id="btn-salvar-clinica">Salvar dados da clínica</button>
                     </div>
                 </div>
             </section>
@@ -250,31 +248,42 @@
                 </div>
 
                 <div class="config-form-usuario" id="form-novo-usuario" style="display:none">
-                    <h3 class="config-subtitulo" style="font-weight:600;margin-bottom:1rem">Novo usuário</h3>
+                    <h3 class="config-subtitulo" id="usuario-form-titulo" style="font-weight:600;margin-bottom:1rem">Novo usuário</h3>
                     <div class="config-form">
+                        <input type="hidden" id="usuario-id" value="0">
                         <div class="config-campo">
                             <label>Nome completo</label>
-                            <input type="text" placeholder="Nome do usuário">
+                            <input type="text" id="usuario-nome" maxlength="45" placeholder="Nome do usuário">
                         </div>
                         <div class="config-campo">
-                            <label>E-mail</label>
-                            <input type="email" placeholder="email@exemplo.com">
+                            <label>E-mail (login)</label>
+                            <input type="email" id="usuario-email" maxlength="45" placeholder="email@exemplo.com">
+                        </div>
+                        <div class="config-campo">
+                            <label>Telefone</label>
+                            <input type="tel" id="usuario-telefone" maxlength="45" placeholder="(00) 00000-0000">
                         </div>
                         <div class="config-campo">
                             <label>Papel</label>
-                            <select>
+                            <select id="usuario-permissao" onchange="atualizarCampoCrp()">
                                 <option value="">Selecione...</option>
-                                <option value="psicologo">Psicólogo(a)</option>
-                                <option value="recepcionista">Recepcionista</option>
+                                <option value="PSICOLOGO">Psicólogo(a)</option>
+                                <option value="RECEPCIONISTA">Recepcionista</option>
+                                <option value="ADMIN">Administrador(a)</option>
                             </select>
                         </div>
+                        <div class="config-campo" id="usuario-campo-crp">
+                            <label>CRP</label>
+                            <input type="text" id="usuario-crp" maxlength="20" placeholder="00/00000">
+                        </div>
                         <div class="config-campo">
-                            <label>Senha provisória</label>
-                            <input type="password" placeholder="••••••••">
+                            <label id="usuario-rotulo-senha">Senha provisória</label>
+                            <input type="password" id="usuario-senha" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+                            <p class="config-dica" id="usuario-dica-senha"></p>
                         </div>
                         <div class="config-acoes">
                             <button class="btn btn-secondary" onclick="fecharFormUsuario()">Cancelar</button>
-                            <button class="btn btn-primary">Criar usuário</button>
+                            <button class="btn btn-primary" id="btn-salvar-usuario" onclick="salvarUsuario()">Criar usuário</button>
                         </div>
                     </div>
                 </div>
@@ -285,23 +294,47 @@
                             <th>Nome</th>
                             <th>E-mail</th>
                             <th>Papel</th>
+                            <th>Situação</th>
                             <th>Ação</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($usuarios as $usuario): ?>
+                        <?php foreach ($usuarios as $usuario):
+                            $ehVoce = (int) $usuario['idUsuario'] === (int) $_SESSION['id'];
+                            $dadosJs = [
+                                'id' => (int) $usuario['idUsuario'], 'nome' => $usuario['nome'], 'email' => $usuario['email'],
+                                'telefone' => $usuario['telefone'] ?? '', 'crp' => $usuario['crp'] ?? '',
+                                'permissao' => $usuario['permissao'], 'voce' => $ehVoce,
+                            ];
+                        ?>
                             <tr>
                                 <td>
                                     <?= htmlspecialchars($usuario['nome']) ?>
-                                    <?php if ((int) $usuario['idUsuario'] === (int) $_SESSION['id']): ?>
+                                    <?php if ($ehVoce): ?>
                                         <span style="color:var(--gray-400)">(você)</span>
                                     <?php endif; ?>
                                 </td>
                                 <td><?= htmlspecialchars($usuario['email']) ?></td>
                                 <td><?= $nomesPapeis[$usuario['permissao']] ?? $usuario['permissao'] ?></td>
                                 <td>
-                                    <button class="btn btn-secondary btn-sm">Editar</button>
-                                    <button class="btn btn-sm" style="color:var(--vermelho-500)">Desativar</button>
+                                    <?php if ((int) $usuario['ativo'] === 1): ?>
+                                        <span class="badge badge-verde">Ativo</span>
+                                    <?php else: ?>
+                                        <span class="badge badge-cinza">Desativado</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <button class="btn btn-secondary btn-sm"
+                                            onclick="editarUsuario(<?= htmlspecialchars(json_encode($dadosJs, JSON_UNESCAPED_UNICODE), ENT_QUOTES) ?>)">Editar</button>
+                                    <?php if (!$ehVoce): ?>
+                                        <?php if ((int) $usuario['ativo'] === 1): ?>
+                                            <button class="btn btn-sm" style="color:var(--vermelho-500)"
+                                                    onclick="alterarStatusUsuario(<?= (int) $usuario['idUsuario'] ?>, 'desativar')">Desativar</button>
+                                        <?php else: ?>
+                                            <button class="btn btn-sm"
+                                                    onclick="alterarStatusUsuario(<?= (int) $usuario['idUsuario'] ?>, 'ativar')">Ativar</button>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

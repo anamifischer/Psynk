@@ -41,10 +41,6 @@
 
                 <div class="config-avatar-wrapper">
                     <div class="config-avatar">CA</div>
-                    <div>
-                        <button class="btn btn-secondary btn-sm">Alterar foto</button>
-                        <p class="config-dica">JPG ou PNG, máximo 2MB</p>
-                    </div>
                 </div>
 
                 <div class="config-form">

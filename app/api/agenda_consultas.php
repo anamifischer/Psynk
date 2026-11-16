@@ -11,6 +11,7 @@ $sql = "SELECT consulta.idconsulta,
                consulta.data,
                consulta.hora_inicio,
                consulta.status,
+               consulta.confirmada_em,
                consulta.id_psicologo,
                consulta.id_paciente,
                paciente.nome AS nome_paciente,
@@ -47,7 +48,9 @@ foreach ($comando->get_result()->fetch_all(MYSQLI_ASSOC) as $c) {
         'pacienteId'  => (int) $c['id_paciente'],
         'paciente'    => $c['nome_paciente'],
         'psicologoId' => (int) $c['id_psicologo'],
-        'status'      => $statusAgenda[$c['status']] ?? 'pendente',
+        'status'      => ($c['status'] === 'aguarda data' && empty($c['confirmada_em']))
+                            ? 'pendente'
+                            : ($statusAgenda[$c['status']] ?? 'pendente'),
         'anotacao'    => ($podeVerAnotacoes && (int) $c['id_responsavel'] === (int) $_SESSION['id'])
                             ? $c['anotacao'] : null,
     ];

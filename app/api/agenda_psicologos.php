@@ -9,7 +9,7 @@ header('Content-Type: application/json; charset=utf-8');
 $idClinica = (int) $_SESSION['id_clinica'];
 
 $lista = [];
-foreach (buscarPsicologosDaClinica($conexao, $idClinica) as $ps) {
+foreach (buscarPsicologosDaClinica($conexao, $idClinica, true) as $ps) {
     $lista[] = ['id' => (int) $ps['idUsuario'], 'nome' => $ps['nome']];
 }
 

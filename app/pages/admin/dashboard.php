@@ -10,10 +10,19 @@
     $idPsicologo = (int) $_SESSION['id'];
 
     $consultasHoje        = buscarConsultasDeHoje($conexao, $idClinica, $idPsicologo);
-    $consultasAtrasadas   = buscarConsultasAtrasadas($conexao, $idClinica, $idPsicologo);
+    $consultasAguardando  = buscarConsultasAguardandoConfirmacao($conexao, $idClinica, $idPsicologo);
     $consultasSemAnotacao = buscarConsultasSemAnotacao($conexao, $idClinica, $idPsicologo);
     $consultasConcluidas  = buscarConsultasConcluidasNoMes($conexao, $idClinica, $idPsicologo);
     $totalConcluidasNoMes = contarConsultasConcluidasNoMes($conexao, $idClinica, $idPsicologo);
+
+    // Aviso: próxima consulta de hoje que ainda não começou
+    $proximaConsulta = null;
+    foreach ($consultasHoje as $c) {
+        if (in_array($c['status'], ['aguarda data', 'atrasada'], true) && $c['hora_inicio'] >= date('H:i:s')) {
+            $proximaConsulta = $c;
+            break;
+        }
+    }
 ?>
 
 
@@ -52,7 +61,7 @@
 
             <div class="cartao" onclick="toggleList('listaAguardaConfirmacao')">
                 <div class="cartaoTitulo">Aguardando Confirmação</div>
-                <div class="cartaoValor"><?= count($consultasAtrasadas) ?></div>
+                <div class="cartaoValor"><?= count($consultasAguardando) ?></div>
                 <div class="cartaoLegenda">pendentes</div>
             </div>
 
@@ -91,8 +100,17 @@
             </div>
             <div class="cartao-aviso">
                 <div class="cartaoTitulo">Avisos</div>
-                <div class="cartaoLegenda">Paciente Ana Lima já está aqui | Atendimento 08:00h - 09:30h</div>
-                <div class="link"><a href="agenda.php">Acessar evento 🡪 </a></div>
+                <?php if ($proximaConsulta): ?>
+                    <div class="cartaoLegenda">
+                        Próxima consulta: <?= htmlspecialchars($proximaConsulta['nome_paciente']) ?>
+                        às <?= formatarHora($proximaConsulta['hora_inicio']) ?>
+                        (<?= htmlspecialchars($proximaConsulta['nome_psicologo']) ?>)
+                    </div>
+                    <div class="link"><a href="agenda.php">Abrir agenda 🡪 </a></div>
+                <?php else: ?>
+                    <div class="cartaoLegenda">Nenhuma consulta pendente para o resto do dia.</div>
+                    <div class="link"><a href="agenda.php">Abrir agenda 🡪 </a></div>
+                <?php endif; ?>
             </div> 
         </div>
 
@@ -117,7 +135,7 @@
                             <tr>
                                 <td>
                                     <span class="link-paciente"
-                                        onclick="abrirDrawer(<?= (int) $consulta['id_paciente'] ?>)">>
+                                        onclick="abrirDrawer(<?= (int) $consulta['id_paciente'] ?>)">
                                         <?= htmlspecialchars($consulta['nome_paciente']) ?>
                                     </span>
                                 </td>
@@ -139,12 +157,13 @@
                     <tr>
                         <th>Paciente</th>
                         <th>Psicólogo(a)</th>
+                        <th>Data</th>
                         <th>Horário</th>
                         <th>Ação</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($consultasAtrasadas as $consulta): ?>
+                    <?php foreach ($consultasAguardando as $consulta): ?>
                         <tr>
                             <td>
                                 <span class="link-paciente" onclick="abrirDrawer(<?= (int) $consulta['id_paciente'] ?>)">
@@ -152,8 +171,9 @@
                                 </span>
                             </td>
                             <td><?= htmlspecialchars($consulta['nome_psicologo']) ?></td>
+                            <td><?= date('d/m/Y', strtotime($consulta['data'])) ?></td>
                             <td><?= formatarHora($consulta['hora_inicio']) ?></td>
-                            <td><button class="btn btn-sm">Atualizar</button></td>
+                            <td><button class="btn btn-sm btn-secondary" onclick="confirmarConsulta(<?= (int) $consulta['idconsulta'] ?>)">Confirmar</button></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -187,7 +207,7 @@
                             <td><?= formatarHora($consulta['hora_inicio']) ?></td>
                             <td>
                                 <button class="btn btn-sm btn-secondary"
-                                        onclick="abrirModal(<?= htmlspecialchars(json_encode($consulta['nome_paciente']), ENT_QUOTES) ?>, <?= (int) $consulta['idconsulta'] ?>)">
+                                        onclick="abrirModalAnotacao(<?= (int) $consulta['id_paciente'] ?>, <?= (int) $consulta['idconsulta'] ?>)">
                                     Lançar
                                 </button>
                             </td>

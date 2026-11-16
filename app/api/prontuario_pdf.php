@@ -29,10 +29,10 @@ if (!$ehResponsavel) {
 $clinica      = buscarClinica($conexao, $idClinica);
 $profissional = buscarUsuarioPorId($conexao, (int) $_SESSION['id']);
 
-// Só as sessões que têm anotação, da mais antiga para a mais recente
+// Só as sessões concluídas que têm anotação, da mais antiga para a mais recente
 $registros = array_reverse(array_filter(
     buscarSessoesDoPaciente($conexao, $idPaciente),
-    fn($sessao) => !empty($sessao['conteudo'])
+    fn($sessao) => $sessao['status'] === 'concluida' && !empty($sessao['conteudo'])
 ));
 
 $nomesStatus = [

@@ -93,3 +93,82 @@
 .search-resultado-item + .search-resultado-item { border-top: 1px solid var(--gray-100); }
 .search-resultado-nome { font-weight: 500; color: var(--gray-900); }
 .search-resultado-psicologo { font-size: 0.8125rem; color: var(--gray-400); }
+
+
+/* ─── Notificações ───────────────────────────────────────────── */
+.notificacoes-wrapper { position: relative; }
+
+.btn-notificacoes {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.selo-notificacoes {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--vermelho-500);
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+}
+
+.painel-notificacoes {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: 340px;
+  max-height: 420px;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+  z-index: 200;
+}
+.painel-notificacoes.aberto { display: block; }
+
+.painel-notificacoes-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--gray-200);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--deep-teal);
+}
+.painel-notificacoes-topo button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+  color: var(--gray-400);
+}
+.painel-notificacoes-topo button:hover { color: var(--teal); }
+
+.notificacao-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--gray-200);
+  font-size: 0.8125rem;
+  color: var(--gray-700);
+}
+.notificacao-item.clicavel { cursor: pointer; }
+.notificacao-item.clicavel:hover { background: var(--warm-sand); }
+.notificacao-item.nao-lida { font-weight: 600; border-left: 3px solid var(--teal); }
+.notificacao-data { font-size: 0.75rem; color: var(--gray-400); font-weight: 400; }
+.notificacoes-vazio { padding: 1rem; font-size: 0.8125rem; color: var(--gray-400); }

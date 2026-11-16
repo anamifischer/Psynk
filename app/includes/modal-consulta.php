@@ -5,7 +5,7 @@
 <div class="modal-consulta" id="modal-consulta">
     <div class="modal-consulta-header">
         <div>
-            <h3 class="modal-consulta-titulo">Nova consulta</h3>
+            <h3 class="modal-consulta-titulo" id="modal-consulta-titulo">Nova consulta</h3>
             <p class="modal-consulta-subtitulo" id="modal-consulta-subtitulo"></p>
         </div>
         <button class="drawer-fechar" onclick="fecharModalConsulta()">
@@ -54,23 +54,16 @@
 
         <div class="modal-consulta-horario-fim" id="modal-consulta-horario-fim"></div>
 
-        <div class="modal-consulta-campo">
-            <label>Status</label>
-            <select id="modal-consulta-status">
-                <option value="pendente">Pendente</option>
-                <option value="confirmado">Confirmado</option>
-            </select>
-        </div>
-
-        <div class="modal-consulta-campo">
-            <label>Anotação prévia <span class="modal-consulta-opcional">(opcional)</span></label>
-            <textarea id="modal-consulta-anotacao" class="modal-textarea" placeholder="Observações iniciais sobre a consulta..."></textarea>
+        <div class="modal-consulta-campo" id="modal-consulta-campo-anotacao">
+            <label id="modal-consulta-rotulo-anotacao">Anotação prévia <span class="modal-consulta-opcional">(opcional)</span></label>
+            <textarea id="modal-consulta-anotacao" class="modal-textarea" maxlength="500" placeholder="Observações iniciais sobre a consulta..."></textarea>
         </div>
 
     </div>
 
     <div class="modal-rodape">
-        <button class="btn btn-secondary" onclick="fecharModalConsulta()">Cancelar</button>
-        <button class="btn btn-primary" onclick="salvarConsulta()">Agendar consulta</button>
+        <button class="btn btn-danger" id="btn-cancelar-consulta" style="display:none; margin-right:auto" onclick="cancelarConsultaAtual()">Cancelar consulta</button>
+        <button class="btn btn-secondary" onclick="fecharModalConsulta()">Fechar</button>
+        <button class="btn btn-primary" id="btn-salvar-consulta" onclick="salvarConsulta()">Agendar consulta</button>
     </div>
 </div>
