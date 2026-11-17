@@ -1,5 +1,5 @@
 .barraSuperior {
-  background: #fff;
+  background: var(--surface);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -69,7 +69,7 @@
   left: 0;
   width: 100%;
   min-width: 280px;
-  background: #fff;
+  background: var(--surface);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow);
   border: 1px solid var(--gray-100);
@@ -132,7 +132,7 @@
   width: 340px;
   max-height: 420px;
   overflow-y: auto;
-  background: #fff;
+  background: var(--surface);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow);
   z-index: 200;
@@ -172,3 +172,56 @@
 .notificacao-item.nao-lida { font-weight: 600; border-left: 3px solid var(--teal); }
 .notificacao-data { font-size: 0.75rem; color: var(--gray-400); font-weight: 400; }
 .notificacoes-vazio { padding: 1rem; font-size: 0.8125rem; color: var(--gray-400); }
+
+
+/* Janela estreita */
+.barraSuperior h1 {
+  white-space: nowrap;
+}
+
+@media (max-width: 1000px) {
+  .barraSuperior {
+    padding: 1rem 1.25rem;
+    gap: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .barraSuperior-direita {
+    gap: 1rem;
+  }
+
+  .search-input {
+    width: 160px;
+  }
+
+  .search-input:focus {
+    width: 200px;
+  }
+
+  .barraSuperior-data {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 800px) {
+  .barraSuperior-data {
+    display: none;
+  }
+}
+
+/* Botão de tema (lua no claro, sol no escuro) */
+.btn-tema {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  color: var(--texto-suave);
+}
+.btn-tema:hover { color: var(--texto-forte); }
+.btn-tema .icone-sol { display: none; }
+[data-theme="dark"] .btn-tema .icone-sol { display: block; }
+[data-theme="dark"] .btn-tema .icone-lua { display: none; }
+[data-theme="dark"] .btn-notificacoes img { filter: invert(1) brightness(1.2); }

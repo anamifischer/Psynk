@@ -141,7 +141,7 @@
                                 </td>
                                 <td><?= htmlspecialchars($consulta['nome_psicologo']) ?></td>
                                 <td><?= formatarHora($consulta['hora_inicio']) ?></td>
-                                <td><span class="badge"><?= htmlspecialchars($consulta['status']) ?></span></td>
+                                <td><?= situacaoDaConsulta($consulta) ?></td>
                             </tr>
                         <?php endforeach; ?>
                 </tbody>

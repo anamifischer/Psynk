@@ -5,6 +5,14 @@
 // ------------------------------------------------------------
 
 // 14:30 vira 14h30
+// aceita 'AAAA-MM'; qualquer outra coisa vira o mês atual
+function normalizarMes(?string $mes): string {
+    if ($mes !== null && preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', $mes)) {
+        return $mes;
+    }
+    return date('Y-m');
+}
+
 function formatarHora(string $hora): string {
     return date('H\hi', strtotime($hora));
 }
@@ -13,6 +21,14 @@ function formatarHora(string $hora): string {
 // Dashboard
 // ------------------------------------------------------------
 
+// badge da situação de uma consulta de hoje
+function situacaoDaConsulta(array $c): string {
+    if ($c['status'] === 'concluida')  return '<span class="badge badge-verde">Concluída</span>';
+    if ($c['status'] === 'cancelada')  return '<span class="badge badge-cinza">Cancelada</span>';
+    if (!empty($c['confirmada_em']))   return '<span class="badge badge-verde">Confirmada</span>';
+    return '<span class="badge badge-laranja">Aguardando confirmação</span>';
+}
+
 // consultas de hoje (menos as canceladas)
 function buscarConsultasDeHoje(mysqli $conexao, int $idClinica, ?int $idPsicologo = null): array {
     $sql = "SELECT consulta.idconsulta,
@@ -20,7 +36,8 @@ function buscarConsultasDeHoje(mysqli $conexao, int $idClinica, ?int $idPsicolog
                    paciente.nome AS nome_paciente,
                    psicologo.nome AS nome_psicologo,
                    consulta.hora_inicio,
-                   consulta.status
+                   consulta.status,
+                   consulta.confirmada_em
             FROM Consulta consulta
             JOIN Paciente paciente ON paciente.idpaciente = consulta.id_paciente
             JOIN Usuario psicologo ON psicologo.idUsuario = consulta.id_psicologo
@@ -42,6 +59,7 @@ function buscarConsultasAguardandoConfirmacao(mysqli $conexao, int $idClinica, ?
     $sql = "SELECT consulta.idconsulta,
                    consulta.id_paciente,
                    paciente.nome AS nome_paciente,
+                   paciente.telefone,
                    psicologo.nome AS nome_psicologo,
                    consulta.data,
                    consulta.hora_inicio
@@ -113,13 +131,13 @@ function buscarConsultasConcluidasNoMes(mysqli $conexao, int $idClinica, ?int $i
 
 // só a contagem das concluídas no mês
 function contarConsultasConcluidasNoMes(mysqli $conexao, int $idClinica, ?int $idPsicologo = null): int {
+    $mes = date('Y-m');
     $sql = "SELECT COUNT(*)
             FROM Consulta
             WHERE Clinica_idtable1 = ?
               AND (? IS NULL OR id_psicologo = ?)
               AND status = 'concluida'
-              AND YEAR(data) = YEAR(CURDATE())
-              AND MONTH(data) = MONTH(CURDATE())";
+              AND DATE_FORMAT(data, '%Y-%m') = '{$mes}'";
 
     $comando = $conexao->prepare($sql);
     $comando->bind_param("iii", $idClinica, $idPsicologo, $idPsicologo);
@@ -435,10 +453,13 @@ function atualizarAnotacao(mysqli $conexao, int $idAnotacao, string $conteudo): 
 
 // pagamentos do paciente (aba do drawer)
 function buscarPagamentosDoPaciente(mysqli $conexao, int $idPaciente): array {
-    $sql = "SELECT idPagamento, Usuario_idUsuario, valor, status, data_vencimento, data_pagamento
-            FROM Pagamento
-            WHERE Paciente_idpaciente = ?
-            ORDER BY data_vencimento DESC";
+    $sql = "SELECT pag.idPagamento,
+                   COALESCE(consulta.id_psicologo, pag.Usuario_idUsuario) AS id_psicologo,
+                   pag.valor, pag.status, pag.data_vencimento, pag.data_pagamento
+            FROM Pagamento pag
+            LEFT JOIN Consulta consulta ON consulta.idconsulta = pag.Consulta_idconsulta
+            WHERE pag.Paciente_idpaciente = ?
+            ORDER BY pag.data_vencimento DESC";
 
     $comando = $conexao->prepare($sql);
     $comando->bind_param("i", $idPaciente);
@@ -447,9 +468,11 @@ function buscarPagamentosDoPaciente(mysqli $conexao, int $idPaciente): array {
 }
 
 function buscarPagamentoPorId(mysqli $conexao, int $idPagamento, int $idClinica): ?array {
-    $sql = "SELECT pag.idPagamento, pag.status, pag.Usuario_idUsuario
+    $sql = "SELECT pag.idPagamento, pag.status,
+                   COALESCE(consulta.id_psicologo, pag.Usuario_idUsuario) AS id_psicologo
             FROM Pagamento pag
             JOIN Paciente paciente ON paciente.idpaciente = pag.Paciente_idpaciente
+            LEFT JOIN Consulta consulta ON consulta.idconsulta = pag.Consulta_idconsulta
             WHERE pag.idPagamento = ? AND paciente.idClinica = ?";
     $comando = $conexao->prepare($sql);
     $comando->bind_param("ii", $idPagamento, $idClinica);
@@ -457,11 +480,11 @@ function buscarPagamentoPorId(mysqli $conexao, int $idPagamento, int $idClinica)
     return $comando->get_result()->fetch_assoc() ?: null;
 }
 
-// admin e recepcionista em qualquer um; psicólogo só nos seus
+// admin e recepcionista em qualquer um; psicólogo só nas consultas dele
 function podeReceberPagamento(array $pagamento): bool {
     $permissao = $_SESSION['permissao'];
     if (in_array($permissao, ['ADMIN', 'RECEPCIONISTA'], true)) return true;
-    return $permissao === 'PSICOLOGO' && (int) $pagamento['Usuario_idUsuario'] === (int) $_SESSION['id'];
+    return $permissao === 'PSICOLOGO' && (int) $pagamento['id_psicologo'] === (int) $_SESSION['id'];
 }
 
 function marcarPagamentoRecebido(mysqli $conexao, int $idPagamento, string $dataPagamento): void {
@@ -478,11 +501,11 @@ function desfazerPagamentoRecebido(mysqli $conexao, int $idPagamento): void {
 }
 
 // números dos cartões do financeiro
-function resumoFinanceiro(mysqli $conexao, int $idClinica, ?int $idPsicologo = null): array {
+function resumoFinanceiro(mysqli $conexao, int $idClinica, ?int $idPsicologo = null, ?string $mes = null): array {
+    $mes = normalizarMes($mes);
     $sql = "SELECT
                 COALESCE(SUM(CASE WHEN pag.status = 'pago'
-                                   AND YEAR(pag.data_pagamento)  = YEAR(CURDATE())
-                                   AND MONTH(pag.data_pagamento) = MONTH(CURDATE())
+                                   AND DATE_FORMAT(pag.data_pagamento, '%Y-%m') = '{$mes}'
                                   THEN pag.valor END), 0) AS receita,
                 COALESCE(SUM(CASE WHEN pag.status = 'pendente' THEN pag.valor END), 0) AS pendente,
                 COALESCE(SUM(CASE WHEN pag.status = 'atrasado' THEN pag.valor END), 0) AS atrasado_valor,
@@ -502,11 +525,11 @@ function resumoFinanceiro(mysqli $conexao, int $idClinica, ?int $idPsicologo = n
 }
 
 // tabelas do financeiro. $tipo: recebidos, pendentes, atrasados ou vencendo
-function buscarPagamentos(mysqli $conexao, int $idClinica, string $tipo, ?int $idPsicologo = null): array {
+function buscarPagamentos(mysqli $conexao, int $idClinica, string $tipo, ?int $idPsicologo = null, ?string $mes = null): array {
+    $mes = normalizarMes($mes);
     $filtros = [
         'recebidos' => "pag.status = 'pago'
-                        AND YEAR(pag.data_pagamento)  = YEAR(CURDATE())
-                        AND MONTH(pag.data_pagamento) = MONTH(CURDATE())",
+                        AND DATE_FORMAT(pag.data_pagamento, '%Y-%m') = '{$mes}'",
         'pendentes' => "pag.status = 'pendente'",
         'atrasados' => "pag.status = 'atrasado'",
         'vencendo'  => "pag.status = 'pendente' AND pag.data_vencimento = CURDATE()",
@@ -516,7 +539,7 @@ function buscarPagamentos(mysqli $conexao, int $idClinica, string $tipo, ?int $i
     }
 
     $sql = "SELECT pag.idPagamento, pag.valor, pag.data_vencimento, pag.data_pagamento,
-                   paciente.idpaciente, paciente.nome AS nome_paciente,
+                   paciente.idpaciente, paciente.nome AS nome_paciente, paciente.telefone,
                    psicologo.nome AS nome_psicologo
             FROM Pagamento pag
             JOIN Paciente paciente ON paciente.idpaciente = pag.Paciente_idpaciente
@@ -571,15 +594,15 @@ function receitaMensal(mysqli $conexao, int $idClinica, int $ano, ?int $idPsicol
 }
 
 // total, concluídas e canceladas do mês atual
-function resumoConsultasDoMes(mysqli $conexao, int $idClinica, ?int $idPsicologo = null): array {
+function resumoConsultasDoMes(mysqli $conexao, int $idClinica, ?int $idPsicologo = null, ?string $mes = null): array {
+    $mes = normalizarMes($mes);
     $sql = "SELECT COUNT(*) AS total,
                    COUNT(CASE WHEN status = 'concluida' THEN 1 END) AS concluidas,
                    COUNT(CASE WHEN status = 'cancelada' THEN 1 END) AS canceladas
             FROM Consulta
             WHERE Clinica_idtable1 = ?
               AND (? IS NULL OR id_psicologo = ?)
-              AND YEAR(data) = YEAR(CURDATE())
-              AND MONTH(data) = MONTH(CURDATE())";
+              AND DATE_FORMAT(data, '%Y-%m') = '{$mes}'";
 
     $comando = $conexao->prepare($sql);
     $comando->bind_param("iii", $idClinica, $idPsicologo, $idPsicologo);

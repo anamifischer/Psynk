@@ -7,16 +7,25 @@
 
 .grafico-container {
     margin: 0 2rem 1.5rem;
-    background: #fff;
+    background: var(--surface);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow);
     padding: 1.25rem;
-    overflow: visible;
-    max-height: 300px;
+    height: 360px;
+    display: flex;
+    flex-direction: column;
+}
+
+.grafico-container h1 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    color: var(--texto-forte);
 }
 
 .grafico-container canvas {
-    width: 100% !important; 
+    width: 100% !important;
+    flex: 1;
+    min-height: 0;
 }
 
 .ano-dropdown-wrapper {
@@ -29,7 +38,7 @@
     display: none;
     position: absolute;
     top: calc(100% + 6px);
-    background: #fff;
+    background: var(--surface);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow);
     border: 1px solid var(--gray-100);
@@ -108,5 +117,40 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--teal);
+}
+
+
+
+/* Filtro de mês dos cards */
+.filtro-mes {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1.5rem 2rem 0;
+    font-family: var(--font);
+    font-size: 0.875rem;
+    color: var(--gray-400);
+}
+
+.filtro-mes span {
+    margin-right: 0.25rem;
+}
+
+.filtro-mes select {
+    padding: 0.5rem 0.75rem;
+    font-family: var(--font);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--gray-700);
+    background: var(--surface);
+    border: 1px solid var(--gray-100);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow);
+    outline: none;
+    cursor: pointer;
+}
+
+.filtro-mes select:focus {
+    border-color: var(--sage);
 }
 

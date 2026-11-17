@@ -11,6 +11,7 @@ let pacienteAtual = null;        // dados do paciente aberto no drawer
 let pacienteAbertoId = null;
 let consultaEmEdicao = null;     // preenchido quando o modal está editando
 let pacientesModal = [];         // pacientes carregados no modal de consulta
+let permissaoUsuario = '';        // perfil de quem está logado (vem da api)
 let recarregarAoFechar = false;  // recarrega a página quando o drawer fechar
 
 
@@ -37,6 +38,13 @@ function irParaAba(nome) {
     document.querySelectorAll('.drawer-painel').forEach(p => p.classList.remove('active'));
     document.querySelector(`.drawer-aba[data-aba="${nome}"]`)?.classList.add('active');
     document.getElementById('aba-' + nome)?.classList.add('active');
+}
+
+// recebe 'aaaa-mm-dd' e diz se é hoje (data local)
+function dataEhHoje(dataIso) {
+    const h = new Date();
+    const hoje = h.getFullYear() + '-' + String(h.getMonth() + 1).padStart(2, '0') + '-' + String(h.getDate()).padStart(2, '0');
+    return dataIso === hoje;
 }
 
 function badgeClassStatus(status) {
@@ -212,6 +220,11 @@ async function abrirModalConsulta(idPaciente = null) {
         return;
     }
     pacientesModal = dados.pacientes;
+    permissaoUsuario = dados.usuario.permissao;
+
+    // recepção não lança anotação prévia
+    document.getElementById('modal-consulta-campo-anotacao').style.display =
+        permissaoUsuario === 'RECEPCIONISTA' ? 'none' : '';
 
     const selectPaciente = document.getElementById('modal-consulta-paciente');
     selectPaciente.innerHTML = '<option value="">Selecione o paciente...</option>';
@@ -335,7 +348,9 @@ async function salvarConsulta() {
     const duracao   = document.getElementById('modal-consulta-duracao').value;
     const anotacao  = document.getElementById('modal-consulta-anotacao').value.trim();
 
-    if (!paciente || !psicologo || !data || !hora) {
+    // ao editar, paciente e psicólogo ficam travados e nem vão no envio
+    const faltaPessoa = !consultaEmEdicao && (!paciente || !psicologo);
+    if (faltaPessoa || !data || !hora) {
         alert('Preencha todos os campos obrigatórios.');
         return;
     }
@@ -508,10 +523,6 @@ function preencherDadosDrawer(paciente) {
     const observacoes = document.getElementById('drawer-observacoes');
     if (observacoes) observacoes.value = paciente.observacoes || '';
 
-    // anotações só aparecem para o responsável
-    const abaAnotacoes = document.querySelector('.drawer-aba[data-aba="anotacoes"]');
-    if (abaAnotacoes) abaAnotacoes.style.display = paciente.mostrarAnotacoes ? '' : 'none';
-
     const btnImprimir = document.getElementById('btn-imprimir');
     if (btnImprimir) {
         btnImprimir.style.display = paciente.mostrarAnotacoes ? '' : 'none';
@@ -528,7 +539,8 @@ function badgeDaSessao(s, paciente) {
     if (s.status === 'concluida')          badge = '<span class="badge badge-verde">Concluída</span>';
     else if (s.status === 'cancelada')     badge = '<span class="badge badge-cinza">Cancelada</span>';
     else if (anotacaoPendente)             badge = '<span class="badge badge-vermelho">Anotação pendente</span>';
-    else if (!s.jaComecou && s.confirmada) badge = '<span class="badge badge-azul">Confirmada</span>';
+    else if (!s.jaComecou && s.confirmada) badge = '<span class="badge badge-verde">Confirmada</span>';
+    else if (!s.jaComecou && dataEhHoje(s.dataIso)) badge = '<span class="badge badge-laranja">Aguardando confirmação</span>';
     else if (!s.jaComecou)                 badge = '<span class="badge badge-amarelo">Aguardando confirmação</span>';
     else                                   badge = '<span class="badge badge-amarelo">Aguardando conclusão</span>';
 
@@ -560,7 +572,7 @@ function renderizarAnotacoes(paciente) {
 
     const historico = paciente.historicoResponsavel || [];
     if (!(paciente.sessoes || []).length && !historico.length) {
-        painel.innerHTML = '<p class="drawer-vazio">Nenhuma sessão registrada.</p>';
+        painel.innerHTML = '<p class="drawer-vazio">Nenhuma consulta registrada.</p>';
         return;
     }
 

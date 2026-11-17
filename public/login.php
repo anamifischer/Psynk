@@ -21,6 +21,10 @@
 
     <form action="../config/processa_login.php" method="post">
 
+        <?php if (isset($_GET['erro'])): ?>
+            <p style="color:#b3261e; margin-bottom:0.75rem;">E-mail ou senha incorretos.</p>
+        <?php endif; ?>
+
         <label for="email">E-mail</label>
         <input type="email" id="email" name="email" placeholder="seu@email.com">
 
@@ -29,9 +33,6 @@
 
         <a href="redefinirSenha.php" class="link">
             Esqueci minha senha →
-        </a>
-        <a href="cadastrar.php" class="link">
-            Ainda não tem uma conta? →
         </a>
 
         <button type="submit" class="btn-primary">

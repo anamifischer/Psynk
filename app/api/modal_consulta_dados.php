@@ -14,6 +14,10 @@ foreach (buscarPacientes($conexao, $idClinica) as $p) {
     if (in_array($p['status'], ['encerrado', 'inativo'], true)) {
         continue;
     }
+    // psicólogo só agenda para os próprios pacientes
+    if ($_SESSION['permissao'] === 'PSICOLOGO' && (int) $p['idPsicologo'] !== (int) $_SESSION['id']) {
+        continue;
+    }
     $pacientes[] = [
         'id'          => (int) $p['idpaciente'],
         'nome'        => $p['nome_paciente'],
@@ -23,6 +27,9 @@ foreach (buscarPacientes($conexao, $idClinica) as $p) {
 
 $psicologos = [];
 foreach (buscarPsicologosDaClinica($conexao, $idClinica) as $ps) {
+    if ($_SESSION['permissao'] === 'PSICOLOGO' && (int) $ps['idUsuario'] !== (int) $_SESSION['id']) {
+        continue;
+    }
     $psicologos[] = ['id' => (int) $ps['idUsuario'], 'nome' => $ps['nome']];
 }
 

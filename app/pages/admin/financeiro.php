@@ -29,8 +29,9 @@
 
     $resumo = resumoFinanceiro($conexao, $idClinica, $idPsicologoFiltro);
 
-    function mostrarLinhasPagamentos(array $pagamentos, string $rotulo, string $classeBadge): void {
+    function mostrarLinhasPagamentos(array $pagamentos, string $rotulo, string $classeBadge, bool $avisarVazio = true): void {
         if (empty($pagamentos)) {
+            if (!$avisarVazio) return;
             echo '<tr><td colspan="5">Nenhum pagamento encontrado.</td></tr>';
             return;
         }
@@ -47,8 +48,6 @@ echo '<td>' . htmlspecialchars($pagamento['nome_paciente']) . '</td>';
         }
     }
 ?>
-
-<!DOCTYPE html>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -96,16 +95,10 @@ echo '<td>' . htmlspecialchars($pagamento['nome_paciente']) . '</td>';
         </div>
 
         <div class="cartoes">
-            <div class="cartao" onclick="toggleList('listaReceita')">
-                <div class="cartaoTitulo">Receita</div>
-                <div class="cartaoValor" id="valor-receita">R$ <?= number_format($resumo['receita'], 2, ',', '.') ?></div>
-                <div class="cartaoLegenda">total mês</div>
-            </div>
-
             <div class="cartao" onclick="toggleList('listaPendentes')">
                 <div class="cartaoTitulo">Pendente</div>
-                <div class="cartaoValor" id="valor-pendente">R$ <?= number_format($resumo['pendente'], 2, ',', '.') ?></div>
-                <div class="cartaoLegenda">pagamentos pendentes</div>
+                <div class="cartaoValor" id="valor-pendente">R$ <?= number_format($resumo['pendente'] + $resumo['atrasado_valor'], 2, ',', '.') ?></div>
+                <div class="cartaoLegenda">pendentes + atrasados</div>
             </div>
 
             <div class="cartao" onclick="toggleList('listaAtrasados')">
@@ -119,29 +112,9 @@ echo '<td>' . htmlspecialchars($pagamento['nome_paciente']) . '</td>';
             </div>
         </div>
 
-        <div id="listaReceita" class="collapse-list">
-            <div class="section-header">
-                <span class="section-title">Receita do mês</span>
-            </div>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Paciente</th>
-                        <th>Psicólogo(a)</th>
-                        <th>Data do pagamento</th>
-                        <th>Valor</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php mostrarLinhasPagamentos(buscarPagamentos($conexao, $idClinica, 'recebidos', $idPsicologoFiltro), 'Pago', 'badge-verde'); ?>
-                </tbody>
-            </table>
-        </div>
-
         <div id="listaPendentes" class="collapse-list">
             <div class="section-header">
-                <span class="section-title">Pagamentos Pendentes</span>
+                <span class="section-title">Pagamentos Pendentes e Atrasados</span>
             </div>
             <table class="data-table">
                 <thead>
@@ -154,7 +127,16 @@ echo '<td>' . htmlspecialchars($pagamento['nome_paciente']) . '</td>';
                     </tr>
                 </thead>
                 <tbody>
-                    <?php mostrarLinhasPagamentos(buscarPagamentos($conexao, $idClinica, 'pendentes', $idPsicologoFiltro), 'Pendente', 'badge-laranja'); ?>
+                    <?php
+                        // atrasados primeiro (vencimento mais antigo), depois os pendentes
+                        $atrasados = buscarPagamentos($conexao, $idClinica, 'atrasados', $idPsicologoFiltro);
+                        $pendentes = buscarPagamentos($conexao, $idClinica, 'pendentes', $idPsicologoFiltro);
+                        if (empty($atrasados) && empty($pendentes)) {
+                            mostrarLinhasPagamentos([], '', '');
+                        }
+                        mostrarLinhasPagamentos($atrasados, 'Atrasado', 'badge-vermelho', false);
+                        mostrarLinhasPagamentos($pendentes, 'Pendente', 'badge-laranja', false);
+                    ?>
                 </tbody>
             </table>
         </div>
@@ -202,7 +184,6 @@ echo '<td>' . htmlspecialchars($pagamento['nome_paciente']) . '</td>';
     </div>
 
     <script src="/app/js/utils.js"></script>
-    <script src="/app/js/financeiro.js"></script>
     <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/drawer.php"); ?>
     <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/modal-consulta.php"); ?>
     

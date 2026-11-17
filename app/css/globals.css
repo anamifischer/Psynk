@@ -39,6 +39,7 @@ body::after {
   min-height: 100vh;
   height: auto;
   overflow-y: auto;
+  transition: margin-left 0.3s ease;
 }
 
 .main.retraido {
@@ -55,13 +56,13 @@ body::after {
 
 
 .cartao {
-  background: #fff;
+  background: var(--surface);
   border-radius: var(--radius-md);
   padding: 1.25rem 1.5rem;
   box-shadow: var(--shadow);
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s;
-  min-width: 140px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -70,7 +71,7 @@ body::after {
 
 .cartao:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 36px rgba(20, 30, 40, 0.12);
+  box-shadow: var(--shadow-hover);
 }
 
 .cartaoTitulo {
@@ -120,9 +121,9 @@ body::after {
 .collapse-list {
     display: none;
     margin: 0 2rem 1.5rem;
-    background: #fff;
+    background: var(--surface);
     border-radius: var(--radius-md);
-    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--shadow);
     overflow: hidden;
 }
 
@@ -135,7 +136,7 @@ body::after {
     display: flex;
     align-items: center;
     padding: 18px 22px;
-    background: #fff;
+    background: var(--surface);
 }
 
 .collapse-list .section-title {
@@ -159,7 +160,7 @@ body::after {
     color: var(--gray-400);
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    background: #fafafa;
+    background: var(--linha-hover);
 }
 
 /* Conteúdo */
@@ -167,7 +168,7 @@ body::after {
     padding: 15px 22px;
     font-size: 14px;
     color: var(--gray-500);
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid var(--borda-leve);
 }
 
 /* Hover */
@@ -176,7 +177,7 @@ body::after {
 }
 
 .collapse-list .data-table tbody tr:hover {
-    background: #fafcfc;
+    background: var(--surface-tint);
 }
 
 /* Badges */
@@ -243,7 +244,7 @@ body::after {
 }
 
 .data-table tr:last-child td { border-bottom: none; }
-.data-table tr:hover td { background: #fafafa; }
+.data-table tr:hover td { background: var(--linha-hover); }
 
 .badge {
   display: inline-flex;
@@ -254,13 +255,13 @@ body::after {
   font-weight: 500;
 }
 
-.badge-verde    { background: #e6f5ed; color: var(--verde-500); }
-.badge-laranja  { background: #fdf3e3; color: var(--laranja-500); }
-.badge-vermelho { background: #faeaea; color: var(--vermelho-500); }
-.badge-amarelo  { background: #fef9e7; color: var(--amarelo-500); }
-.badge-azul     { background: #eaf1fd; color: var(--azul-500); }
-.badge-roxo     { background: #f0edf7; color: var(--roxo-500); }
-.badge-cinza    { background: #f2f2f2; color: var(--cinza-500); }
+.badge-verde    { background: var(--badge-verde-bg); color: var(--verde-500); }
+.badge-laranja  { background: var(--badge-laranja-bg); color: var(--laranja-500); }
+.badge-vermelho { background: var(--badge-vermelho2-bg); color: var(--vermelho-500); }
+.badge-amarelo  { background: var(--badge-amarelo-bg); color: var(--amarelo-500); }
+.badge-azul     { background: var(--badge-azul2-bg); color: var(--azul-500); }
+.badge-roxo     { background: var(--badge-roxo2-bg); color: var(--roxo-500); }
+.badge-cinza    { background: var(--badge-cinza-bg); color: var(--cinza-500); }
 
 .btn {
   display: inline-flex;
@@ -278,7 +279,7 @@ body::after {
 
 .btn-sm { padding: 0.3125rem 0.75rem; font-size: 0.8125rem; }
 .btn-primary { background: var(--deep-teal); color: #fff; }
-.btn-primary:hover { background: #1a3338; }
+.btn-primary:hover { background: var(--deep-teal-hover); }
 .btn-secondary { background: var(--gray-100); color: var(--gray-700); }
 .btn-secondary:hover { background: var(--gray-200); }
 
@@ -300,7 +301,7 @@ body::after {
     top: calc(100% + 6px);
     left: unset;
     right: 0;
-    background: #fff;
+    background: var(--surface);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow);
     padding: 1rem 1.25rem;
@@ -367,4 +368,21 @@ body::after {
 
 .linha-clicavel:hover {
     background: var(--gray-100);
+}
+
+/* Janela estreita (navegador reduzido) */
+.collapse-list {
+  overflow-x: auto;
+}
+
+@media (max-width: 900px) {
+  .cartoes {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .cartoes {
+    grid-template-columns: 1fr;
+  }
 }

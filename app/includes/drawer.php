@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="/app/css/drawer.css">
+<link rel="stylesheet" type="text/css" href="/app/css/drawer.css?v=<?= filemtime($_SERVER['DOCUMENT_ROOT'] . '/app/css/drawer.css') ?>">
     
     <div class="drawer-overlay" id="drawer-overlay" onclick="fecharDrawer()"></div>
 
@@ -15,7 +15,7 @@
 
         <div class="drawer-abas">
             <button class="drawer-aba active" data-aba="dados">Dados</button>
-            <button class="drawer-aba" data-aba="anotacoes">Anotações</button>
+            <button class="drawer-aba" data-aba="anotacoes">Consultas</button>
             <button class="drawer-aba" data-aba="pagamentos">Pagamentos</button>
             <button class="btn" id="btn-imprimir" title="Imprimir prontuário">
                 <img src="/imgs/icons/imprimir.png" alt="Imprimir prontuário" width="18" height="18">
@@ -83,7 +83,7 @@
 
             </div>
 
-            <!-- Aba Anotações -->
+            <!-- Aba Consultas -->
             <div class="drawer-painel" id="aba-anotacoes"></div>
 
             <!-- Aba Pagamentos -->

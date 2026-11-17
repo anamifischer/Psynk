@@ -22,7 +22,6 @@
                 <a href="#funcionalidades" class="btn">Funcionalidades</a>
                 <a href="#planos" class="btn">Planos</a>
                 <button id="btn-login" onclick="window.location.href='/public/login.php'">Login</button>
-                <button id="btn-login" onclick="window.location.href='/public/cadastrar.php'">Cadastrar</button>
             </nav>
 
             <main id="conteudo">

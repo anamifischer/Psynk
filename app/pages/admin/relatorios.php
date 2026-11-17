@@ -21,13 +21,32 @@
         }
     }
 
-    $resumo              = resumoFinanceiro($conexao, $idClinica, $idPsicologoFiltro);
-    $pagamentosRecebidos = buscarPagamentos($conexao, $idClinica, 'recebidos', $idPsicologoFiltro);
+    // Mês dos cards (padrão: mês atual)
+    $anoRef = (int) ($_GET['ano'] ?? date('Y'));
+    $mesRef = (int) ($_GET['mes'] ?? date('n'));
+    $mesCompleto = normalizarMes(sprintf('%04d-%02d', $anoRef, $mesRef));
+    $anoRef = (int) substr($mesCompleto, 0, 4);
+    $mesRef = (int) substr($mesCompleto, 5, 2);
+    $nomesMeses = [1 => 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                   'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    $rotuloMes = $nomesMeses[$mesRef] . ' de ' . $anoRef;
 
-    $consultasMes = resumoConsultasDoMes($conexao, $idClinica, $idPsicologoFiltro);
+    $resumo              = resumoFinanceiro($conexao, $idClinica, $idPsicologoFiltro, $mesCompleto);
+    $pagamentosRecebidos = buscarPagamentos($conexao, $idClinica, 'recebidos', $idPsicologoFiltro, $mesCompleto);
+
+    $consultasMes = resumoConsultasDoMes($conexao, $idClinica, $idPsicologoFiltro, $mesCompleto);
     $pacientes    = contarPacientesPorStatus($conexao, $idClinica, $idPsicologoFiltro);
 
     $aReceber = $resumo['pendente'] + $resumo['atrasado_valor'];
+
+    // lista do card "A receber": atrasados primeiro, depois pendentes
+    $listaAReceber = [];
+    foreach (buscarPagamentos($conexao, $idClinica, 'atrasados', $idPsicologoFiltro) as $pag) {
+        $listaAReceber[] = $pag + ['rotulo' => 'Atrasado', 'badge' => 'badge-vermelho'];
+    }
+    foreach (buscarPagamentos($conexao, $idClinica, 'pendentes', $idPsicologoFiltro) as $pag) {
+        $listaAReceber[] = $pag + ['rotulo' => 'Pendente', 'badge' => 'badge-amarelo'];
+    }
     $taxaCancelamento = $consultasMes['total'] > 0
         ? round($consultasMes['canceladas'] / $consultasMes['total'] * 100)
         : 0;
@@ -102,18 +121,35 @@
             <canvas id="graficoReceita" data-psicologo="<?= (int) $idPsicologoFiltro ?>"></canvas>
         </div>
 
+        <form class="filtro-mes" method="get">
+            <?php if ($idPsicologoFiltro !== null && true): ?>
+                <input type="hidden" name="psicologo" value="<?= (int) $idPsicologoFiltro ?>">
+            <?php endif; ?>
+            <span>Período dos cards:</span>
+            <select name="mes" onchange="this.form.submit()">
+                <?php foreach ($nomesMeses as $numero => $nome): ?>
+                    <option value="<?= $numero ?>" <?= $numero === $mesRef ? 'selected' : '' ?>><?= $nome ?></option>
+                <?php endforeach; ?>
+            </select>
+            <select name="ano" onchange="this.form.submit()">
+                <?php for ($a = (int) date('Y'); $a >= (int) date('Y') - 3; $a--): ?>
+                    <option value="<?= $a ?>" <?= $a === $anoRef ? 'selected' : '' ?>><?= $a ?></option>
+                <?php endfor; ?>
+            </select>
+        </form>
+
         <h2 class="grupo-titulo">Financeiro</h2>
         <div class="cartoes">
             <div class="cartao" onclick="toggleList('faturamentoClinica')">
                 <div class="cartaoTitulo"><?= $nomeFiltro ? 'Faturamento de ' . htmlspecialchars($nomeFiltro) : 'Faturamento Clínica' ?></div>
                 <div class="cartaoValor">R$ <?= number_format($resumo['receita'], 2, ',', '.') ?></div>
-                <div class="cartaoLegenda">mês</div>
+                <div class="cartaoLegenda"><?= $rotuloMes ?></div>
             </div>
 
-            <div class="cartao">
+            <div class="cartao" onclick="toggleList('listaAReceber')">
                 <div class="cartaoTitulo">A receber</div>
                 <div class="cartaoValor">R$ <?= number_format($aReceber, 2, ',', '.') ?></div>
-                <div class="cartaoLegenda">pendentes + atrasados</div>
+                <div class="cartaoLegenda">pendentes + atrasados (atual)</div>
             </div>
 
             <div class="cartao">
@@ -135,7 +171,7 @@
                 </thead>
                 <tbody>
                     <?php if (empty($pagamentosRecebidos)): ?>
-                        <tr><td colspan="5">Nenhum pagamento recebido neste mês.</td></tr>
+                        <tr><td colspan="5">Nenhum pagamento recebido neste período.</td></tr>
                     <?php endif; ?>
                     <?php foreach ($pagamentosRecebidos as $pagamento): ?>
                         <tr class="faturamento-linha linha-clicavel"
@@ -144,7 +180,36 @@
                             <td><?= htmlspecialchars($pagamento['nome_psicologo']) ?></td>
                             <td><?= date('d/m/Y', strtotime($pagamento['data_pagamento'])) ?></td>
                             <td>R$ <?= number_format($pagamento['valor'], 2, ',', '.') ?></td>
-                            <td><span class="badge badge-green">Pago</span></td>
+                            <td><span class="badge badge-verde">Pago</span></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="collapse-list" id="listaAReceber">
+            <table class="faturamento-tabela">
+                <thead>
+                    <tr>
+                        <th>Paciente</th>
+                        <th>Psicólogo(a)</th>
+                        <th>Vencimento</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($listaAReceber)): ?>
+                        <tr><td colspan="5">Nenhum pagamento pendente ou atrasado.</td></tr>
+                    <?php endif; ?>
+                    <?php foreach ($listaAReceber as $pagamento): ?>
+                        <tr class="faturamento-linha linha-clicavel"
+                            onclick="abrirDrawer(<?= (int) $pagamento['idpaciente'] ?>)">
+                            <td><?= htmlspecialchars($pagamento['nome_paciente']) ?></td>
+                            <td><?= htmlspecialchars($pagamento['nome_psicologo']) ?></td>
+                            <td><?= date('d/m/Y', strtotime($pagamento['data_vencimento'])) ?></td>
+                            <td>R$ <?= number_format($pagamento['valor'], 2, ',', '.') ?></td>
+                            <td><span class="badge <?= $pagamento['badge'] ?>"><?= $pagamento['rotulo'] ?></span></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -156,19 +221,19 @@
             <div class="cartao">
                 <div class="cartaoTitulo">Consultas concluídas</div>
                 <div class="cartaoValor"><?= (int) $consultasMes['concluidas'] ?></div>
-                <div class="cartaoLegenda">neste mês</div>
+                <div class="cartaoLegenda"><?= $rotuloMes ?></div>
             </div>
 
             <div class="cartao">
                 <div class="cartaoTitulo">Taxa de cancelamento</div>
                 <div class="cartaoValor"><?= $taxaCancelamento ?>%</div>
-                <div class="cartaoLegenda"><?= (int) $consultasMes['canceladas'] ?> de <?= (int) $consultasMes['total'] ?> consultas no mês</div>
+                <div class="cartaoLegenda"><?= (int) $consultasMes['canceladas'] ?> de <?= (int) $consultasMes['total'] ?> consultas em <?= $rotuloMes ?></div>
             </div>
 
             <div class="cartao">
                 <div class="cartaoTitulo">Pacientes ativos</div>
                 <div class="cartaoValor"><?= (int) $pacientes['ativo'] ?></div>
-                <div class="cartaoLegenda">em acompanhamento</div>
+                <div class="cartaoLegenda">em acompanhamento (atual)</div>
             </div>
         </div>
     </div>
@@ -177,6 +242,7 @@
     <script src="/app/js/utils.js"></script>
     <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/drawer.php"); ?>
     <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/modal-consulta.php"); ?>
+
 
 
 </body>

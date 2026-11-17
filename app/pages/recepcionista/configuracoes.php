@@ -1,6 +1,19 @@
 <?php
     require_once __DIR__ . "/../../../config/sessao.php";
     verificarPermissao(["RECEPCIONISTA"]);
+
+    require_once __DIR__ . "/../../../config/conexao.php";
+    require_once __DIR__ . "/../../includes/consultas.php";
+
+    $perfil = buscarUsuarioPorId($conexao, (int) $_SESSION['id']);
+
+    // Iniciais para o avatar (primeiras letras dos dois primeiros nomes)
+    $iniciais = '';
+    foreach (array_slice(preg_split('/\s+/', trim($perfil['nome'])), 0, 2) as $parte) {
+        $iniciais .= mb_strtoupper(mb_substr($parte, 0, 1));
+    }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -8,7 +21,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configurações — Psynk</title>
+    <title>PsySink — Configurações</title>
+
+    <?php $papelUsuario = "recepcionista"; ?>
 
     <link rel="stylesheet" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
     <link rel="stylesheet" href="/app/css/variables.css">
@@ -16,12 +31,11 @@
     <link rel="stylesheet" href="/app/css/configuracoes.css">
 
     <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/menuRecepcionista.php"); ?>
-    <?php $papelUsuario = "recepcionista"; ?>
 
     <script>
         const papelUsuario = "<?= $papelUsuario ?>";
     </script>
-
+    
 </head>
 <body>
 
@@ -40,24 +54,30 @@
                 <h2 class="config-titulo">Dados pessoais</h2>
 
                 <div class="config-avatar-wrapper">
-                    <div class="config-avatar">CA</div>
+                    <div class="config-avatar" id="config-avatar-preview"><?= $iniciais ?></div>
                 </div>
 
                 <div class="config-form">
                     <div class="config-campo">
                         <label>Nome completo</label>
-                        <input type="text" value="Carol Andrade" placeholder="Seu nome completo">
+                        <input type="text" id="perfil-nome" maxlength="45" value="<?= htmlspecialchars($perfil['nome']) ?>" placeholder="Seu nome completo">
                     </div>
                     <div class="config-campo">
                         <label>E-mail</label>
-                        <input type="email" value="carol@psynk.com" placeholder="seu@email.com">
+                        <input type="email" id="perfil-email" maxlength="45" value="<?= htmlspecialchars($perfil['email']) ?>" placeholder="seu@email.com">
                     </div>
                     <div class="config-campo">
                         <label>Telefone</label>
-                        <input type="tel" value="(51) 98888-0000" placeholder="(00) 00000-0000">
+                        <input type="tel" id="perfil-telefone" maxlength="45" value="<?= htmlspecialchars($perfil['telefone'] ?? '') ?>" placeholder="(00) 00000-0000">
                     </div>
+                    <?php if ($papelUsuario === 'psicologo' || $papelUsuario === 'admin'): ?>
+                    <div class="config-campo">
+                        <label>CRP</label>
+                        <input type="text" id="perfil-crp" maxlength="20" value="<?= htmlspecialchars($perfil['crp'] ?? '') ?>" placeholder="00/00000">
+                    </div>
+                    <?php endif; ?>
                     <div class="config-acoes">
-                        <button class="btn btn-primary">Salvar alterações</button>
+                        <button class="btn btn-primary" id="btn-salvar-perfil">Salvar alterações</button>
                     </div>
                 </div>
             </section>
@@ -68,18 +88,19 @@
                 <div class="config-form">
                     <div class="config-campo">
                         <label>Senha atual</label>
-                        <input type="password" placeholder="••••••••">
+                        <input type="password" id="senha-atual" autocomplete="current-password" placeholder="••••••••">
                     </div>
                     <div class="config-campo">
                         <label>Nova senha</label>
-                        <input type="password" placeholder="••••••••">
+                        <input type="password" id="senha-nova" autocomplete="new-password" placeholder="••••••••">
                     </div>
                     <div class="config-campo">
                         <label>Confirmar nova senha</label>
-                        <input type="password" placeholder="••••••••">
+                        <input type="password" id="senha-confirmar" autocomplete="new-password" placeholder="••••••••">
                     </div>
+                    <p class="config-dica">A nova senha precisa ter pelo menos 8 caracteres.</p>
                     <div class="config-acoes">
-                        <button class="btn btn-primary">Alterar senha</button>
+                        <button class="btn btn-primary" id="btn-alterar-senha">Alterar senha</button>
                     </div>
                 </div>
             </section>
@@ -88,18 +109,7 @@
     </div>
 </div>
 
-<script>
-document.querySelectorAll('.config-nav-item').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.config-nav-item').forEach(b => b.classList.remove('ativo'));
-        document.querySelectorAll('.config-secao').forEach(s => s.classList.remove('ativa'));
-        btn.classList.add('ativo');
-        document.getElementById(btn.dataset.secao).classList.add('ativa');
-    });
-});
-</script>
-
-<script src="/app/js/utils.js"></script>
+<script src="/app/js/config.js"></script>
 
 </body>
 </html>

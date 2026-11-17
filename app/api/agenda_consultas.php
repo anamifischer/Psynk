@@ -7,6 +7,9 @@ header('Content-Type: application/json; charset=utf-8');
 
 $idClinica = (int) $_SESSION['id_clinica'];
 
+// psicólogo só vê a própria agenda
+$filtroPsicologo = $_SESSION['permissao'] === 'PSICOLOGO' ? 'AND consulta.id_psicologo = ' . (int) $_SESSION['id'] : '';
+
 $sql = "SELECT consulta.idconsulta,
                consulta.data,
                consulta.hora_inicio,
@@ -24,20 +27,22 @@ $sql = "SELECT consulta.idconsulta,
         FROM Consulta consulta
         JOIN Paciente paciente ON paciente.idpaciente = consulta.id_paciente
         WHERE consulta.Clinica_idtable1 = ?
+          {$filtroPsicologo}
         ORDER BY consulta.data, consulta.hora_inicio";
 
 $comando = $conexao->prepare($sql);
 $comando->bind_param("i", $idClinica);
 $comando->execute();
 
-$statusAgenda = [
-    'aguarda data' => 'confirmado',
-    'concluida'    => 'confirmado',
-    'atrasada'     => 'pendente',
-    'cancelada'    => 'cancelado',
-];
 
 $podeVerAnotacoes = in_array($_SESSION['permissao'], ['ADMIN', 'PSICOLOGO'], true);
+
+// confirmado (verde), pendente (amarelo), pendente hoje (laranja) ou cancelado (cinza)
+function statusNaAgenda(array $c): string {
+    if ($c['status'] === 'cancelada') return 'cancelado';
+    if ($c['status'] === 'concluida' || !empty($c['confirmada_em'])) return 'confirmado';
+    return $c['data'] === date('Y-m-d') ? 'pendente-hoje' : 'pendente';
+}
 
 $lista = [];
 foreach ($comando->get_result()->fetch_all(MYSQLI_ASSOC) as $c) {
@@ -48,9 +53,7 @@ foreach ($comando->get_result()->fetch_all(MYSQLI_ASSOC) as $c) {
         'pacienteId'  => (int) $c['id_paciente'],
         'paciente'    => $c['nome_paciente'],
         'psicologoId' => (int) $c['id_psicologo'],
-        'status'      => ($c['status'] === 'aguarda data' && empty($c['confirmada_em']))
-                            ? 'pendente'
-                            : ($statusAgenda[$c['status']] ?? 'pendente'),
+        'status'      => statusNaAgenda($c),
         'anotacao'    => ($podeVerAnotacoes && (int) $c['id_responsavel'] === (int) $_SESSION['id'])
                             ? $c['anotacao'] : null,
     ];

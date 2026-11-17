@@ -1,5 +1,10 @@
 const mesesLabels = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 let graficoReceita = null;
+
+// Lê uma cor do tema atual (claro ou escuro)
+function corDoTema(variavel) {
+    return getComputedStyle(document.documentElement).getPropertyValue(variavel).trim();
+}
 let anoAtivo = new Date().getFullYear();
 
 async function atualizarGrafico() {
@@ -75,11 +80,11 @@ async function atualizarGrafico() {
                     position: 'top',
                     labels: {
                         font: { size: 12 },
-                        color: 'var(--sage)',
-                        boxWidth: 12,
+                        color: corDoTema('--texto'),
+                        boxWidth: 10,
+                        boxHeight: 10,
                         usePointStyle: true,
                         pointStyle: 'circle',
-                        pointStyleWidth: 12,
                     }
                 },
                 tooltip: {
@@ -91,12 +96,12 @@ async function atualizarGrafico() {
             scales: {
                 x: {
                     grid: { display: false },
-                    ticks: { color: '#9E9E9E', font: { size: 12 } }
+                    ticks: { color: corDoTema('--gray-400'), font: { size: 12 } }
                 },
                 y: {
-                    grid: { color: '#f0f0f0' },
+                    grid: { color: corDoTema('--borda-leve') },
                     ticks: {
-                        color: '#9E9E9E',
+                        color: corDoTema('--gray-400'),
                         font: { size: 12 },
                         callback: v => 'R$ ' + v.toLocaleString('pt-BR')
                     }
@@ -139,3 +144,15 @@ function iniciarFiltroAnos() {
 
     atualizarGrafico();
 }
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    if (document.getElementById("graficoReceita")) iniciarFiltroAnos();
+});
+
+// Redesenha o gráfico quando o tema muda
+document.addEventListener('temaalterado', () => {
+    if (!document.getElementById('graficoReceita')) return;
+    if (graficoReceita) { graficoReceita.destroy(); graficoReceita = null; }
+    atualizarGrafico();
+});

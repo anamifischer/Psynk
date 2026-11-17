@@ -39,6 +39,12 @@
         'inativo'   => 'Inativo',
     ];
 
+    // cor do badge de cada status
+    $coresStatus = [
+        'ativo' => 'verde', 'em_espera' => 'azul', 'pausado' => 'amarelo',
+        'encerrado' => 'cinza', 'inativo' => 'cinza',
+    ];
+
     // Monta o link de um chip mantendo o outro filtro
     function montarLinkFiltro(?int $psicologo, ?string $status): string {
         $parametros = [];
@@ -48,7 +54,7 @@
     }
 
     // Desenha as linhas de uma tabela de pacientes
-    function mostrarLinhasPacientes(array $pacientes, array $nomesDosStatus): void {
+    function mostrarLinhasPacientes(array $pacientes, array $nomesDosStatus, array $coresStatus): void {
         if (empty($pacientes)) {
             echo '<tr><td colspan="3">Nenhum paciente encontrado.</td></tr>';
             return;
@@ -57,7 +63,7 @@
             echo '<tr onclick="abrirDrawer(' . (int) $paciente['idpaciente'] . ')" style="cursor:pointer">';
             echo '<td>' . htmlspecialchars($paciente['nome_paciente']) . '</td>';
             echo '<td>' . htmlspecialchars($paciente['nome_psicologo']) . '</td>';
-            echo '<td><span class="badge badge-green">' . htmlspecialchars($nomesDosStatus[$paciente['status']]) . '</span></td>';
+            echo '<td><span class="badge badge-' . ($coresStatus[$paciente['status']] ?? 'cinza') . '">' . htmlspecialchars($nomesDosStatus[$paciente['status']]) . '</span></td>';
             echo '</tr>';
         }
     }
@@ -156,7 +162,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php mostrarLinhasPacientes($pacientesCadastrados, $nomesDosStatus); ?>
+                    <?php mostrarLinhasPacientes($pacientesCadastrados, $nomesDosStatus, $coresStatus); ?>
                 </tbody>
             </table>
         </div>
@@ -174,7 +180,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php mostrarLinhasPacientes($pacientesEmEspera, $nomesDosStatus); ?>
+                    <?php mostrarLinhasPacientes($pacientesEmEspera, $nomesDosStatus, $coresStatus); ?>
                 </tbody>
             </table>
         </div>
@@ -192,7 +198,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php mostrarLinhasPacientes($pacientesAtivos, $nomesDosStatus); ?>
+                    <?php mostrarLinhasPacientes($pacientesAtivos, $nomesDosStatus, $coresStatus); ?>
                 </tbody>
             </table>
         </div>

@@ -8,21 +8,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda — Psynk</title>
+    <title>PsySink — Agenda</title>
 
     <link rel="stylesheet" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
     <link rel="stylesheet" href="/app/css/variables.css">
-    <link rel="stylesheet" href="/app/css/agenda.css">
+    <link rel="stylesheet" href="/app/css/agenda.css?v=<?= filemtime($_SERVER['DOCUMENT_ROOT'] . '/app/css/agenda.css') ?>">
 
     <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/menuRecepcionista.php"); ?>
-    <?php $papel = 'recepcionista'; ?>
-
 </head>
 <body>
 
 <div class="main">
 
     <aside class="painel-filtros">
+
+        <div class="filtro-secao">
+            <button class="btn btn-primary botao-nova-consulta" onclick="abrirModalConsulta()">+ Nova consulta</button>
+        </div>
 
         
         <div class="filtro-secao">
@@ -51,7 +53,11 @@
                 </div>
                 <div class="legenda-item">
                     <span class="legenda-bolinha pendente"></span>
-                    <span>Pendente</span>
+                    <span>Aguardando confirmação</span>
+                </div>
+                <div class="legenda-item">
+                    <span class="legenda-bolinha pendente-hoje"></span>
+                    <span>Aguardando confirmação (hoje)</span>
                 </div>
                 <div class="legenda-item">
                     <span class="legenda-bolinha cancelado"></span>
@@ -72,9 +78,11 @@
                 <h2 class="periodo-atual" id="periodo-atual"></h2>
                 <button class="botao-nav" id="btn-proximo">›</button>
             </div>
-            <button class="btn" id="btn-consulta" title="Agendar Consulta" onclick="abrirModalConsulta()">
-                <img src="/imgs/icons/add.png" alt="Agendar Consulta" width="18" height="18">
-            </button>
+            <div class="topo-direita">
+                <button class="btn" id="btn-consulta" title="Agendar Consulta" onclick="abrirModalConsulta()">
+                    <img src="/imgs/icons/add.png" alt="Agendar Consulta" width="18" height="18">
+                </button>
+            </div>
         </header>
 
         
@@ -89,8 +97,18 @@
     </div>
 
 </div>
+
+<div class="painel-detalhe" id="painel-detalhe">
+    <div class="detalhe-cabecalho">
+        <h3 id="detalhe-titulo">Detalhes</h3>
+        <button id="fechar-detalhe">✕</button>
+    </div>
+    <div class="detalhe-conteudo" id="detalhe-conteudo"></div>
+</div>
+
 <script src="/app/js/utils.js"></script>
 <script src="/app/js/agenda.js"></script>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/drawer.php"); ?>
 <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/modal-consulta.php"); ?>
 </body>
 </html>

@@ -1,14 +1,37 @@
 <?php
     require_once __DIR__ . "/../../../config/sessao.php";
     verificarPermissao(["PSICOLOGO"]);
+    require_once __DIR__ . "/../../../config/conexao.php";
+    require_once __DIR__ . "/../../includes/consultas.php";
+    $tituloPagina = 'Dashboard';
+
+    $idClinica = (int) $_SESSION['id_clinica'];
+
+    $idPsicologo = (int) $_SESSION['id'];
+
+    $consultasHoje        = buscarConsultasDeHoje($conexao, $idClinica, $idPsicologo);
+    $consultasAguardando  = buscarConsultasAguardandoConfirmacao($conexao, $idClinica, $idPsicologo);
+    $consultasSemAnotacao = buscarConsultasSemAnotacao($conexao, $idClinica, $idPsicologo);
+    $consultasConcluidas  = buscarConsultasConcluidasNoMes($conexao, $idClinica, $idPsicologo);
+    $totalConcluidasNoMes = contarConsultasConcluidasNoMes($conexao, $idClinica, $idPsicologo);
+
+    // Aviso: próxima consulta de hoje que ainda não começou
+    $proximaConsulta = null;
+    foreach ($consultasHoje as $c) {
+        if (in_array($c['status'], ['aguarda data', 'atrasada'], true) && $c['hora_inicio'] >= date('H:i:s')) {
+            $proximaConsulta = $c;
+            break;
+        }
+    }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin</title>
+    <title>PsySink — Dashboard</title>
 
     <link rel="stylesheet" type="text/css" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
 
@@ -17,7 +40,7 @@
     <link rel="stylesheet" type="text/css" href="/app/css/dashboard.css">
   
     <?php 
-        include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/menuAdmin.php");
+        include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/menuPsicologo.php");
     ?>
 
 
@@ -32,25 +55,25 @@
         <div class="cartoes">
             <div class="cartao" onclick="toggleList('listaConsultas')">
                 <div class="cartaoTitulo">Consultas Hoje</div>
-                <div class="cartaoValor">8</div>
+                <div class="cartaoValor"><?= count($consultasHoje) ?></div>
                 <div class="cartaoLegenda">confirmadas</div>
             </div>
 
             <div class="cartao" onclick="toggleList('listaAguardaConfirmacao')">
                 <div class="cartaoTitulo">Aguardando Confirmação</div>
-                <div class="cartaoValor">2</div>
+                <div class="cartaoValor"><?= count($consultasAguardando) ?></div>
                 <div class="cartaoLegenda">pendentes</div>
             </div>
 
             <div class="cartao" onclick="toggleList('listaPendenteAnotacao')">
                 <div class="cartaoTitulo">Pendentes</div>
-                <div class="cartaoValor">2</div>
+                <div class="cartaoValor"><?= count($consultasSemAnotacao) ?></div>
                 <div class="cartaoLegenda">anotações da consulta</div>
             </div>
 
-            <div class="cartao">
+            <div class="cartao" onclick="toggleList('listaConcluidas')">
                 <div class="cartaoTitulo">Consultas</div>
-                <div class="cartaoValor">23</div>
+                <div class="cartaoValor"><?= $totalConcluidasNoMes ?></div>
                 <div class="cartaoLegenda">concluídas neste mês</div>
             </div>
         </div>
@@ -77,8 +100,17 @@
             </div>
             <div class="cartao-aviso">
                 <div class="cartaoTitulo">Avisos</div>
-                <div class="cartaoLegenda">Paciente Ana Lima já está aqui | Atendimento 08:00h - 09:30h</div>
-                <div class="link"><a href="agenda.php">Acessar evento 🡪 </a></div>
+                <?php if ($proximaConsulta): ?>
+                    <div class="cartaoLegenda">
+                        Próxima consulta: <?= htmlspecialchars($proximaConsulta['nome_paciente']) ?>
+                        às <?= formatarHora($proximaConsulta['hora_inicio']) ?>
+                        (<?= htmlspecialchars($proximaConsulta['nome_psicologo']) ?>)
+                    </div>
+                    <div class="link"><a href="agenda.php">Abrir agenda 🡪 </a></div>
+                <?php else: ?>
+                    <div class="cartaoLegenda">Nenhuma consulta pendente para o resto do dia.</div>
+                    <div class="link"><a href="agenda.php">Abrir agenda 🡪 </a></div>
+                <?php endif; ?>
             </div> 
         </div>
 
@@ -96,12 +128,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Ana Lima')">Ana Lima</span></td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>08h00</td>
-                        <td><span class="badge badge-verde">Confirmado</span></td>
-                    </tr>
+                    <?php if (empty($consultasHoje)): ?>
+                    <tr><td colspan="4">Nenhuma consulta hoje.</td></tr>
+                        <?php endif; ?>
+                        <?php foreach ($consultasHoje as $consulta): ?>
+                            <tr>
+                                <td>
+                                    <span class="link-paciente"
+                                        onclick="abrirDrawer(<?= (int) $consulta['id_paciente'] ?>)">
+                                        <?= htmlspecialchars($consulta['nome_paciente']) ?>
+                                    </span>
+                                </td>
+                                <td><?= htmlspecialchars($consulta['nome_psicologo']) ?></td>
+                                <td><?= formatarHora($consulta['hora_inicio']) ?></td>
+                                <td><?= situacaoDaConsulta($consulta) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
@@ -115,17 +157,25 @@
                     <tr>
                         <th>Paciente</th>
                         <th>Psicólogo(a)</th>
+                        <th>Data</th>
                         <th>Horário</th>
                         <th>Ação</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Bruno Martins')">Bruno Martins</span></td>
-                        <td>Dra. Fernanda Rocha</td>
-                        <td>09h30</td>
-                        <td><button class="btn btn-sm">Confirmar</button></td>
-                    </tr>
+                    <?php foreach ($consultasAguardando as $consulta): ?>
+                        <tr>
+                            <td>
+                                <span class="link-paciente" onclick="abrirDrawer(<?= (int) $consulta['id_paciente'] ?>)">
+                                    <?= htmlspecialchars($consulta['nome_paciente']) ?>
+                                </span>
+                            </td>
+                            <td><?= htmlspecialchars($consulta['nome_psicologo']) ?></td>
+                            <td><?= date('d/m/Y', strtotime($consulta['data'])) ?></td>
+                            <td><?= formatarHora($consulta['hora_inicio']) ?></td>
+                            <td><button class="btn btn-sm btn-secondary" onclick="confirmarConsulta(<?= (int) $consulta['idconsulta'] ?>)">Confirmar</button></td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
@@ -145,17 +195,56 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><span class="link-paciente" onclick="abrirDrawer('Ana Lima')">Ana Lima</span></td>
-                        <td>Dr. Carlos Souza</td>
-                        <td>05/08/2026</td>
-                        <td>14h00</td>
-                        <td><button class="btn btn-sm btn-secondary" onclick="abrirModal('Ana Lima', 1)">Lançar</button></td>
-                    </tr>
+                    <?php foreach ($consultasSemAnotacao as $consulta): ?>
+                        <tr>
+                            <td>
+                                <span class="link-paciente" onclick="abrirDrawer(<?= (int) $consulta['id_paciente'] ?>)">
+                                        <?= htmlspecialchars($consulta['nome_paciente']) ?>
+                                </span>
+                            </td>
+                            <td><?= htmlspecialchars($consulta['nome_psicologo']) ?></td>
+                            <td><?= date('d/m/Y', strtotime($consulta['data'])) ?></td>
+                            <td><?= formatarHora($consulta['hora_inicio']) ?></td>
+                            <td>
+                                <button class="btn btn-sm btn-secondary"
+                                        onclick="abrirModalAnotacao(<?= (int) $consulta['id_paciente'] ?>, <?= (int) $consulta['idconsulta'] ?>)">
+                                    Lançar
+                                </button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
 
+        <div id="listaConcluidas" class="collapse-list">
+            <div class="section-header">
+                <span class="section-title">Consultas concluídas neste mês</span>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Paciente</th>
+                        <th>Psicólogo(a)</th>
+                        <th>Data</th>
+                        <th>Horário</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($consultasConcluidas)): ?>
+                        <tr><td colspan="4">Nenhuma consulta concluída neste mês.</td></tr>
+                    <?php endif; ?>
+                    <?php foreach ($consultasConcluidas as $consulta): ?>
+                        <tr class="linha-clicavel" onclick="abrirDrawer(<?= (int) $consulta['id_paciente'] ?>)">
+                            <td><?= htmlspecialchars($consulta['nome_paciente']) ?></td>
+                            <td><?= htmlspecialchars($consulta['nome_psicologo']) ?></td>
+                            <td><?= date('d/m/Y', strtotime($consulta['data'])) ?></td>
+                            <td><?= formatarHora($consulta['hora_inicio']) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     
             
         <script src="/app/js/utils.js"></script>

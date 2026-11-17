@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
     <link rel="stylesheet" href="/app/css/variables.css">
-    <link rel="stylesheet" href="/app/css/agenda.css">
+    <link rel="stylesheet" href="/app/css/agenda.css?v=<?= filemtime($_SERVER['DOCUMENT_ROOT'] . '/app/css/agenda.css') ?>">
 
     <?php include($_SERVER['DOCUMENT_ROOT'] . "/app/includes/menuAdmin.php"); ?>
 </head>
@@ -21,6 +21,10 @@
 <div class="main">
 
     <aside class="painel-filtros">
+
+        <div class="filtro-secao">
+            <button class="btn btn-primary botao-nova-consulta" onclick="abrirModalConsulta()">+ Nova consulta</button>
+        </div>
 
         
         <div class="filtro-secao">
@@ -49,7 +53,11 @@
                 </div>
                 <div class="legenda-item">
                     <span class="legenda-bolinha pendente"></span>
-                    <span>Pendente</span>
+                    <span>Aguardando confirmação</span>
+                </div>
+                <div class="legenda-item">
+                    <span class="legenda-bolinha pendente-hoje"></span>
+                    <span>Aguardando confirmação (hoje)</span>
                 </div>
                 <div class="legenda-item">
                     <span class="legenda-bolinha cancelado"></span>

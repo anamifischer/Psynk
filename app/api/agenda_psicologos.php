@@ -10,6 +10,7 @@ $idClinica = (int) $_SESSION['id_clinica'];
 
 $lista = [];
 foreach (buscarPsicologosDaClinica($conexao, $idClinica, true) as $ps) {
+    if ($_SESSION['permissao'] === 'PSICOLOGO' && (int) $ps['idUsuario'] !== (int) $_SESSION['id']) continue;
     $lista[] = ['id' => (int) $ps['idUsuario'], 'nome' => $ps['nome']];
 }
 

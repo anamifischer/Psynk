@@ -3,7 +3,7 @@ require_once "conexao.php";
 require_once "sessao.php";
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    header("Location: ../pages/auth/login.php");
+    header("Location: /public/login.php");
     exit;
 }
 
@@ -37,5 +37,5 @@ if ($usuario
 }
 
 // Mesma mensagem para e-mail inexistente ou senha errada
-header("Location: ../pages/auth/login.php?erro=1");
+header("Location: /public/login.php?erro=1");
 exit;
